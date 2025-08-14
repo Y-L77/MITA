@@ -1,0 +1,36 @@
+{
+  "_metadata": {
+    "project": "MITA_ProblemSetDatabase",
+    "author": "Yipeng Lu <yipeng.dev@gmail.com>",
+    "license": "Proprietary",
+    "copyright": "© 2025 MITA. All rights reserved.",
+    "notice": "Unauthorized distribution or modification prohibited."
+  },
+  "questions": [
+    {
+      "id": 1,
+      "question": "5x = 25",
+      "answer": 5,
+      "elo": 300,
+      "latex": "5x = 25",
+      "category": "algebra"
+    },
+    {
+      "id": 2,
+      "question": "∫(2x dx) from 0 to 3",
+      "answer": 9,
+      "elo": 1800,
+      "latex": "\\int_{0}^{3} 2x \\, dx",
+      "category": "calculus"
+    },
+    {
+      "id": 3,
+      "question": "8 - 5",
+      "answer": 3,
+      "elo": 100,
+      "latex": "8 - 5",
+      "category": "arithmetic"
+    }
+    
+  ]
+}
