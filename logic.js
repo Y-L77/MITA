@@ -10,7 +10,7 @@ const ELO_TIERS = [
   { min: 200, max: 400, name: "Middle Schooler" },
   { min: 400, max: 600, name: "High Schooler" },
   { min: 600, max: 800, name: "Senior" },
-  { min: 800, max: 1200, name: "Undergrad" },
+  { min: 800, max: 1200, name: "Regionals" },
   { min: 1200, max: 1700, name: "Nationalist" },
   { min: 1700, max: 2000, name: "Olympian" }
 ];

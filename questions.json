@@ -1,36 +1,66 @@
 {
-  "_metadata": {
-    "project": "MITA_ProblemSetDatabase",
-    "author": "Yipeng Lu <yipeng.dev@gmail.com>",
-    "license": "Proprietary",
-    "copyright": "© 2025 MITA. All rights reserved.",
-    "notice": "Unauthorized distribution or modification prohibited."
-  },
-  "questions": [
-    {
-      "id": 1,
-      "question": "5x = 25",
-      "answer": 5,
-      "elo": 300,
-      "latex": "5x = 25",
-      "category": "algebra"
+    "_metadata": {
+        "project": "MITA_ProblemSetDatabase",
+        "author": "Yipeng Lu <yipeng.dev@gmail.com>",
+        "license": "Proprietary",
+        "copyright": "© 2025 MITA. All rights reserved.",
+        "notice": "Unauthorized distribution or modification prohibited."
     },
-    {
-      "id": 2,
-      "question": "∫(2x dx) from 0 to 3",
-      "answer": 9,
-      "elo": 1800,
-      "latex": "\\int_{0}^{3} 2x \\, dx",
-      "category": "calculus"
-    },
-    {
-      "id": 3,
-      "question": "8 - 5",
-      "answer": 3,
-      "elo": 100,
-      "latex": "8 - 5",
-      "category": "arithmetic"
-    }
-    
-  ]
+    "questions": [
+        {
+            "id": 1,
+            "question": "log₃(81) + log₂(8)",
+            "answer": 7,
+            "elo": 700,
+            "latex": "\\log_{3}(81) + \\log_{2}(8)",
+            "category": [
+                "logarithms"
+            ]
+        },
+        {
+            "id": 2,
+            "question": "∫(2x dx) from 0 to 3",
+            "answer": 9,
+            "elo": 1800,
+            "latex": "\\int_{0}^{3} 2x \\, dx",
+            "category": [
+                "calculus"
+            ]
+        },
+        {
+            "id": 3,
+            "question": "log2(x) + log2(x-2) = 3",
+            "answer": 4,
+            "elo": 850,
+            "latex": "\\log_{2}(x) + \\log_{2}(x-2) = 3, \\quad x \\in \\mathbb{R}",
+            "category": [
+                "algebra",
+                "logarithms"
+            ]
+        },
+        {
+            "id": 4,
+            "question": "2^log2(3x) = 9",
+            "answer": 3,
+            "elo": 850,
+            "latex": "2^{\\log_{2}(3x)} = 9",
+            "category": [
+                "algebra",
+                "logarithms",
+                "exponents"
+            ]
+        },
+        {
+            "id": 5,
+            "question": "16 × sum_{i=0}^{4} (1/2)^i = ?",
+            "answer": 31,
+            "elo": 1000,
+            "latex": "16 \\times \\sum_{i=0}^{4} \\left( \\frac{1}{2} \\right)^i = ?",
+            "category": [
+                "algebra",
+                "series",
+                "summation"
+            ]
+        }
+    ]
 }

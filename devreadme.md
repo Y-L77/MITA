@@ -13,6 +13,8 @@ Rhythm has made the landing page, I'll leave it for him to integrate in my compo
 
 -adding QoTM (instead of puzzles) refer to evil skribbles or cemc QoTW for nice problem examples
 
+-adding latex form keyboard instead of mouse (refer to desmos i like their typecasting)
+
 -Polishing actual game loop, making sure questions cycle properly, adding questions to question pool, making sure the canvas has good user experience, getting the singleplayer launch ready.
 
 -dynamic elo and customized elo equation that scales and works well.
