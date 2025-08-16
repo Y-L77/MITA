@@ -15,7 +15,8 @@
             "latex": "\\log_{3}(81) + \\log_{2}(8)",
             "category": [
                 "logarithms"
-            ]
+            ],
+            "author": "Yipeng Lu"
         },
         {
             "id": 2,
@@ -25,7 +26,8 @@
             "latex": "\\int_{0}^{3} 2x \\, dx",
             "category": [
                 "calculus"
-            ]
+            ],
+            "author": "Yipeng Lu"
         },
         {
             "id": 3,
@@ -36,7 +38,8 @@
             "category": [
                 "algebra",
                 "logarithms"
-            ]
+            ],
+            "author": "Yipeng Lu"
         },
         {
             "id": 4,
@@ -48,7 +51,8 @@
                 "algebra",
                 "logarithms",
                 "exponents"
-            ]
+            ],
+            "author": "Yipeng Lu"
         },
         {
             "id": 5,
@@ -60,7 +64,8 @@
                 "algebra",
                 "series",
                 "summation"
-            ]
+            ],
+            "author": "Yipeng Lu"
         }
     ]
 }

@@ -1,77 +1,114 @@
+/* ====================== */
+/*  BASE STYLES           */
+/* ====================== */
 body {
   margin: 0;
   padding: 0;
   background-color: #000;
   font-family: 'Courier New', monospace;
-  height: 100vh;
-  overflow: hidden;
   color: white;
-  touch-action: none; /* Prevent scrolling when drawing */
+  overflow-x: hidden;
+  touch-action: pan-y;
+  min-height: 300vh; /* Allows scrolling 2-3 pages down */
 }
 
+/* Custom scrollbar */
+body::-webkit-scrollbar {
+  width: 10px;
+  background-color: transparent;
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: #333;
+  border-radius: 5px;
+  transition: opacity 0.3s ease;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+  background-color: #444;
+}
+
+body.scrollbar-hidden::-webkit-scrollbar-thumb {
+  opacity: 0;
+}
+
+/* ====================== */
+/*  CANVAS STYLES         */
+/* ====================== */
 #drawing-canvas {
-  position: fixed;
+  position: absolute; /* Changed from fixed to absolute */
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 300vh;
   z-index: 1;
   pointer-events: auto;
   opacity: 0.9;
+  will-change: transform;
 }
 
-.ui-element {
-  position: relative;
-  z-index: 10;
-  pointer-events: auto;
+/* ====================== */
+/*  UI ELEMENT STYLES     */
+/* ====================== */
+#elo-display,
+#email-display {
+  position: fixed;
+  z-index: 100;
+  pointer-events: none;
 }
 
 #elo-display {
-  position: absolute;
   top: 10px;
   left: 20px;
   color: #aaa;
   font-size: 1rem;
-  z-index: 10;
+}
+
+#email-display {
+  top: 10px;
+  right: 20px;
+  color: #aaa;
+  font-size: 1rem;
 }
 
 #question-container {
-  position: absolute;
-  top: 0; /* Removed padding from top */
+  position: fixed;
+  top: 50px;
   left: 0;
   right: 0;
   display: flex;
   justify-content: center;
   padding: 0 20px;
-  z-index: 10;
+  z-index: 100;
+  pointer-events: none;
 }
 
 .question-box {
-  background-color: #333;
-  padding: 20px; /* Uniform padding */
+  background-color: rgba(51, 51, 51, 0.9);
+  padding: 20px;
   border-radius: 5px;
-  width: 90%; /* Increased width */
-  max-width: 800px; /* Much larger max-width */
+  width: 90%;
+  max-width: 800px;
   text-align: center;
-  margin-top: 10px; /* Reduced from 30px */
-  word-wrap: break-word; /* Break long text */
-  white-space: pre-line; /* Respect newlines */
-  user-select: none; /* Prevent text selection */
-  -webkit-user-select: none; /* Safari */
-  -moz-user-select: none; /* Firefox */
-  -ms-user-select: none; /* IE/Edge */
-  font-size: 1.2rem; /* Slightly larger font */
-  line-height: 1.5; /* Better readability */
+  margin-top: 10px;
+  word-wrap: break-word;
+  white-space: pre-line;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  font-size: 1.2rem;
+  line-height: 1.5;
 }
 
 .answer-container {
-  position: absolute;
+  position: fixed;
   bottom: 20px;
   right: 20px;
   display: flex;
   gap: 10px;
   align-items: center;
-  z-index: 10;
+  z-index: 100;
 }
 
 #answer-box {
@@ -82,9 +119,12 @@ body {
   width: 150px;
   border-radius: 5px;
   font-size: 1rem;
+  pointer-events: auto;
 }
 
-#submit-btn, #change-elo-btn, #clear-drawing-btn {
+#submit-btn,
+#change-elo-btn,
+#clear-drawing-btn {
   background: #222;
   color: white;
   border: none;
@@ -92,26 +132,49 @@ body {
   border-radius: 5px;
   cursor: pointer;
   font-size: 1rem;
+  pointer-events: auto;
 }
 
-#submit-btn:hover, #change-elo-btn:hover, #clear-drawing-btn:hover {
+#submit-btn:hover,
+#change-elo-btn:hover,
+#clear-drawing-btn:hover {
   background: #333;
 }
 
 #result {
-  position: absolute;
+  position: fixed;
   bottom: 70px;
   right: 20px;
   color: #4CAF50;
   font-size: 1rem;
-  z-index: 10;
+  z-index: 100;
+  pointer-events: none;
 }
 
-#email-display {
-  position: absolute;
-  top: 10px;
-  right: 20px;
-  color: #aaa;
-  font-size: 1rem;
-  z-index: 10;
+/* ====================== */
+/*  MOBILE OPTIMIZATIONS  */
+/* ====================== */
+@media (max-width: 768px) {
+  .answer-container {
+    flex-direction: column;
+    align-items: flex-end;
+    bottom: 10px;
+    right: 10px;
+  }
+  
+  #answer-box {
+    width: 120px;
+    padding: 10px;
+  }
+  
+  .question-box {
+    width: 95%;
+    padding: 15px;
+    font-size: 1rem;
+  }
+  
+  #result {
+    bottom: 150px;
+    right: 10px;
+  }
 }

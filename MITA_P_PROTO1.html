@@ -8,13 +8,17 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div id="elo-display">ELO: <span id="elo-value">300</span> (<span id="elo-rank">Middle Schooler</span>)</div>
-  <div id="email-display">yipeng.dev@gmail.com</div>
+  <div id="content-wrapper">
+    <div id="elo-display">ELO: <span id="elo-value">300</span> (<span id="elo-rank">Middle Schooler</span>)</div>
+    <div id="email-display">yipeng.dev@gmail.com</div>
+    
+    <button id="hidden-focus-helper" aria-hidden="true" style="opacity:0;position:absolute;"></button>
+    
+    <canvas id="drawing-canvas"></canvas>
 
-  <canvas id="drawing-canvas"></canvas>
-
-  <div id="question-container">
-    <div id="question" class="question-box"></div>
+    <div id="question-container">
+      <div id="question" class="question-box"></div>
+    </div>
   </div>
   
   <div class="answer-container">
