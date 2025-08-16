@@ -66,6 +66,54 @@
                 "summation"
             ],
             "author": "Yipeng Lu"
+        },
+        {
+            "id": 6,
+            "question": "The circle 25 = (x+3)^2 + (y+4)^2 is tangent to a line passing through the origin. What is the maximum y-value of the line at x=4?",
+            "answer": -3,
+            "elo": 1400,
+            "latex": "\\begin{multline*} 25 = (x + 3)^2 \\\\ + (y + 4)^2 \\end{multline*} \\text{is tangent to a line through the origin. What is the maximum } y\\text{-value at } x=4?",
+            "category": [
+                "geometry",
+                "coordinate-geometry"
+            ],
+            "author": "Yipeng Lu"
+        },
+        {
+            "id": 7,
+            "question": "Solve for n in: 2ⁿ = (16⁴⁰ × 16⁷⁰ + 256⁵⁴ × 2⁹ + 33,554,432¹⁷ × 2¹⁵) × 2¹⁵⁸³",
+            "answer": 2025,
+            "elo": 1200,
+            "latex": "2^n = \\left(16^{40} \\times 16^{70} + 256^{54} \\times 2^9 + 33,\\!554,\\!432^{17} \\times 2^{15}\\right) \\times 2^{1583}",
+            "category": [
+                "exponents",
+                "algebra"
+            ],
+            "author": "Yipeng Lu"
+        },
+        {
+            "id": 8,
+            "question": "Solve for x: 72ˣ × 375ˣ⁺² = 2⁹ × 3¹¹ × 5¹⁵",
+            "answer": 3,
+            "elo": 1100,
+            "latex": "72^x \\times 375^{x+2} = 2^9 \\times 3^{11} \\times 5^{15}",
+            "category": [
+                "exponents",
+                "algebra"
+            ],
+            "author": "Yipeng Lu"
+        },
+        {
+            "id": 9,
+            "question": "How many 5-digit numbers (digits 0-9, no repetitions) are divisible by 5?",
+            "answer": 5712,
+            "elo": 1200,
+            "latex": "\\text{How many 5-digit numbers (digits 0-9, no repetitions) are divisible by 5?}",
+            "category": [
+                "combinatorics",
+                "divisibility"
+            ],
+            "author": "Yipeng Lu"
         }
     ]
 }
