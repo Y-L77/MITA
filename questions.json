@@ -22,7 +22,7 @@
             "id": 2,
             "question": "∫(2x dx) from 0 to 3",
             "answer": 9,
-            "elo": 1800,
+            "elo": 1400,
             "latex": "\\int_{0}^{3} 2x \\, dx",
             "category": [
                 "calculus"
@@ -113,6 +113,42 @@
                 "combinatorics",
                 "divisibility"
             ],
+            "author": "Yipeng Lu"
+        },
+        {
+            "id": 10,
+            "question": "θ ∈ (0, π/2), 2cos²θ - sinθ = 1. Find 2sinθ.",
+            "answer": 1,
+            "elo": 950,
+            "latex": "\\theta \\in \\left(0, \\frac{\\pi}{2}\\right), \\quad 2\\cos^{2}\\theta - \\sin\\theta = 1. \\quad \\text{Find } 2\\sin\\theta.",
+            "category": [
+                "trigonometry",
+                "algebra"
+            ],
+            "author": "Yipeng Lu"
+        },
+        {
+            "id": 11,
+            "question": "Given x + y = 23016 and LCM = 299039, find max(x, y).",
+            "answer": 23003,
+            "elo": 1300,
+            "latex": "\\text{Given } x + y = 23016 \\text{ and } \\text{LCM} = 299039, \\text{ find } \\max(x, y).",
+            "category": [
+                "number-theory",
+                "gcd-lcm"
+            ],
+            "author": "Yipeng Lu"
+        },
+        {
+            "id": 12,
+            "question": "Given (4+tan²A)(5+tan²B) = √320 tanA tanB where 0 < A, B < π/2, find tan²B × tanA.",
+            "answer": 10,
+            "elo": 1700,
+            "latex": "\\text{Given } (4+\\tan^2A)(5+\\tan^2B) = \\sqrt{320} \\tan A \\tan B \\text{ where } 0 < A, B < \\frac{\\pi}{2}, \\text{ find } \\tan^2B \\times \\tan A.",
+            "category": [
+                "trigonometry",
+                "algebra"
+            ], 
             "author": "Yipeng Lu"
         }
     ]
