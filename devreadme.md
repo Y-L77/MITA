@@ -45,3 +45,8 @@ Rhythm has made the landing page, I'll leave it for him to integrate in my compo
 
 -rhythm's development to his discretion based on the doc above.
 -i will set up mini development team to write up math contest questions.
+
+
+DEV NOTE:
+don't reorder my questions.json by difficulty. you can reorder it in a .md file.
+The questions will be ordered by id, note the id on the elo ordered md for ease of change
