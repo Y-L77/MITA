@@ -36,7 +36,7 @@ body.scrollbar-hidden::-webkit-scrollbar-thumb {
 /*  CANVAS STYLES         */
 /* ====================== */
 #drawing-canvas {
-  position: absolute; /* Changed from fixed to absolute */
+  position: absolute;
   top: 0;
   left: 0;
   width: 100vw;
@@ -71,26 +71,48 @@ body.scrollbar-hidden::-webkit-scrollbar-thumb {
   font-size: 1rem;
 }
 
+/* Toggle button - FIXED POSITION so it stays visible */
+#toggle-question-btn {
+  position: fixed;
+  top: 40px; /* Reduced from 50px to minimize padding */
+  left: 50%;
+  transform: translateX(-50%);
+  background: #222;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  z-index: 102; /* Higher than question container */
+  pointer-events: auto;
+}
+
+#toggle-question-btn:hover {
+  background: #333;
+}
+
+/* Question container - FIXED with minimal top padding */
 #question-container {
   position: fixed;
-  top: 50px;
+  top: 70px; /* Reduced padding from top */
   left: 0;
   right: 0;
   display: flex;
   justify-content: center;
   padding: 0 20px;
-  z-index: 100;
-  pointer-events: none;
+  z-index: 101;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  pointer-events: none; /* Allow drawing through question box */
 }
 
 .question-box {
   background-color: rgba(51, 51, 51, 0.9);
-  padding: 20px;
+  padding: 15px; /* Reduced padding */
   border-radius: 5px;
   width: 90%;
   max-width: 800px;
   text-align: center;
-  margin-top: 10px;
   word-wrap: break-word;
   white-space: pre-line;
   user-select: none;
@@ -99,8 +121,10 @@ body.scrollbar-hidden::-webkit-scrollbar-thumb {
   -ms-user-select: none;
   font-size: 1.2rem;
   line-height: 1.5;
+  pointer-events: none; /* Allow drawing through question box */
 }
 
+/* Answer container at bottom */
 .answer-container {
   position: fixed;
   bottom: 20px;
@@ -109,6 +133,7 @@ body.scrollbar-hidden::-webkit-scrollbar-thumb {
   gap: 10px;
   align-items: center;
   z-index: 100;
+  pointer-events: auto;
 }
 
 #answer-box {
@@ -155,6 +180,21 @@ body.scrollbar-hidden::-webkit-scrollbar-thumb {
 /*  MOBILE OPTIMIZATIONS  */
 /* ====================== */
 @media (max-width: 768px) {
+  #toggle-question-btn {
+    top: 35px;
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+  
+  #question-container {
+    top: 60px;
+  }
+  
+  .question-box {
+    padding: 10px;
+    font-size: 1rem;
+  }
+  
   .answer-container {
     flex-direction: column;
     align-items: flex-end;
@@ -165,12 +205,6 @@ body.scrollbar-hidden::-webkit-scrollbar-thumb {
   #answer-box {
     width: 120px;
     padding: 10px;
-  }
-  
-  .question-box {
-    width: 95%;
-    padding: 15px;
-    font-size: 1rem;
   }
   
   #result {

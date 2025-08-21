@@ -16,13 +16,16 @@
     
     <canvas id="drawing-canvas"></canvas>
 
+    <!-- Toggle button is now SEPARATE from question container -->
+    <button id="toggle-question-btn" class="toggle-btn">▲ Hide Question</button>
+    
     <div id="question-container">
       <div id="question" class="question-box"></div>
     </div>
   </div>
   
   <div class="answer-container">
-    <input type="number" id="answer-box" placeholder="Your answer..." autofocus>
+    <input type="text" id="answer-box" placeholder="Your answer..." autofocus> <!-- Changed from type="number" to type="text" -->
     <button id="submit-btn">Submit</button>
     <button id="change-elo-btn">Change ELO</button>
     <button id="clear-drawing-btn">Clear Drawing</button>

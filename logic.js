@@ -24,7 +24,9 @@ const elements = {
   changeEloBtn: document.getElementById('change-elo-btn'),
   clearDrawingBtn: document.getElementById('clear-drawing-btn'),
   canvas: document.getElementById('drawing-canvas'),
-  hiddenFocusHelper: document.getElementById('hidden-focus-helper')
+  hiddenFocusHelper: document.getElementById('hidden-focus-helper'),
+  toggleQuestionBtn: document.getElementById('toggle-question-btn'),
+  questionContainer: document.getElementById('question-container')
 };
 
 // ======================
@@ -41,7 +43,8 @@ const state = {
   drawingHistory: [],
   maxUndoSteps: 20,
   currentHistoryIndex: -1,
-  lastAnswerTime: 0
+  lastAnswerTime: 0,
+  questionBoxVisible: true
 };
 
 // ======================
@@ -133,8 +136,8 @@ function restoreCanvasState() {
   const img = new Image();
   img.onload = function() {
     const ctx = elements.canvas.getContext('2d');
-    ctx.clearRect(0, 0, elements.canvas.width, elements.canvas.height);
-    ctx.drawImage(img, 0, 0);
+  ctx.clearRect(0, 0, elements.canvas.width, elements.canvas.height);
+  ctx.drawImage(img, 0, 0);
   };
   img.src = state.drawingHistory[state.currentHistoryIndex];
 }
@@ -210,6 +213,31 @@ function handleTouchMove(e) {
 }
 
 // ======================
+//  QUESTION BOX TOGGLE FUNCTIONS
+// ======================
+function toggleQuestionBox() {
+  if (state.questionBoxVisible) {
+    hideQuestionBox();
+  } else {
+    showQuestionBox();
+  }
+}
+
+function hideQuestionBox() {
+  elements.questionContainer.style.transform = 'translateY(-100px)';
+  elements.questionContainer.style.opacity = '0';
+  state.questionBoxVisible = false;
+  elements.toggleQuestionBtn.innerHTML = '▼ Show Question';
+}
+
+function showQuestionBox() {
+  elements.questionContainer.style.transform = 'translateY(0)';
+  elements.questionContainer.style.opacity = '1';
+  state.questionBoxVisible = true;
+  elements.toggleQuestionBtn.innerHTML = '▲ Hide Question';
+}
+
+// ======================
 //  UTILITY FUNCTIONS
 // ======================
 function getRankForElo(elo) {
@@ -220,6 +248,62 @@ function getRankForElo(elo) {
 function updateEloDisplay() {
   document.getElementById('elo-value').textContent = state.currentElo;
   elements.eloRank.textContent = getRankForElo(state.currentElo);
+}
+
+// ======================
+//  ANSWER VALIDATION FUNCTIONS
+// ======================
+function parseUserAnswer(userInput) {
+  // Trim and clean the input
+  userInput = userInput.trim();
+  
+  // Handle fractions like "2/9", "7/15", etc.
+  if (userInput.includes('/')) {
+    const parts = userInput.split('/').map(part => part.trim());
+    if (parts.length === 2) {
+      const numerator = parseFloat(parts[0]);
+      const denominator = parseFloat(parts[1]);
+      if (!isNaN(numerator) && !isNaN(denominator) && denominator !== 0) {
+        return numerator / denominator;
+      }
+    }
+  }
+  
+  // Handle decimal numbers
+  const decimal = parseFloat(userInput);
+  if (!isNaN(decimal)) {
+    return decimal;
+  }
+  
+  // Return NaN if input is invalid
+  return NaN;
+}
+
+function isAnswerCorrect(userAnswer, correctAnswer) {
+  const tolerance = state.currentQuestion?.tolerance || 0.001;
+  
+  // If correctAnswer is a string (like "2/9"), parse it first
+  let correctValue = correctAnswer;
+  if (typeof correctAnswer === 'string') {
+    correctValue = parseUserAnswer(correctAnswer);
+    if (isNaN(correctValue)) {
+      // If we can't parse the correct answer, do string comparison
+      return userAnswer.trim().toLowerCase() === correctAnswer.trim().toLowerCase();
+    }
+  }
+  
+  // Parse user answer if it's a string
+  let userValue = userAnswer;
+  if (typeof userAnswer === 'string') {
+    userValue = parseUserAnswer(userAnswer);
+    if (isNaN(userValue)) {
+      // If we can't parse user answer, do string comparison
+      return userAnswer.trim().toLowerCase() === String(correctAnswer).trim().toLowerCase();
+    }
+  }
+  
+  // Compare numeric values with tolerance
+  return Math.abs(userValue - correctValue) < tolerance;
 }
 
 // ======================
@@ -273,13 +357,6 @@ function handleEloChange() {
   }
 }
 
-function isAnswerCorrect(userAnswer, correctAnswer) {
-  const tolerance = state.currentQuestion?.tolerance || 0.001;
-  return Math.abs(userAnswer - correctAnswer) < tolerance;
-}
-
-
-
 async function initGame() {
   try {
     state.questions = await loadQuestions();
@@ -291,14 +368,17 @@ async function initGame() {
     updateEloDisplay();
     setupDrawing();
 
+    // Toggle question box button
+    elements.toggleQuestionBtn.addEventListener('click', toggleQuestionBox);
+
     elements.submitBtn.addEventListener('click', () => {
       const now = Date.now();
       if (now - state.lastAnswerTime < 1000) return;
       state.lastAnswerTime = now;
       
-      const userAnswer = parseFloat(elements.answerBox.value);
-      if (isNaN(userAnswer)) {
-        elements.result.textContent = "Please enter a valid number";
+      const userAnswer = elements.answerBox.value;
+      if (!userAnswer.trim()) {
+        elements.result.textContent = "Please enter an answer";
         return;
       }
 
