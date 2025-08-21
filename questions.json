@@ -141,14 +141,78 @@
         },
         {
             "id": 12,
-            "question": "Given (4+tan²A)(5+tan²B) = √320 tanA tanB where 0 < A, B < π/2, find tan²B × tanA.",
+            "question": "Given \\\\ $(4 + \\tan^2 A)(5 + \\tan^2 B) = \\sqrt{320} \\tan A \\tan B$ \\\\ Find $\\tan^2 B \\times \\tan A$. \\\\ Constraints: $0 < A, B < \\frac{\\pi}{2}$",
             "answer": 10,
             "elo": 1700,
-            "latex": "\\text{Given } (4+\\tan^2A)(5+\\tan^2B) = \\sqrt{320} \\tan A \\tan B \\text{ where } 0 < A, B < \\frac{\\pi}{2}, \\text{ find } \\tan^2B \\times \\tan A.",
+            "latex": "\\text{Given } \\\\ (4 + \\tan^2 A)(5 + \\tan^2 B) = \\sqrt{320} \\tan A \\tan B \\\\ \\text{Find } \\tan^2 B \\times \\tan A. \\\\ \\text{Constraints: } 0 < A, B < \\frac{\\pi}{2}",
             "category": [
                 "trigonometry",
-                "algebra"
-            ], 
+                "algebra",
+                "problem-solving"
+            ],
+            "author": "Yipeng Lu and CSMC Q6 2018"
+        },
+        {
+            "id": 13,
+            "question": "2 marbles are drawn from a bag containing 5 red, 3 blue, and 2 green marbles. What is the probability both are red?",
+            "answer": "2/9",
+            "elo": 800,
+            "latex": "\\text{A bag contains 5 red, 3 blue, and 2 green marbles.} \\\\ \\text{If 2 marbles are drawn, what is the probability both are red?}",
+            "category": [
+                "probability",
+                "combinatorics"
+            ],
+            "author": "Yipeng Lu"
+        },
+        {
+            "id": 14,
+            "question": "2 marbles are drawn from a bag containing 5 red, 3 blue, and 2 green marbles. What is the probability that one is blue?",
+            "answer": "7/15",
+            "elo": 900,
+            "latex": "\\text{A bag contains 5 red, 3 blue, and 2 green marbles.} \\\\ \\text{If 2 marbles are drawn, what is the probability exactly one is blue?}",
+            "category": [
+                "probability",
+                "combinatorics"
+            ],
+            "author": "Yipeng Lu"
+        },
+        {
+            "id": 15,
+            "question": "Two rooks are placed on random empty squares of a 6x6 chess board. What is the probability they do not attack each other?",
+            "answer": "5/7",
+            "elo": 1100,
+            "latex": "\\text{Two rooks are placed on random empty squares of a 6x6 chess board.} \\\\ \\text{What is the probability they do not attack each other?}",
+            "category": [
+                "probability",
+                "combinatorics"
+            ],
+            "author": "Yipeng Lu"
+        },
+        {
+            "id": 16,
+            "question": "A fair die is rolled 8 times. What is the probability that all 6 faces appear at least once?",
+            "answer": "191520/1679616",
+            "elo": 1500,
+            "latex": "\\text{A fair die is rolled 8 times.} \\\\ \\text{What is the probability that all 6 faces appear at least once?}",
+            "category": [
+                "probability",
+                "combinatorics",
+                "inclusion-exclusion"
+            ],
+            "author": "Yipeng Lu"
+        },
+        {
+            "id": 17,
+            "question": "A 3-digit number is formed by choosing 3 distinct digits from the set {0, 1, ..., 9}. What is the probability that the number is divisible by 3 and the largest of the three digits is in the hundreds place?",
+            "answer": "10/81",
+            "elo": 1600,
+            "latex": "\\text{A 3-digit number is formed by choosing 3 distinct digits} \\\\ \\text{from the set } \\{0, 1, \\dots, 9\\}. \\\\ \\text{What is the probability that the number is divisible by 3} \\\\ \\text{and the largest digit is in the hundreds place?}",
+            "category": [
+                "probability",
+                "combinatorics",
+                "divisibility",
+                "number-theory"
+            ],
             "author": "Yipeng Lu"
         }
     ]
