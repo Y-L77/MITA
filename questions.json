@@ -204,7 +204,7 @@
         {
             "id": 17,
             "question": "A 3-digit number is formed by choosing 3 distinct digits from the set {0, 1, ..., 9}. What is the probability that the number is divisible by 3 and the largest of the three digits is in the hundreds place?",
-            "answer": "10/81",
+            "answer": "7/54",
             "elo": 1600,
             "latex": "\\text{A 3-digit number is formed by choosing 3 distinct digits} \\\\ \\text{from the set } \\{0, 1, \\dots, 9\\}. \\\\ \\text{What is the probability that the number is divisible by 3} \\\\ \\text{and the largest digit is in the hundreds place?}",
             "category": [
@@ -212,6 +212,46 @@
                 "combinatorics",
                 "divisibility",
                 "number-theory"
+            ],
+            "author": "Yipeng Lu"
+        },
+        {
+            "id": 18,
+            "question": "Solve for x: x^{log₂x} = x^4 / 16",
+            "answer": 4,
+            "elo": 1400,
+            "latex": "\\text{Solve for } x: \\quad x^{\\log_{2} x} = \\frac{x^4}{16}",
+            "category": [
+                "algebra",
+                "logarithms",
+                "exponents"
+            ],
+            "author": "Yipeng Lu"
+        },
+        {
+            "id": 19,
+            "question": "Solve for the sum: log4(3/1) + log4(4/2) + log4(5/3) + ... + log4(100/98), round to the nearest integer.",
+            "answer": 6,
+            "elo": 1250,
+            "latex": "\\text{Solve for the sum: } \\log_{4}\\frac{3}{1} + \\log_{4}\\frac{4}{2} + \\log_{4}\\frac{5}{3} + \\dots + \\log_{4}\\frac{100}{98}, \\text{ round to nearest integer}",
+            "category": [
+                "logarithms",
+                "series",
+                "summation",
+                "telescoping"
+            ],
+            "author": "Yipeng Lu"
+        },
+        {
+            "id": 20,
+            "question": "log_4(a) = log_8(b) = log_20(a + 2b). Solve for b/a.",
+            "answer": 2,
+            "elo": 1400,
+            "latex": "\\log_{4}(a) = \\log_{8}(b) = \\log_{20}(a + 2b). \\quad \\text{Solve for } \\frac{b}{a}.",
+            "category": [
+                "logarithms",
+                "algebra",
+                "problem-solving"
             ],
             "author": "Yipeng Lu"
         }

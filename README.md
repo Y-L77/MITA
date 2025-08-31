@@ -1,5 +1,5 @@
 #MITA: Mathematical International Talent Arena
-**© 2025 [MITA TEAM] • All Rights Reserved • [CFs, Yipeng Lu/Rhythm Panchal]**
+**© 2025 [MITA TEAM] • All Rights Reserved • [CFs, Yipeng Lu/Rhythm Panchal/Rohit Chavali]**
 
 ## 🌍 Vision
 **Creating the first internationally recognized ELO system for competitive math**, replacing outdated contest-based rankings with real-time skill measurements through online duels.

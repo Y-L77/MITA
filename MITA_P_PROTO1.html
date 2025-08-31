@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,32 +8,54 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
   <div id="content-wrapper">
     <div id="elo-display">ELO: <span id="elo-value">300</span> (<span id="elo-rank">Middle Schooler</span>)</div>
     <div id="email-display">yipeng.dev@gmail.com</div>
-    
+
     <button id="hidden-focus-helper" aria-hidden="true" style="opacity:0;position:absolute;"></button>
-    
+
     <canvas id="drawing-canvas"></canvas>
 
     <!-- Toggle button is now SEPARATE from question container -->
     <button id="toggle-question-btn" class="toggle-btn">▲ Hide Question</button>
-    
+
     <div id="question-container">
       <div id="question" class="question-box"></div>
     </div>
   </div>
-  
+
   <div class="answer-container">
-    <input type="text" id="answer-box" placeholder="Your answer..." autofocus> <!-- Changed from type="number" to type="text" -->
+    <input type="text" id="answer-box" placeholder="Your answer..." autofocus>
+    <!-- Changed from type="number" to type="text" -->
     <button id="submit-btn">Submit</button>
     <button id="change-elo-btn">Change ELO</button>
     <button id="clear-drawing-btn">Clear Drawing</button>
   </div>
   <div id="result"></div>
 
+  <div id="color-picker-container">
+    <button id="color-picker-btn">
+      <span id="current-color-preview"></span>
+      Color
+    </button>
+    <div id="color-dropdown" class="hidden">
+      <div class="color-option" data-color="red" style="background:red;"></div>
+      <div class="color-option" data-color="yellow" style="background:yellow;"></div>
+      <div class="color-option" data-color="green" style="background:green;"></div>
+      <div class="color-option" data-color="lightblue" style="background:lightblue;"></div>
+      <div class="color-option" data-color="orange" style="background:orange;"></div>
+      <div class="color-option" data-color="white" style="background:white;border:1px solid #444;"></div>
+      <div class="color-option" data-color="#000000" style="background:#000000"></div>
+      <div class="color-option" data-color="#8a2be2" style="background:#8a2be2"></div> <!-- violet -->
+      <div class="color-option" data-color="#00008b" style="background:#00008b"></div> <!-- dark blue -->
+      <div class="color-option" data-color="#39ff14" style="background: #39ff14;"></div>
+    </div>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
   <script src="logic.js"></script>
 </body>
+
 </html>
