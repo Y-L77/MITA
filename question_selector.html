@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MITA — Question Selector</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Selector-specific styles */
+    :root { --accent: #ffd54f; --muted: #888; }
+
+    body.selector {
+      background: #121212; /* flat dark */
+      min-height: 100vh;
+      color: #fff;
+      font-family: 'Courier New', monospace;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .selector-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+      width: 100%;
+      max-width: 760px;
+    }
+
+    /* Player placeholders */
+    .player {
+      position: fixed;
+      top: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      z-index: 120;
+      font-size: 0.95rem;
+      color: #ddd;
+    }
+    .player.home { left: 18px; }
+    .player.guest { right: 18px; flex-direction: row-reverse; }
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: #1e1e1e;
+      display:flex;align-items:center;justify-content:center;
+      font-weight:700;color:#ffd;
+      box-shadow:0 4px 12px rgba(0,0,0,0.4);
+    }
+
+    .name {
+      background: rgba(255,255,255,0.04);
+      padding: 4px 8px;
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Roulette panel */
+    .roulette {
+      width: 100%;
+      max-width: 720px;
+      height: 320px;
+      background: #1a1a1a;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .roulette .window {
+      width: 80%;
+      height: 60%;
+      background: #000;
+      border-radius: 6px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 14px;
+      text-align: center;
+      color: #fff;
+      font-size: 1.1rem;
+      line-height: 1.25;
+      white-space: pre-line;
+      transition: transform 120ms linear;
+    }
+
+    .roulette .window.flash {
+      box-shadow: 0 0 12px rgba(255,213,79,0.25);
+      transform: scale(1.03);
+    }
+
+    .controls {
+      display:flex;
+      gap: 12px;
+      align-items:center;
+      justify-content:center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      background: #1e1e1e;
+      color: #fff;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      font-size: 0.95rem;
+    }
+
+    .btn.accent {
+      background: linear-gradient(90deg,#ffb74d,#ffd54f);
+      color: #000;
+      font-weight: 700;
+    }
+
+    .elo-control {
+      display:flex;
+      gap:8px;
+      align-items:center;
+      background: rgba(255,255,255,0.03);
+      padding: 6px 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    input[type="number"].elo-input {
+      width: 80px;
+      background: transparent;
+      color: #fff;
+      border: none;
+      outline: none;
+      font-size: 0.95rem;
+      text-align:center;
+    }
+
+    .confirm-row {
+      display:flex;
+      gap:12px;
+      margin-top:8px;
+      justify-content:center;
+    }
+
+    .confirm-btn {
+      min-width: 120px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.05);
+      background: rgba(255,255,255,0.04);
+      color: #fff;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    .confirm-btn.active {
+      background: linear-gradient(90deg,#43a047,#66bb6a);
+      box-shadow:0 4px 12px rgba(66,160,71,0.25);
+    }
+
+    .meta-small { color: var(--muted); font-size: 0.85rem; }
+
+    .note {
+      margin-top: 12px;
+      color: #aaa;
+      font-size: 0.85rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body class="selector">
+  <!-- Player placeholders -->
+  <div class="player home" role="region" aria-label="home player">
+    <div class="avatar">H</div>
+    <div class="name">Home</div>
+  </div>
+
+  <div class="player guest" role="region" aria-label="guest player">
+    <div class="name">Guest</div>
+    <div class="avatar">G</div>
+  </div>
+
+  <div class="selector-wrap">
+    <div class="roulette" id="roulette">
+      <div class="window" id="roulette-window">
+        Loading...
+      </div>
+    </div>
+
+    <div class="controls">
+      <div class="elo-control" title="Set ELO to filter pool">
+        <label style="color:var(--muted);font-size:0.85rem;">ELO</label>
+        <input id="elo-input" class="elo-input" type="number" min="0" step="50" value="300">
+        <button id="save-elo" class="btn">Save</button>
+      </div>
+      <button id="spin-btn" class="btn accent">SPIN</button>
+    </div>
+
+    <div class="confirm-row">
+      <button id="home-confirm" class="confirm-btn">Home Confirm</button>
+      <button id="guest-confirm" class="confirm-btn">Guest Confirm</button>
+    </div>
+
+    <div style="margin-top:8px; color:var(--muted); font-size:0.9rem;">
+      <span id="currently-shown-id">—</span>
+      <div class="meta-small" id="pool-info">Pool: — questions</div>
+    </div>
+
+    <div class="note">
+        MITA MVP V1.1
+        yipeng.dev@gmail.com
+    </div>
+  </div>
+
+  <script src="selector.js"></script>
+</body>
+</html>

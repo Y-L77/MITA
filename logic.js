@@ -1,3 +1,4 @@
+// logic.js (UPDATED to honour selectedQuestionId and selectedElo from selector)
 // ======================
 //  CONFIGURATION
 // ======================
@@ -7,9 +8,9 @@ const ELO_TIERS = [
   { min: 400, max: 600, name: "High Schooler" },
   { min: 600, max: 800, name: "Senior" },
   { min: 800, max: 1200, name: "Regionals" },
-  { min: 1200, max: 1700, name: "Nationalist" }, //bulk of the questions and probably contestants
-  { min: 1700, max: 2000, name: "Olympian" }, //are you really legit?
-  { min: 2000, max: 9999, name: "Grandmaster" } //try to get past this cheater, no AI cracking these questions
+  { min: 1200, max: 1700, name: "Nationalist" },
+  { min: 1700, max: 2000, name: "Olympian" },
+  { min: 2000, max: 9999, name: "Grandmaster" }
 ];
 
 // ======================
@@ -358,6 +359,13 @@ async function initGame() {
     state.questions = await loadQuestions();
     if (state.questions.length === 0) throw new Error("No questions available");
 
+    // If there is a selectedElo in localStorage (from the selector), use it.
+    const storedElo = localStorage.getItem('selectedElo');
+    if (storedElo) {
+      const elonum = parseInt(storedElo, 10);
+      if (!isNaN(elonum)) state.currentElo = elonum;
+    }
+
     updateEloDisplay();
     setupDrawing();
     setupColorPicker();
@@ -383,8 +391,29 @@ async function initGame() {
     elements.changeEloBtn.addEventListener('click', handleEloChange);
     elements.answerBox.addEventListener('keypress', (e) => { if (e.key === 'Enter') elements.submitBtn.click(); });
 
+    // If the selector set a specific question id, try to load that question by id.
+    const selectedQuestionId = localStorage.getItem('selectedQuestionId');
+    if (selectedQuestionId) {
+      const idNum = parseInt(selectedQuestionId, 10);
+      const selected = state.questions.find(q => q.id === idNum);
+      if (selected) {
+        // render exactly that question
+        renderQuestion(selected);
+        // remove the selection so reloads don't keep forcing the selected question
+        localStorage.removeItem('selectedQuestionId');
+        // leave selectedElo (it might be useful)
+        return;
+      }
+    }
+
+    // fallback behavior: choose random from elo range
     const initialPool = getQuestionsInEloRange(state.currentElo);
     if (initialPool.length > 0) renderQuestion(initialPool[Math.floor(Math.random() * initialPool.length)]);
+    else {
+      // if no questions in that tier, show a random question
+      renderQuestion(state.questions[Math.floor(Math.random() * state.questions.length)]);
+    }
+
   } catch (error) {
     console.error("Game initialization failed:", error);
     elements.result.textContent = "Failed to initialize game. Check console for details.";
