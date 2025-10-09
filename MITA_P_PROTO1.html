@@ -3,13 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MITA Problem Generator</title>
+  <title>MITA Question Canvas</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
   <link rel="stylesheet" href="style.css">
   <style>
     .top-nav{position:fixed;top:8px;left:8px;display:flex;gap:8px;z-index:120}
     .top-nav a{background:#111;border:1px solid rgba(255,255,255,.08);color:#fff;text-decoration:none;padding:8px 10px;border-radius:8px}
     .top-nav a:hover{background:#191919}
+    /* Result overlay */
+    #result-overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:300}
+    #result-overlay .box{background:rgba(0,0,0,.8);border:1px solid rgba(255,255,255,.15);padding:18px 22px;border-radius:12px;color:#fff;font-size:1.05rem;text-align:center}
+    #confetti{position:fixed;inset:0;pointer-events:none;z-index:350}
   </style>
 </head>
 
@@ -21,8 +25,8 @@
   </div>
 
   <div id="content-wrapper">
-    <div id="elo-display">ELO: <span id="elo-value">300</span> (<span id="elo-rank">Middle Schooler</span>)</div>
-    <div id="email-display">yipeng.dev@gmail.com</div>
+    <!-- Removed ELO header -->
+    <!-- <div id="elo-display">ELO: <span id="elo-value">300</span> (<span id="elo-rank">Middle Schooler</span>)</div> -->
 
     <button id="hidden-focus-helper" aria-hidden="true" style="opacity:0;position:absolute;"></button>
 
@@ -39,7 +43,7 @@
   <div class="answer-container">
     <input type="text" id="answer-box" placeholder="Your answer..." autofocus>
     <button id="submit-btn">Submit</button>
-    <button id="change-elo-btn">Change ELO</button>
+    <button id="change-elo-btn" style="display:none">Change ELO</button>
     <button id="clear-drawing-btn">Clear Drawing</button>
   </div>
   <div id="result"></div>
@@ -62,6 +66,10 @@
       <div class="color-option" data-color="#39ff14" style="background:#39ff14;"></div>
     </div>
   </div>
+
+  <!-- Result overlay + confetti canvas -->
+  <div id="result-overlay"><div class="box" id="result-text">...</div></div>
+  <canvas id="confetti"></canvas>
 
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
   <script src="logic.js"></script>

@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MITA — Blank Canvas</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .top-nav{position:fixed;top:8px;left:8px;display:flex;gap:8px;z-index:120}
+    .top-nav a{background:#111;border:1px solid rgba(255,255,255,.08);color:#fff;text-decoration:none;padding:8px 10px;border-radius:8px}
+    .top-nav a:hover{background:#191919}
+    body{background:#0e0e0e;color:#fff}
+    #blank-canvas{width:100vw;height:100vh;display:block}
+    .tools{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:8px;background:#111;border:1px solid rgba(255,255,255,.08);padding:8px 10px;border-radius:10px}
+    .tools button{color:#fff;background:#1a1a1a;border:1px solid rgba(255,255,255,.08);padding:6px 10px;border-radius:8px;cursor:pointer}
+    .color-dot{width:18px;height:18px;border-radius:50%;border:1px solid rgba(255,255,255,.2);cursor:pointer}
+  </style>
+</head>
+<body>
+  <div class="top-nav">
+    <a href="index.html">⟵ Home</a>
+    <a href="question_selector.html">🎰 Selector</a>
+    <a href="stats.html">📊 Stats</a>
+  </div>
+
+  <canvas id="blank-canvas"></canvas>
+  <div class="tools">
+    <button id="undo">Undo</button>
+    <button id="redo">Redo</button>
+    <button id="clear">Clear</button>
+    <div class="color-dot" data-color="#ffffff" style="background:#ffffff;"></div>
+    <div class="color-dot" data-color="#ff5252" style="background:#ff5252;"></div>
+    <div class="color-dot" data-color="#ffd54f" style="background:#ffd54f;"></div>
+    <div class="color-dot" data-color="#69f0ae" style="background:#69f0ae;"></div>
+    <div class="color-dot" data-color="#40c4ff" style="background:#40c4ff;"></div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('blank-canvas');
+    const ctx = canvas.getContext('2d');
+    let isDrawing=false,lastX=0,lastY=0,color='#ffffff',hist=[],idx=-1;
+
+    function resize(){
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = Math.floor(window.innerWidth * dpr);
+      canvas.height = Math.floor(window.innerHeight * dpr);
+      canvas.style.width='100vw'; canvas.style.height='100vh';
+      ctx.setTransform(1,0,0,1,0,0); ctx.scale(dpr,dpr);
+    }
+    function getPos(e){
+      const r = canvas.getBoundingClientRect();
+      if (e.touches && e.touches[0]) return {x:e.touches[0].clientX-r.left,y:e.touches[0].clientY-r.top};
+      return {x:e.clientX-r.left,y:e.clientY-r.top};
+    }
+    function save(){ try{ hist.push(canvas.toDataURL()); if(hist.length>50) hist.shift(); idx=hist.length-1; }catch{} }
+    function restore(){ const d=hist[idx]; if(!d) return; const img=new Image(); img.onload=()=>{ctx.clearRect(0,0,canvas.width,canvas.height); ctx.drawImage(img,0,0)}; img.src=d; }
+
+    function down(e){ save(); isDrawing=true; const p=getPos(e); lastX=p.x; lastY=p.y; ctx.beginPath(); ctx.moveTo(lastX,lastY); }
+    function move(e){ if(!isDrawing) return; const p=getPos(e); ctx.strokeStyle=color; ctx.lineWidth=2; ctx.lineCap='round'; ctx.lineJoin='round'; ctx.lineTo(p.x,p.y); ctx.stroke(); lastX=p.x; lastY=p.y; }
+    function up(){ isDrawing=false; }
+
+    function undo(){ if(idx<=0) return; idx--; restore(); }
+    function redo(){ if(idx>=hist.length-1) return; idx++; restore(); }
+    function clear(){ ctx.clearRect(0,0,canvas.width,canvas.height); save(); }
+
+    resize(); save();
+    window.addEventListener('resize', ()=>{ save(); resize(); });
+
+    canvas.addEventListener('mousedown', down);
+    canvas.addEventListener('mousemove', move);
+    canvas.addEventListener('mouseup', up);
+    canvas.addEventListener('mouseout', up);
+    canvas.addEventListener('touchstart', down, {passive:true});
+    canvas.addEventListener('touchmove', move, {passive:true});
+    canvas.addEventListener('touchend', up);
+
+    document.getElementById('undo').onclick=undo;
+    document.getElementById('redo').onclick=redo;
+    document.getElementById('clear').onclick=clear;
+
+    document.querySelectorAll('.color-dot').forEach(dot=>{
+      dot.addEventListener('click', ()=>{ color = dot.getAttribute('data-color') || '#ffffff'; });
+    });
+
+    document.addEventListener('keydown', (e)=>{
+      const meta = e.ctrlKey || e.metaKey;
+      if (!meta) return;
+      const k = e.key.toLowerCase();
+      if (k==='z' && !e.shiftKey){ e.preventDefault(); undo(); }
+      else if (k==='y' || (k==='z' && e.shiftKey)){ e.preventDefault(); redo(); }
+    });
+  </script>
+</body>
+</html>

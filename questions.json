@@ -1,259 +1,271 @@
 {
-    "_metadata": {
-        "project": "MITA_ProblemSetDatabase",
-        "author": "Yipeng Lu <yipeng.dev@gmail.com>",
-        "license": "Proprietary",
-        "copyright": "© 2025 MITA. All rights reserved.",
-        "notice": "Unauthorized distribution or modification prohibited."
+  "_metadata": {
+    "project": "MITA_ProblemSetDatabase",
+    "author": "Yipeng Lu <yipeng.dev@gmail.com>",
+    "license": "Proprietary",
+    "copyright": "© 2025 MITA. All rights reserved.",
+    "notice": "Unauthorized distribution or modification prohibited."
+  },
+  "questions": [
+    {
+      "id": 1,
+      "question": "log₃(81) + log₂(8)",
+      "answer": 7,
+      "elo": 700,
+      "latex": "\\log_{3}(81) + \\log_{2}(8)",
+      "category": ["logarithms"],
+      "author": "Yipeng Lu",
+      "web_difficulty": {
+        "combinatorics": 0, "algebra": 0, "functions": 0, "trigonometry": 0, "geometry": 0,
+        "probability": 0, "number theory": 0, "logarithms": 1, "sequences": 0
+      }
     },
-    "questions": [
-        {
-            "id": 1,
-            "question": "log₃(81) + log₂(8)",
-            "answer": 7,
-            "elo": 700,
-            "latex": "\\log_{3}(81) + \\log_{2}(8)",
-            "category": [
-                "logarithms"
-            ],
-            "author": "Yipeng Lu"
-        },
-        {
-            "id": 2,
-            "question": "∫(2x dx) from 0 to 3",
-            "answer": 9,
-            "elo": 1400,
-            "latex": "\\int_{0}^{3} 2x \\, dx",
-            "category": [
-                "calculus"
-            ],
-            "author": "Yipeng Lu"
-        },
-        {
-            "id": 3,
-            "question": "log2(x) + log2(x-2) = 3",
-            "answer": 4,
-            "elo": 850,
-            "latex": "\\log_{2}(x) + \\log_{2}(x-2) = 3, \\quad x \\in \\mathbb{R}",
-            "category": [
-                "algebra",
-                "logarithms"
-            ],
-            "author": "Yipeng Lu"
-        },
-        {
-            "id": 4,
-            "question": "2^log2(3x) = 9",
-            "answer": 3,
-            "elo": 850,
-            "latex": "2^{\\log_{2}(3x)} = 9",
-            "category": [
-                "algebra",
-                "logarithms",
-                "exponents"
-            ],
-            "author": "Yipeng Lu"
-        },
-        {
-            "id": 5,
-            "question": "16 × sum_{i=0}^{4} (1/2)^i = ?",
-            "answer": 31,
-            "elo": 1000,
-            "latex": "16 \\times \\sum_{i=0}^{4} \\left( \\frac{1}{2} \\right)^i = ?",
-            "category": [
-                "algebra",
-                "series",
-                "summation"
-            ],
-            "author": "Yipeng Lu"
-        },
-        {
-            "id": 6,
-            "question": "The circle 25 = (x+3)^2 + (y+4)^2 is tangent to a line passing through the origin. What is the maximum y-value of the line at x=4?",
-            "answer": -3,
-            "elo": 1400,
-            "latex": "\\begin{multline*} 25 = (x + 3)^2 \\\\ + (y + 4)^2 \\end{multline*} \\text{is tangent to a line through the origin. What is the maximum } y\\text{-value at } x=4?",
-            "category": [
-                "geometry",
-                "coordinate-geometry"
-            ],
-            "author": "Yipeng Lu"
-        },
-        {
-            "id": 7,
-            "question": "Solve for n in: 2ⁿ = (16⁴⁰ × 16⁷⁰ + 256⁵⁴ × 2⁹ + 33,554,432¹⁷ × 2¹⁵) × 2¹⁵⁸³",
-            "answer": 2025,
-            "elo": 1200,
-            "latex": "2^n = \\left(16^{40} \\times 16^{70} + 256^{54} \\times 2^9 + 33,\\!554,\\!432^{17} \\times 2^{15}\\right) \\times 2^{1583}",
-            "category": [
-                "exponents",
-                "algebra"
-            ],
-            "author": "Yipeng Lu"
-        },
-        {
-            "id": 8,
-            "question": "Solve for x: 72ˣ × 375ˣ⁺² = 2⁹ × 3¹¹ × 5¹⁵",
-            "answer": 3,
-            "elo": 1100,
-            "latex": "72^x \\times 375^{x+2} = 2^9 \\times 3^{11} \\times 5^{15}",
-            "category": [
-                "exponents",
-                "algebra"
-            ],
-            "author": "Yipeng Lu"
-        },
-        {
-            "id": 9,
-            "question": "How many 5-digit numbers (digits 0-9, no repetitions) are divisible by 5?",
-            "answer": 5712,
-            "elo": 1200,
-            "latex": "\\text{How many 5-digit numbers (digits 0-9, no repetitions) are divisible by 5?}",
-            "category": [
-                "combinatorics",
-                "divisibility"
-            ],
-            "author": "Yipeng Lu"
-        },
-        {
-            "id": 10,
-            "question": "θ ∈ (0, π/2), 2cos²θ - sinθ = 1. Find 2sinθ.",
-            "answer": 1,
-            "elo": 950,
-            "latex": "\\theta \\in \\left(0, \\frac{\\pi}{2}\\right), \\quad 2\\cos^{2}\\theta - \\sin\\theta = 1. \\quad \\text{Find } 2\\sin\\theta.",
-            "category": [
-                "trigonometry",
-                "algebra"
-            ],
-            "author": "Yipeng Lu"
-        },
-        {
-            "id": 11,
-            "question": "Given x + y = 23016 and LCM = 299039, find max(x, y).",
-            "answer": 23003,
-            "elo": 1300,
-            "latex": "\\text{Given } x + y = 23016 \\text{ and } \\text{LCM} = 299039, \\text{ find } \\max(x, y).",
-            "category": [
-                "number-theory",
-                "gcd-lcm"
-            ],
-            "author": "Yipeng Lu"
-        },
-        {
-            "id": 12,
-            "question": "Given \\\\ $(4 + \\tan^2 A)(5 + \\tan^2 B) = \\sqrt{320} \\tan A \\tan B$ \\\\ Find $\\tan^2 B \\times \\tan A$. \\\\ Constraints: $0 < A, B < \\frac{\\pi}{2}$",
-            "answer": 10,
-            "elo": 1700,
-            "latex": "\\text{Given } \\\\ (4 + \\tan^2 A)(5 + \\tan^2 B) = \\sqrt{320} \\tan A \\tan B \\\\ \\text{Find } \\tan^2 B \\times \\tan A. \\\\ \\text{Constraints: } 0 < A, B < \\frac{\\pi}{2}",
-            "category": [
-                "trigonometry",
-                "algebra",
-                "problem-solving"
-            ],
-            "author": "Yipeng Lu and CSMC Q6 2018"
-        },
-        {
-            "id": 13,
-            "question": "2 marbles are drawn from a bag containing 5 red, 3 blue, and 2 green marbles. What is the probability both are red?",
-            "answer": "2/9",
-            "elo": 800,
-            "latex": "\\text{A bag contains 5 red, 3 blue, and 2 green marbles.} \\\\ \\text{If 2 marbles are drawn, what is the probability both are red?}",
-            "category": [
-                "probability",
-                "combinatorics"
-            ],
-            "author": "Yipeng Lu"
-        },
-        {
-            "id": 14,
-            "question": "2 marbles are drawn from a bag containing 5 red, 3 blue, and 2 green marbles. What is the probability that one is blue?",
-            "answer": "7/15",
-            "elo": 900,
-            "latex": "\\text{A bag contains 5 red, 3 blue, and 2 green marbles.} \\\\ \\text{If 2 marbles are drawn, what is the probability exactly one is blue?}",
-            "category": [
-                "probability",
-                "combinatorics"
-            ],
-            "author": "Yipeng Lu"
-        },
-        {
-            "id": 15,
-            "question": "Two rooks are placed on random empty squares of a 6x6 chess board. What is the probability they do not attack each other?",
-            "answer": "5/7",
-            "elo": 1100,
-            "latex": "\\text{Two rooks are placed on random empty squares of a 6x6 chess board.} \\\\ \\text{What is the probability they do not attack each other?}",
-            "category": [
-                "probability",
-                "combinatorics"
-            ],
-            "author": "Yipeng Lu"
-        },
-        {
-            "id": 16,
-            "question": "A fair die is rolled 8 times. What is the probability that all 6 faces appear at least once?",
-            "answer": "191520/1679616",
-            "elo": 1500,
-            "latex": "\\text{A fair die is rolled 8 times.} \\\\ \\text{What is the probability that all 6 faces appear at least once?}",
-            "category": [
-                "probability",
-                "combinatorics",
-                "inclusion-exclusion"
-            ],
-            "author": "Yipeng Lu"
-        },
-        {
-            "id": 17,
-            "question": "A 3-digit number is formed by choosing 3 distinct digits from the set {0, 1, ..., 9}. What is the probability that the number is divisible by 3 and the largest of the three digits is in the hundreds place?",
-            "answer": "7/54",
-            "elo": 1600,
-            "latex": "\\text{A 3-digit number is formed by choosing 3 distinct digits} \\\\ \\text{from the set } \\{0, 1, \\dots, 9\\}. \\\\ \\text{What is the probability that the number is divisible by 3} \\\\ \\text{and the largest digit is in the hundreds place?}",
-            "category": [
-                "probability",
-                "combinatorics",
-                "divisibility",
-                "number-theory"
-            ],
-            "author": "Yipeng Lu"
-        },
-        {
-            "id": 18,
-            "question": "Solve for x: x^{log₂x} = x^4 / 16",
-            "answer": 4,
-            "elo": 1400,
-            "latex": "\\text{Solve for } x: \\quad x^{\\log_{2} x} = \\frac{x^4}{16}",
-            "category": [
-                "algebra",
-                "logarithms",
-                "exponents"
-            ],
-            "author": "Yipeng Lu"
-        },
-        {
-            "id": 19,
-            "question": "Solve for the sum: log4(3/1) + log4(4/2) + log4(5/3) + ... + log4(100/98), round to the nearest integer.",
-            "answer": 6,
-            "elo": 1250,
-            "latex": "\\text{Solve for the sum: } \\log_{4}\\frac{3}{1} + \\log_{4}\\frac{4}{2} + \\log_{4}\\frac{5}{3} + \\dots + \\log_{4}\\frac{100}{98}, \\text{ round to nearest integer}",
-            "category": [
-                "logarithms",
-                "series",
-                "summation",
-                "telescoping"
-            ],
-            "author": "Yipeng Lu"
-        },
-        {
-            "id": 20,
-            "question": "log_4(a) = log_8(b) = log_20(a + 2b). Solve for b/a.",
-            "answer": 2,
-            "elo": 1400,
-            "latex": "\\log_{4}(a) = \\log_{8}(b) = \\log_{20}(a + 2b). \\quad \\text{Solve for } \\frac{b}{a}.",
-            "category": [
-                "logarithms",
-                "algebra",
-                "problem-solving"
-            ],
-            "author": "Yipeng Lu"
-        }
-    ]
+    {
+      "id": 2,
+      "question": "∫(2x dx) from 0 to 3",
+      "answer": 9,
+      "elo": 1400,
+      "latex": "\\int_{0}^{3} 2x \\, dx",
+      "category": ["calculus"],
+      "author": "Yipeng Lu",
+      "web_difficulty": {
+        "combinatorics": 0, "algebra": 0, "functions": 4, "trigonometry": 0, "geometry": 0,
+        "probability": 0, "number theory": 0, "logarithms": 0, "sequences": 0
+      }
+    },
+    {
+      "id": 3,
+      "question": "log2(x) + log2(x-2) = 3",
+      "answer": 4,
+      "elo": 850,
+      "latex": "\\log_{2}(x) + \\log_{2}(x-2) = 3, \\quad x \\in \\mathbb{R}",
+      "category": ["algebra","logarithms"],
+      "author": "Yipeng Lu",
+      "web_difficulty": {
+        "combinatorics": 0, "algebra": 1, "functions": 0, "trigonometry": 0, "geometry": 0,
+        "probability": 0, "number theory": 0, "logarithms": 1, "sequences": 0
+      }
+    },
+    {
+      "id": 4,
+      "question": "2^log2(3x) = 9",
+      "answer": 3,
+      "elo": 850,
+      "latex": "2^{\\log_{2}(3x)} = 9",
+      "category": ["algebra","logarithms","exponents"],
+      "author": "Yipeng Lu",
+      "web_difficulty": {
+        "combinatorics": 0, "algebra": 1, "functions": 0, "trigonometry": 0, "geometry": 0,
+        "probability": 0, "number theory": 0, "logarithms": 1, "sequences": 0
+      }
+    },
+    {
+      "id": 5,
+      "question": "16 × sum_{i=0}^{4} (1/2)^i = ?",
+      "answer": 31,
+      "elo": 1000,
+      "latex": "16 \\times \\sum_{i=0}^{4} \\left( \\frac{1}{2} \\right)^i = ?",
+      "category": ["algebra","series","summation"],
+      "author": "Yipeng Lu",
+      "web_difficulty": {
+        "combinatorics": 0, "algebra": 2, "functions": 0, "trigonometry": 0, "geometry": 0,
+        "probability": 0, "number theory": 0, "logarithms": 0, "sequences": 2
+      }
+    },
+    {
+      "id": 6,
+      "question": "The circle 25 = (x+3)^2 + (y+4)^2 is tangent to a line passing through the origin. What is the maximum y-value of the line at x=4?",
+      "answer": -3,
+      "elo": 1400,
+      "latex": "\\begin{multline*} 25 = (x + 3)^2 \\\\ + (y + 4)^2 \\end{multline*} \\text{is tangent to a line through the origin. What is the maximum } y\\text{-value at } x=4?",
+      "category": ["geometry","coordinate-geometry"],
+      "author": "Yipeng Lu",
+      "web_difficulty": {
+        "combinatorics": 0, "algebra": 0, "functions": 0, "trigonometry": 0, "geometry": 4,
+        "probability": 0, "number theory": 0, "logarithms": 0, "sequences": 0
+      }
+    },
+    {
+      "id": 7,
+      "question": "Solve for n in: 2ⁿ = (16⁴⁰ × 16⁷⁰ + 256⁵⁴ × 2⁹ + 33,554,432¹⁷ × 2¹⁵) × 2¹⁵⁸³",
+      "answer": 2025,
+      "elo": 1200,
+      "latex": "2^n = \\left(16^{40} \\times 16^{70} + 256^{54} \\times 2^9 + 33,\\!554,\\!432^{17} \\times 2^{15}\\right) \\times 2^{1583}",
+      "category": ["exponents","algebra"],
+      "author": "Yipeng Lu",
+      "web_difficulty": {
+        "combinatorics": 0, "algebra": 3, "functions": 0, "trigonometry": 0, "geometry": 0,
+        "probability": 0, "number theory": 0, "logarithms": 0, "sequences": 0
+      }
+    },
+    {
+      "id": 8,
+      "question": "Solve for x: 72ˣ × 375ˣ⁺² = 2⁹ × 3¹¹ × 5¹⁵",
+      "answer": 3,
+      "elo": 1100,
+      "latex": "72^x \\times 375^{x+2} = 2^9 \\times 3^{11} \\times 5^{15}",
+      "category": ["exponents","algebra"],
+      "author": "Yipeng Lu",
+      "web_difficulty": {
+        "combinatorics": 0, "algebra": 2, "functions": 0, "trigonometry": 0, "geometry": 0,
+        "probability": 0, "number theory": 0, "logarithms": 0, "sequences": 0
+      }
+    },
+    {
+      "id": 9,
+      "question": "How many 5-digit numbers (digits 0-9, no repetitions) are divisible by 5?",
+      "answer": 5712,
+      "elo": 1200,
+      "latex": "\\text{How many 5-digit numbers (digits 0-9, no repetitions) are divisible by 5?}",
+      "category": ["combinatorics","divisibility"],
+      "author": "Yipeng Lu",
+      "web_difficulty": {
+        "combinatorics": 3, "algebra": 0, "functions": 0, "trigonometry": 0, "geometry": 0,
+        "probability": 0, "number theory": 3, "logarithms": 0, "sequences": 0
+      }
+    },
+    {
+      "id": 10,
+      "question": "θ ∈ (0, π/2), 2cos²θ - sinθ = 1. Find 2sinθ.",
+      "answer": 1,
+      "elo": 950,
+      "latex": "\\theta \\in \\left(0, \\frac{\\pi}{2}\\right), \\quad 2\\cos^{2}\\theta - \\sin\\theta = 1. \\quad \\text{Find } 2\\sin\\theta.",
+      "category": ["trigonometry","algebra"],
+      "author": "Yipeng Lu",
+      "web_difficulty": {
+        "combinatorics": 0, "algebra": 2, "functions": 0, "trigonometry": 2, "geometry": 0,
+        "probability": 0, "number theory": 0, "logarithms": 0, "sequences": 0
+      }
+    },
+    {
+      "id": 11,
+      "question": "Given x + y = 23016 and LCM = 299039, find max(x, y).",
+      "answer": 23003,
+      "elo": 1300,
+      "latex": "\\text{Given } x + y = 23016 \\text{ and } \\text{LCM} = 299039, \\text{ find } \\max(x, y).",
+      "category": ["number-theory","gcd-lcm"],
+      "author": "Yipeng Lu",
+      "web_difficulty": {
+        "combinatorics": 0, "algebra": 0, "functions": 0, "trigonometry": 0, "geometry": 0,
+        "probability": 0, "number theory": 3, "logarithms": 0, "sequences": 0
+      }
+    },
+    {
+      "id": 12,
+      "question": "Given \\\\ $(4 + \\tan^2 A)(5 + \\tan^2 B) = \\sqrt{320} \\tan A \\tan B$ \\\\ Find $\\tan^2 B \\times \\tan A$. \\\\ Constraints: $0 < A, B < \\frac{\\pi}{2}$",
+      "answer": 10,
+      "elo": 1700,
+      "latex": "\\text{Given } \\\\ (4 + \\tan^2 A)(5 + \\tan^2 B) = \\sqrt{320} \\tan A \\tan B \\\\ \\text{Find } \\tan^2 B \\times \\tan A. \\\\ \\text{Constraints: } 0 < A, B < \\frac{\\pi}{2}",
+      "category": ["trigonometry","algebra","problem-solving"],
+      "author": "Yipeng Lu and CSMC Q6 2018",
+      "web_difficulty": {
+        "combinatorics": 0, "algebra": 5, "functions": 0, "trigonometry": 5, "geometry": 0,
+        "probability": 0, "number theory": 0, "logarithms": 0, "sequences": 0
+      }
+    },
+    {
+      "id": 13,
+      "question": "2 marbles are drawn from a bag containing 5 red, 3 blue, and 2 green marbles. What is the probability both are red?",
+      "answer": "2/9",
+      "elo": 800,
+      "latex": "\\text{A bag contains 5 red, 3 blue, and 2 green marbles.} \\\\ \\text{If 2 marbles are drawn, what is the probability both are red?}",
+      "category": ["probability","combinatorics"],
+      "author": "Yipeng Lu",
+      "web_difficulty": {
+        "combinatorics": 1, "algebra": 0, "functions": 0, "trigonometry": 0, "geometry": 0,
+        "probability": 1, "number theory": 0, "logarithms": 0, "sequences": 0
+      }
+    },
+    {
+      "id": 14,
+      "question": "2 marbles are drawn from a bag containing 5 red, 3 blue, and 2 green marbles. What is the probability that one is blue?",
+      "answer": "7/15",
+      "elo": 900,
+      "latex": "\\text{A bag contains 5 red, 3 blue, and 2 green marbles.} \\\\ \\text{If 2 marbles are drawn, what is the probability exactly one is blue?}",
+      "category": ["probability","combinatorics"],
+      "author": "Yipeng Lu",
+      "web_difficulty": {
+        "combinatorics": 1, "algebra": 0, "functions": 0, "trigonometry": 0, "geometry": 0,
+        "probability": 1, "number theory": 0, "logarithms": 0, "sequences": 0
+      }
+    },
+    {
+      "id": 15,
+      "question": "Two rooks are placed on random empty squares of a 6x6 chess board. What is the probability they do not attack each other?",
+      "answer": "5/7",
+      "elo": 1100,
+      "latex": "\\text{Two rooks are placed on random empty squares of a 6x6 chess board.} \\\\ \\text{What is the probability they do not attack each other?}",
+      "category": ["probability","combinatorics"],
+      "author": "Yipeng Lu",
+      "web_difficulty": {
+        "combinatorics": 2, "algebra": 0, "functions": 0, "trigonometry": 0, "geometry": 0,
+        "probability": 2, "number theory": 0, "logarithms": 0, "sequences": 0
+      }
+    },
+    {
+      "id": 16,
+      "question": "A fair die is rolled 8 times. What is the probability that all 6 faces appear at least once?",
+      "answer": "191520/1679616",
+      "elo": 1500,
+      "latex": "\\text{A fair die is rolled 8 times.} \\\\ \\text{What is the probability that all 6 faces appear at least once?}",
+      "category": ["probability","combinatorics","inclusion-exclusion"],
+      "author": "Yipeng Lu",
+      "web_difficulty": {
+        "combinatorics": 4, "algebra": 0, "functions": 0, "trigonometry": 0, "geometry": 0,
+        "probability": 4, "number theory": 0, "logarithms": 0, "sequences": 0
+      }
+    },
+    {
+      "id": 17,
+      "question": "A 3-digit number is formed by choosing 3 distinct digits from the set {0, 1, ..., 9}. What is the probability that the number is divisible by 3 and the largest of the three digits is in the hundreds place?",
+      "answer": "7/54",
+      "elo": 1600,
+      "latex": "\\text{A 3-digit number is formed by choosing 3 distinct digits} \\\\ \\text{from the set } \\{0, 1, \\dots, 9\\}. \\\\ \\text{What is the probability that the number is divisible by 3} \\\\ \\text{and the largest digit is in the hundreds place?}",
+      "category": ["probability","combinatorics","divisibility","number-theory"],
+      "author": "Yipeng Lu",
+      "web_difficulty": {
+        "combinatorics": 4, "algebra": 0, "functions": 0, "trigonometry": 0, "geometry": 0,
+        "probability": 4, "number theory": 4, "logarithms": 0, "sequences": 0
+      }
+    },
+    {
+      "id": 18,
+      "question": "Solve for x: x^{log₂x} = x^4 / 16",
+      "answer": 4,
+      "elo": 1400,
+      "latex": "\\text{Solve for } x: \\quad x^{\\log_{2} x} = \\frac{x^4}{16}",
+      "category": ["algebra","logarithms","exponents"],
+      "author": "Yipeng Lu",
+      "web_difficulty": {
+        "combinatorics": 0, "algebra": 4, "functions": 0, "trigonometry": 0, "geometry": 0,
+        "probability": 0, "number theory": 0, "logarithms": 4, "sequences": 0
+      }
+    },
+    {
+      "id": 19,
+      "question": "Solve for the sum: log4(3/1) + log4(4/2) + log4(5/3) + ... + log4(100/98), round to the nearest integer.",
+      "answer": 6,
+      "elo": 1250,
+      "latex": "\\text{Solve for the sum: } \\log_{4}\\frac{3}{1} + \\log_{4}\\frac{4}{2} + \\log_{4}\\frac{5}{3} + \\dots + \\log_{4}\\frac{100}{98}, \\text{ round to nearest integer}",
+      "category": ["logarithms","series","summation","telescoping"],
+      "author": "Yipeng Lu",
+      "web_difficulty": {
+        "combinatorics": 0, "algebra": 0, "functions": 0, "trigonometry": 0, "geometry": 0,
+        "probability": 0, "number theory": 0, "logarithms": 3, "sequences": 3
+      }
+    },
+    {
+      "id": 20,
+      "question": "log_4(a) = log_8(b) = log_20(a + 2b). Solve for b/a.",
+      "answer": 2,
+      "elo": 1400,
+      "latex": "\\log_{4}(a) = \\log_{8}(b) = \\log_{20}(a + 2b). \\quad \\text{Solve for } \\frac{b}{a}.",
+      "category": ["logarithms","algebra","problem-solving"],
+      "author": "Yipeng Lu",
+      "web_difficulty": {
+        "combinatorics": 0, "algebra": 4, "functions": 0, "trigonometry": 0, "geometry": 0,
+        "probability": 0, "number theory": 0, "logarithms": 4, "sequences": 0
+      }
+    }
+  ]
 }

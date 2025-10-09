@@ -1,14 +1,12 @@
-// logic.js — MITA Canvas Player (v3.1)
-// ----------------------------------------------------------------------------------
-// What changed vs v3.0:
-// • Added global keyboard handlers: Ctrl/Cmd+Z → undo, Ctrl/Cmd+Y or Shift+Ctrl/Cmd+Z → redo.
-// • Kept the coherent ELO system + persistence + category stats from v3.0.
-// • Preserves your IDs, KaTeX render, canvas draw, color picker, question box toggle, “Change ELO”.
-// ----------------------------------------------------------------------------------
+// logic.js — Single-player Canvas (v4)
+// Changes:
+// • Removed ELO display elements. Keeps ELO math & persistence silently for stats.
+// • On submit: show overlay for ~2.2s.
+//    - Incorrect → "Incorrect. Answer: ..." then redirect to Home.
+//    - Correct → "Correct!" + mini confetti, then redirect to Home.
+// • Ctrl/Cmd+Z undo, Ctrl/Cmd+Y or Shift+Ctrl/Cmd+Z redo.
+// • Retains your canvas/color/toggle/KaTeX IDs & structure.
 
-/* ======================
-   CONFIGURATION
-====================== */
 const ELO_TIERS = [
   { min: 0,   max: 200,  name: "Elementary" },
   { min: 200, max: 400,  name: "Middle Schooler" },
@@ -20,20 +18,15 @@ const ELO_TIERS = [
   { min: 2000,max: 9999, name: "Grandmaster" }
 ];
 
-const SAVE_KEY = 'mita_save_v3';  // single store for elo + stats
-const K_FACTOR = 24;              // tune later
+const SAVE_KEY = 'mita_save_v3';
+const K_FACTOR = 24;
 
-/* ======================
-   DOM ELEMENTS
-====================== */
 const elements = {
   question: document.getElementById('question'),
   answerBox: document.getElementById('answer-box'),
   submitBtn: document.getElementById('submit-btn'),
   result: document.getElementById('result'),
-  eloDisplay: document.getElementById('elo-display'),
-  eloRank: document.getElementById('elo-rank'),
-  changeEloBtn: document.getElementById('change-elo-btn'),
+  changeEloBtn: document.getElementById('change-elo-btn'), // hidden now
   clearDrawingBtn: document.getElementById('clear-drawing-btn'),
   canvas: document.getElementById('drawing-canvas'),
   hiddenFocusHelper: document.getElementById('hidden-focus-helper'),
@@ -43,60 +36,48 @@ const elements = {
   colorDropdown: document.getElementById('color-dropdown'),
   colorOptions: document.querySelectorAll('.color-option'),
   currentColorPreview: document.getElementById('current-color-preview'),
+  resultOverlay: document.getElementById('result-overlay'),
+  resultText: document.getElementById('result-text'),
+  confetti: document.getElementById('confetti'),
 };
 
-/* ======================
-   GAME STATE
-====================== */
 const state = {
-  // Question engine
   currentQuestion: null,
   questions: [],
-
-  // Player
   currentElo: 300,
-
-  // Canvas
   isDrawing: false,
   lastX: 0, lastY: 0,
   savedDrawing: null,
   drawingHistory: [],
   maxUndoSteps: 20,
   currentHistoryIndex: -1,
-
-  // UI
   lastAnswerTime: 0,
   questionBoxVisible: true,
   currentColor: "#ffffff",
-
-  // Stats
+  // stats
   streak: 0,
   bestStreak: 0,
   totalAttempts: 0,
   totalCorrect: 0,
-  categoryStats: {},       // { [cat]: {attempts, correct} }
-  eloHistory: []           // [{ts, elo}]
+  categoryStats: {},
+  eloHistory: []
 };
 
-/* ======================
-   PERSISTENCE
-====================== */
+// ---------- persistence ----------
 function loadSave() {
   try {
-    const raw = localStorage.getItem(SAVE_KEY);
-    if (!raw) return;
-    const s = JSON.parse(raw);
+    const s = JSON.parse(localStorage.getItem(SAVE_KEY) || '{}');
     if (typeof s.currentElo === 'number') state.currentElo = s.currentElo;
     if (typeof s.streak === 'number') state.streak = s.streak;
     if (typeof s.bestStreak === 'number') state.bestStreak = s.bestStreak;
     if (typeof s.totalAttempts === 'number') state.totalAttempts = s.totalAttempts;
     if (typeof s.totalCorrect === 'number') state.totalCorrect = s.totalCorrect;
-    if (s.categoryStats && typeof s.categoryStats === 'object') state.categoryStats = s.categoryStats;
+    if (s.categoryStats) state.categoryStats = s.categoryStats;
     if (Array.isArray(s.eloHistory)) state.eloHistory = s.eloHistory;
   } catch {}
 }
 function saveAll() {
-  const snapshot = {
+  const snap = {
     currentElo: state.currentElo,
     streak: state.streak,
     bestStreak: state.bestStreak,
@@ -105,16 +86,10 @@ function saveAll() {
     categoryStats: state.categoryStats,
     eloHistory: state.eloHistory
   };
-  try { localStorage.setItem(SAVE_KEY, JSON.stringify(snapshot)); } catch {}
+  try { localStorage.setItem(SAVE_KEY, JSON.stringify(snap)); } catch {}
 }
 
-/* ======================
-   ELO HELPERS
-====================== */
-function getRankForElo(elo) {
-  const tier = ELO_TIERS.find(r => elo >= r.min && elo < r.max);
-  return tier ? tier.name : "—";
-}
+// ---------- ELO ----------
 function expectedScore(playerElo, questionElo) {
   return 1 / (1 + Math.pow(10, (questionElo - playerElo) / 400));
 }
@@ -126,49 +101,35 @@ function updateElo(playerElo, questionElo, correct) {
   const next = Math.max(0, Math.round(playerElo + delta));
   state.eloHistory.push({ ts: Date.now(), elo: next });
   if (state.eloHistory.length > 500) state.eloHistory.shift();
-  return { next, delta };
-}
-function updateEloDisplay() {
-  document.getElementById('elo-value').textContent = state.currentElo;
-  elements.eloRank.textContent = getRankForElo(state.currentElo);
+  return { next };
 }
 
-/* ======================
-   ANSWER CHECKING
-====================== */
+// ---------- answer checking ----------
 function parseFraction(str) {
   const s = String(str).trim();
-  if (/^[+-]?\d+\/[+-]?\d+$/.test(s)) {
-    const [n, d] = s.split('/').map(Number);
-    if (d !== 0) return n / d;
-  }
+  if (/^[+-]?\d+\/[+-]?\d+$/.test(s)) { const [n,d]=s.split('/').map(Number); if (d!==0) return n/d; }
   return null;
 }
 function toNumber(x) {
   if (typeof x === 'number') return x;
-  const f = parseFraction(x);
-  if (f !== null) return f;
-  const n = Number(String(x).trim());
-  return Number.isFinite(n) ? n : null;
+  const f = parseFraction(x); if (f !== null) return f;
+  const n = Number(String(x).trim()); return Number.isFinite(n) ? n : null;
 }
 function isAnswerCorrect(user, key) {
-  const uNum = toNumber(user);
-  const kNum = toNumber(key);
+  const uNum = toNumber(user), kNum = toNumber(key);
   if (uNum !== null && kNum !== null) return Math.abs(uNum - kNum) < 1e-9;
   return String(user).trim().toLowerCase() === String(key).trim().toLowerCase();
 }
 
-/* ======================
-   DRAWING
-====================== */
+// ---------- drawing ----------
 function resizeCanvas() {
   const dpr = window.devicePixelRatio || 1;
+  const ctx = elements.canvas.getContext('2d');
   elements.canvas.width = Math.floor(window.innerWidth * dpr);
-  elements.canvas.height = Math.floor(window.innerHeight * 3 * dpr); // keep 300vh
+  elements.canvas.height = Math.floor(window.innerHeight * 3 * dpr); // 300vh
   elements.canvas.style.width = '100vw';
   elements.canvas.style.height = '300vh';
-  const ctx = elements.canvas.getContext('2d');
-  ctx.setTransform(1,0,0,1,0,0); // reset before scale to avoid compounding
+  ctx.setTransform(1,0,0,1,0,0);
   ctx.scale(dpr, dpr);
 }
 function saveCanvasState() {
@@ -188,74 +149,23 @@ function restoreCanvasState() {
   };
   img.src = dataUrl;
 }
-function undoLastStroke() {
-  if (state.currentHistoryIndex <= 0) return;
-  state.currentHistoryIndex--;
-  restoreCanvasState();
+function undoLastStroke() { if (state.currentHistoryIndex<=0) return; state.currentHistoryIndex--; restoreCanvasState(); }
+function redoLastStroke() { if (state.currentHistoryIndex>=state.drawingHistory.length-1) return; state.currentHistoryIndex++; restoreCanvasState(); }
+function getPos(e) {
+  const r = elements.canvas.getBoundingClientRect();
+  if (e.touches && e.touches[0]) return { x:e.touches[0].clientX - r.left, y:e.touches[0].clientY - r.top };
+  return { x:e.clientX - r.left, y:e.clientY - r.top };
 }
-function redoLastStroke() {
-  if (state.currentHistoryIndex >= state.drawingHistory.length - 1) return;
-  state.currentHistoryIndex++;
-  restoreCanvasState();
-}
-function getPosition(e) {
-  const rect = elements.canvas.getBoundingClientRect();
-  if (e.touches && e.touches[0]) {
-    return { x: e.touches[0].clientX - rect.left, y: e.touches[0].clientY - rect.top };
-  }
-  return { x: e.clientX - rect.left, y: e.clientY - rect.top };
-}
-function startDrawing(e) {
-  saveCanvasState();
-  state.isDrawing = true;
-  const ctx = elements.canvas.getContext('2d');
-  const pos = getPosition(e);
-  [state.lastX, state.lastY] = [pos.x, pos.y];
-  ctx.beginPath();
-  ctx.moveTo(state.lastX, state.lastY);
-}
-function draw(e) {
-  if (!state.isDrawing) return;
-  const ctx = elements.canvas.getContext('2d');
-  ctx.strokeStyle = state.currentColor;
-  ctx.lineWidth = 2;
-  ctx.lineCap = 'round';
-  ctx.lineJoin = 'round';
-  const pos = getPosition(e);
-  ctx.lineTo(pos.x, pos.y);
-  ctx.stroke();
-  [state.lastX, state.lastY] = [pos.x, pos.y];
-}
-function stopDrawing() { state.isDrawing = false; }
-function clearDrawing() {
-  const ctx = elements.canvas.getContext('2d');
-  ctx.clearRect(0, 0, elements.canvas.width, elements.canvas.height);
-  saveCanvasState();
-}
+function startDrawing(e){ saveCanvasState(); state.isDrawing=true; const ctx=elements.canvas.getContext('2d'); const p=getPos(e); [state.lastX,state.lastY]=[p.x,p.y]; ctx.beginPath(); ctx.moveTo(state.lastX,state.lastY); }
+function draw(e){ if(!state.isDrawing) return; const ctx=elements.canvas.getContext('2d'); ctx.strokeStyle=state.currentColor; ctx.lineWidth=2; ctx.lineCap='round'; ctx.lineJoin='round'; const p=getPos(e); ctx.lineTo(p.x,p.y); ctx.stroke(); [state.lastX,state.lastY]=[p.x,p.y]; }
+function stopDrawing(){ state.isDrawing=false; }
+function clearDrawing(){ const ctx=elements.canvas.getContext('2d'); ctx.clearRect(0,0,elements.canvas.width,elements.canvas.height); saveCanvasState(); }
 
-/* ======================
-   QUESTION UI
-====================== */
-function toggleQuestionBox() {
-  if (state.questionBoxVisible) hideQuestionBox();
-  else showQuestionBox();
-}
-function hideQuestionBox() {
-  elements.questionContainer.style.transform = 'translateY(-100px)';
-  elements.questionContainer.style.opacity = '0';
-  state.questionBoxVisible = false;
-  elements.toggleQuestionBtn.innerHTML = '▼ Show Question';
-}
-function showQuestionBox() {
-  elements.questionContainer.style.transform = 'translateY(0)';
-  elements.questionContainer.style.opacity = '1';
-  state.questionBoxVisible = true;
-  elements.toggleQuestionBtn.innerHTML = '▲ Hide Question';
-}
+// ---------- question UI ----------
+function toggleQuestionBox(){ state.questionBoxVisible ? hideQuestionBox() : showQuestionBox(); }
+function hideQuestionBox(){ elements.questionContainer.style.transform='translateY(-100px)'; elements.questionContainer.style.opacity='0'; state.questionBoxVisible=false; elements.toggleQuestionBtn.innerHTML='▼ Show Question'; }
+function showQuestionBox(){ elements.questionContainer.style.transform='translateY(0)'; elements.questionContainer.style.opacity='1'; state.questionBoxVisible=true; elements.toggleQuestionBtn.innerHTML='▲ Hide Question'; }
 
-/* ======================
-   RENDER & SELECTION
-====================== */
 function renderQuestion(q) {
   state.currentQuestion = q;
   try { katex.render(q.latex || q.question, elements.question); }
@@ -264,64 +174,76 @@ function renderQuestion(q) {
   elements.answerBox.focus();
   elements.result.textContent = '';
 }
-function getQuestionsInEloRange(elo) {
-  const tier = ELO_TIERS.find(r => elo >= r.min && elo < r.max) || ELO_TIERS[0];
-  return state.questions.filter(q => q.elo >= tier.min && q.elo < tier.max);
-}
-function handleEloChange() {
-  const newElo = prompt("Enter new ELO rating:", state.currentElo);
-  if (newElo && !isNaN(newElo)) {
-    state.currentElo = Math.max(0, parseInt(newElo, 10));
-    updateEloDisplay();
-    const pool = getQuestionsInEloRange(state.currentElo);
-    if (pool.length > 0) renderQuestion(pool[Math.floor(Math.random() * pool.length)]);
-    else elements.result.textContent = "No questions available for this ELO";
-    saveAll();
-  }
-}
 
-/* ======================
-   CATEGORY STATS UPDATE
-====================== */
 function addCategoryStats(q, correct) {
-  const cats = Array.isArray(q.category) ? q.category : [];
-  cats.forEach(c => {
+  const cats = Array.isArray(q.category) ? q.category : (q.category?[q.category]:[]);
+  cats.forEach(c=>{
     const key = String(c||'').toLowerCase();
-    if (!state.categoryStats[key]) state.categoryStats[key] = { attempts: 0, correct: 0 };
-    state.categoryStats[key].attempts += 1;
-    if (correct) state.categoryStats[key].correct += 1;
+    if (!state.categoryStats[key]) state.categoryStats[key] = { attempts:0, correct:0 };
+    state.categoryStats[key].attempts++;
+    if (correct) state.categoryStats[key].correct++;
   });
 }
 
-/* ======================
-   INIT
-====================== */
+// ---------- confetti ----------
+function launchConfetti(durationMs=1200, count=60){
+  const canvas = elements.confetti;
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  function resize(){
+    canvas.width = Math.floor(window.innerWidth * dpr);
+    canvas.height = Math.floor(window.innerHeight * dpr);
+    canvas.style.width = '100%'; canvas.style.height = '100%';
+    ctx.setTransform(1,0,0,1,0,0); ctx.scale(dpr,dpr);
+  }
+  resize();
+  const particles = Array.from({length:count}).map(()=>({
+    x: Math.random()*window.innerWidth,
+    y: -20 - Math.random()*40,
+    r: 2 + Math.random()*4,
+    vx: -1 + Math.random()*2,
+    vy: 2 + Math.random()*3,
+    a: Math.random()*Math.PI*2
+  }));
+  const start = performance.now();
+  function step(t){
+    const elapsed = t - start;
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    particles.forEach(p=>{
+      p.x += p.vx; p.y += p.vy; p.a += 0.1;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.a);
+      ctx.fillStyle = `hsl(${(p.x+p.y)%360}, 80%, 60%)`;
+      ctx.fillRect(-p.r, -p.r, 2*p.r, 2*p.r);
+      ctx.restore();
+    });
+    if (elapsed < durationMs) requestAnimationFrame(step); else ctx.clearRect(0,0,canvas.width,canvas.height);
+  }
+  requestAnimationFrame(step);
+}
+
+// ---------- init ----------
 async function initGame() {
   try {
-    // 1) Load questions
+    // load questions
     const resp = await fetch('questions.json');
     const payload = await resp.json();
     state.questions = payload.questions || payload;
 
-    // 2) ELO seed from selector if any
+    // seed from selector
     const storedElo = localStorage.getItem('selectedElo');
-    if (storedElo && !isNaN(parseInt(storedElo,10))) state.currentElo = parseInt(storedElo, 10);
+    if (storedElo && !isNaN(parseInt(storedElo,10))) state.currentElo = parseInt(storedElo,10);
 
-    // 3) Hydrate from save
     loadSave();
-    updateEloDisplay();
 
-    // 4) Wire UI
+    // UI wires
     elements.clearDrawingBtn.addEventListener('click', clearDrawing);
     elements.toggleQuestionBtn.addEventListener('click', toggleQuestionBox);
-    elements.changeEloBtn.addEventListener('click', handleEloChange);
     elements.answerBox.addEventListener('keydown', (e)=>{ if(e.key==='Enter') submitAnswer(); });
     elements.submitBtn.addEventListener('click', submitAnswer);
 
-    // Color picker
-    elements.colorPickerBtn?.addEventListener('click', ()=>{
-      elements.colorDropdown?.classList.toggle('hidden');
-    });
+    elements.colorPickerBtn?.addEventListener('click', ()=>{ elements.colorDropdown?.classList.toggle('hidden'); });
     elements.colorOptions?.forEach(opt=>{
       opt.addEventListener('click', ()=>{
         const color = opt.getAttribute('data-color');
@@ -331,9 +253,8 @@ async function initGame() {
       });
     });
 
-    // Canvas draw
-    resizeCanvas();
-    saveCanvasState();
+    // canvas
+    resizeCanvas(); saveCanvasState();
     elements.canvas.addEventListener('mousedown', startDrawing);
     elements.canvas.addEventListener('mousemove', draw);
     elements.canvas.addEventListener('mouseup', stopDrawing);
@@ -343,51 +264,45 @@ async function initGame() {
     elements.canvas.addEventListener('touchend', stopDrawing);
     window.addEventListener('resize', ()=>{ saveCanvasState(); resizeCanvas(); });
 
-    // 5) One-time forced question from selector (if any)
+    // selected question or fallback
     const selectedQuestionId = localStorage.getItem('selectedQuestionId');
     if (selectedQuestionId) {
       const idNum = parseInt(selectedQuestionId, 10);
       const selected = state.questions.find(q => q.id === idNum);
       if (selected) {
         renderQuestion(selected);
-        localStorage.removeItem('selectedQuestionId'); // force only once
+        localStorage.removeItem('selectedQuestionId'); // one-shot
       } else {
-        const pool = getQuestionsInEloRange(state.currentElo);
-        renderQuestion(pool.length ? pool[Math.floor(Math.random()*pool.length)] : state.questions[Math.floor(Math.random()*state.questions.length)]);
+        renderRandom();
       }
     } else {
-      const pool = getQuestionsInEloRange(state.currentElo);
-      renderQuestion(pool.length ? pool[Math.floor(Math.random()*pool.length)] : state.questions[Math.floor(Math.random()*state.questions.length)]);
+      renderRandom();
     }
 
-    // 6) GLOBAL KEYBOARD: Undo/Redo (Ctrl/Cmd+Z / Ctrl/Cmd+Y or Shift+Ctrl/Cmd+Z)
+    // Keyboard: undo/redo
     document.addEventListener('keydown', (e) => {
-      const key = e.key.toLowerCase();
-      const meta = e.ctrlKey || e.metaKey;
+      const key = e.key.toLowerCase(); const meta = e.ctrlKey || e.metaKey;
       if (!meta) return;
-
-      // Prevent interfering while typing answers unless modifier is pressed (we are)
-      if (key === 'z' && !e.shiftKey) {
-        e.preventDefault();
-        undoLastStroke();
-      } else if (key === 'y' || (key === 'z' && e.shiftKey)) {
-        e.preventDefault();
-        redoLastStroke();
-      }
+      if (key === 'z' && !e.shiftKey){ e.preventDefault(); undoLastStroke(); }
+      else if (key === 'y' || (key === 'z' && e.shiftKey)){ e.preventDefault(); redoLastStroke(); }
     });
 
   } catch (err) {
-    console.error('Game init failed', err);
-    elements.result.textContent = 'Failed to initialize game. Check console.';
+    console.error('init error', err);
+    elements.result.textContent = 'Failed to initialize.';
   }
 }
 
-/* ======================
-   SUBMIT HANDLER
-====================== */
+function renderRandom(){
+  const pool = state.questions.length ? state.questions : [];
+  const pick = pool[Math.floor(Math.random()*pool.length)];
+  if (pick) renderQuestion(pick);
+}
+
+// ---------- submit ----------
 function submitAnswer() {
   const now = Date.now();
-  if (now - state.lastAnswerTime < 600) return; // debounce
+  if (now - state.lastAnswerTime < 600) return;
   state.lastAnswerTime = now;
 
   const q = state.currentQuestion;
@@ -405,11 +320,10 @@ function submitAnswer() {
     state.streak = 0;
   }
 
-  // ELO vs question
+  // ELO vs question (silent)
   const qElo = (typeof q.elo === 'number') ? q.elo : state.currentElo;
-  const { next, delta } = updateElo(state.currentElo, qElo, correct);
+  const { next } = updateElo(state.currentElo, qElo, correct);
   state.currentElo = next;
-  updateEloDisplay();
 
   // Category stats
   addCategoryStats(q, correct);
@@ -417,20 +331,15 @@ function submitAnswer() {
   // Persist
   saveAll();
 
-  const sign = delta > 0 ? `+${delta}` : `${delta}`;
-  elements.result.textContent = correct
-    ? `✅ Correct! (${sign} ELO)  Streak: ${state.streak}`
-    : `❌ Not quite. (${sign} ELO)  (Answer: ${q.answer})`;
-
-  // Draw next after a short delay
-  setTimeout(()=>{
-    const pool = getQuestionsInEloRange(state.currentElo);
-    const nextQ = pool.length ? pool[Math.floor(Math.random()*pool.length)] : state.questions[Math.floor(Math.random()*state.questions.length)];
-    renderQuestion(nextQ);
-  }, 1200);
+  // Show overlay result 2.2s then go Home
+  elements.resultOverlay.style.display = 'flex';
+  if (correct) {
+    elements.resultText.textContent = '✅ Correct!';
+    launchConfetti(1200, 70);
+  } else {
+    elements.resultText.textContent = `❌ Incorrect. Answer: ${q.answer}`;
+  }
+  setTimeout(()=>{ location.href = 'index.html'; }, 2200);
 }
 
-/* ======================
-   BOOT
-====================== */
 document.addEventListener('DOMContentLoaded', initGame);
