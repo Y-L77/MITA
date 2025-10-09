@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MITA — Home</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Minimal inline styles scoped to homepage -->
+  <style>
+    .home-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:#0c0c0c;color:#fff}
+    .home-card{width:clamp(320px,92vw,860px);background:#121212;border:1px solid rgba(255,255,255,.06);border-radius:16px;box-shadow:0 20px 64px rgba(0,0,0,.55);padding:28px}
+    .home-head{display:flex;justify-content:space-between;align-items:center;gap:16px}
+    .logo{display:grid;place-items:center;width:44px;height:44px;border-radius:12px;background:#fff;color:#000;font-weight:800}
+    .title h1{margin:0;font-size:1.35rem;letter-spacing:.2px}
+    .title p{margin:2px 0 0;color:#bbb;font-size:.9rem}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:18px}
+    .card-btn{display:flex;flex-direction:column;gap:6px;background:#1a1a1a;border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:16px;text-decoration:none;color:#fff}
+    .card-btn:hover{background:#202020}
+    .cta{display:flex;gap:10px;margin-top:14px}
+    .cta a{display:inline-flex;align-items:center;gap:8px;background:#111;border:1px solid rgba(255,255,255,.08);padding:10px 14px;border-radius:10px;text-decoration:none;color:#fff}
+    .cta a:hover{background:#191919}
+    .elo-pill{padding:6px 10px;border-radius:999px;background:#0e0e0e;border:1px solid rgba(255,255,255,.06);font-size:.9rem}
+    .muted{color:#a7a7a7}
+  </style>
+</head>
+<body class="selector">
+  <div class="home-wrap">
+    <div class="home-card">
+      <div class="home-head">
+        <div style="display:flex;gap:10px;align-items:center">
+          <div class="logo">M</div>
+          <div class="title">
+            <h1>MITA — Mathematical International Talent Arena</h1>
+            <p class="muted">Train smarter. Solve beautifully.</p>
+          </div>
+        </div>
+        <div id="elo-pill" class="elo-pill">ELO: —</div>
+      </div>
+
+      <div class="grid" style="margin-top:18px">
+        <a class="card-btn" href="question_selector.html">
+          <div style="font-weight:700">🎰 Question Selector</div>
+          <div class="muted">Spin roulette, confirm, jump into canvas.</div>
+        </a>
+        <a class="card-btn" href="MITA_P_PROTO1.html">
+          <div style="font-weight:700">✍️ Canvas Player</div>
+          <div class="muted">Draw, type LaTeX, answer & earn ELO.</div>
+        </a>
+        <a class="card-btn" href="stats.html">
+          <div style="font-weight:700">📊 Stats & Web Diagram</div>
+          <div class="muted">Category performance with a radar chart.</div>
+        </a>
+      </div>
+
+      <div class="cta">
+        <a href="questions.json">questions.json</a>
+        <a href="README.md">README</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Read current ELO and rank from persistence; fall back to selector's seed.
+    (function(){
+      const save = JSON.parse(localStorage.getItem('mita_save_v3')||'{}');
+      let elo = typeof save.currentElo==='number' ? save.currentElo : null;
+      if(elo===null){
+        const seed = localStorage.getItem('selectedElo');
+        elo = seed? parseInt(seed,10) : 300;
+      }
+      function rankForElo(e){
+        const tiers=[
+          {min:0,max:200,name:'Elementary'},
+          {min:200,max:400,name:'Middle Schooler'},
+          {min:400,max:600,name:'High Schooler'},
+          {min:600,max:800,name:'Senior'},
+          {min:800,max:1200,name:'Regionals'},
+          {min:1200,max:1700,name:'Nationalist'},
+          {min:1700,max:2000,name:'Olympian'},
+          {min:2000,max:9999,name:'Grandmaster'}
+        ];
+        const t=tiers.find(t=>e>=t.min&&e<t.max);return t?t.name:'—';
+      }
+      const pill=document.getElementById('elo-pill');
+      pill.textContent = 'ELO: '+elo+' ('+rankForElo(elo)+')';
+    })();
+  </script>
+</body>
+</html>
