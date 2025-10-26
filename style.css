@@ -9,8 +9,7 @@ body {
   color: white;
   overflow-x: hidden;
   touch-action: pan-y;
-  min-height: 300vh;
-  /* Allows scrolling 2-3 pages down */
+  min-height: 300vh; /* Allows scrolling 2-3 pages down */
 }
 
 /* Custom scrollbar */
@@ -40,12 +39,13 @@ body.scrollbar-hidden::-webkit-scrollbar-thumb {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 300vh;
+  width: 100vw;   /* CSS size */
+  height: 300vh;  /* CSS size for tall page */
   z-index: 1;
   pointer-events: auto;
   opacity: 0.9;
-  will-change: transform;
+  /* IMPORTANT: remove GPU pre-transform to keep pointer math exact */
+  /* was: will-change: transform; */
 }
 
 /* ====================== */
@@ -76,7 +76,6 @@ body.scrollbar-hidden::-webkit-scrollbar-thumb {
 #toggle-question-btn {
   position: fixed;
   top: 40px;
-  /* Reduced from 50px to minimize padding */
   left: 50%;
   transform: translateX(-50%);
   background: #222;
@@ -87,7 +86,6 @@ body.scrollbar-hidden::-webkit-scrollbar-thumb {
   cursor: pointer;
   font-size: 0.9rem;
   z-index: 102;
-  /* Higher than question container */
   pointer-events: auto;
 }
 
@@ -99,7 +97,6 @@ body.scrollbar-hidden::-webkit-scrollbar-thumb {
 #question-container {
   position: fixed;
   top: 70px;
-  /* Reduced padding from top */
   left: 0;
   right: 0;
   display: flex;
@@ -107,14 +104,12 @@ body.scrollbar-hidden::-webkit-scrollbar-thumb {
   padding: 0 20px;
   z-index: 101;
   transition: transform 0.3s ease, opacity 0.3s ease;
-  pointer-events: none;
-  /* Allow drawing through question box */
+  pointer-events: none; /* draw through the question box */
 }
 
 .question-box {
   background-color: rgba(51, 51, 51, 0.9);
   padding: 15px;
-  /* Reduced padding */
   border-radius: 5px;
   width: 90%;
   max-width: 800px;
@@ -122,13 +117,9 @@ body.scrollbar-hidden::-webkit-scrollbar-thumb {
   word-wrap: break-word;
   white-space: pre-line;
   user-select: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
   font-size: 1.2rem;
   line-height: 1.5;
   pointer-events: none;
-  /* Allow drawing through question box */
 }
 
 /* Answer container at bottom */
@@ -286,4 +277,3 @@ body.scrollbar-hidden::-webkit-scrollbar-thumb {
 .color-option:hover {
   transform: scale(1.2);
 }
-

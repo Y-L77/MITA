@@ -10,8 +10,8 @@
     .top-nav a{background:#111;border:1px solid rgba(255,255,255,.08);color:#fff;text-decoration:none;padding:8px 10px;border-radius:8px}
     .top-nav a:hover{background:#191919}
     body{background:#0e0e0e;color:#fff}
-    #blank-canvas{width:100vw;height:100vh;display:block}
-    .tools{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:8px;background:#111;border:1px solid rgba(255,255,255,.08);padding:8px 10px;border-radius:10px}
+    #blank-canvas{position:absolute;top:0;left:0;width:100vw;height:300vh;display:block}
+    .tools{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:8px;background:#111;border:1px solid rgba(255,255,255,.08);padding:8px 10px;border-radius:10px;z-index:130}
     .tools button{color:#fff;background:#1a1a1a;border:1px solid rgba(255,255,255,.08);padding:6px 10px;border-radius:8px;cursor:pointer}
     .color-dot{width:18px;height:18px;border-radius:50%;border:1px solid rgba(255,255,255,.2);cursor:pointer}
   </style>
@@ -38,33 +38,109 @@
   <script>
     const canvas = document.getElementById('blank-canvas');
     const ctx = canvas.getContext('2d');
-    let isDrawing=false,lastX=0,lastY=0,color='#ffffff',hist=[],idx=-1;
 
-    function resize(){
-      const dpr = window.devicePixelRatio || 1;
-      canvas.width = Math.floor(window.innerWidth * dpr);
-      canvas.height = Math.floor(window.innerHeight * dpr);
-      canvas.style.width='100vw'; canvas.style.height='100vh';
-      ctx.setTransform(1,0,0,1,0,0); ctx.scale(dpr,dpr);
+    let dpr = window.devicePixelRatio || 1;
+    let cssW = 0, cssH = 0;
+
+    let isDrawing=false,lastX=0,lastY=0,color='#ffffff';
+    let hist=[], idx=-1, maxSteps=300;
+
+    function setBackingStore(){
+      cssW = window.innerWidth;
+      cssH = Math.floor(window.innerHeight * 3); // 300vh
+      dpr  = window.devicePixelRatio || 1;
+
+      canvas.width  = Math.max(1, Math.floor(cssW * dpr));
+      canvas.height = Math.max(1, Math.floor(cssH * dpr));
+      canvas.style.width  = cssW + 'px';
+      canvas.style.height = cssH + 'px';
+
+      ctx.setTransform(dpr,0,0,dpr,0,0); // 1 unit = 1 CSS px
     }
+
+    function redraw(){
+      ctx.setTransform(1,0,0,1,0,0);
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      const d = hist[idx];
+      if (!d){ ctx.setTransform(dpr,0,0,dpr,0,0); return; }
+      const img = new Image();
+      img.onload = () => {
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        ctx.setTransform(dpr,0,0,dpr,0,0);
+      };
+      img.src = d;
+    }
+
+    function handleZoomOrResize(){
+      const prevDpr = dpr, prevW = cssW, prevH = cssH;
+      setBackingStore();
+      if (dpr!==prevDpr || cssW!==prevW || cssH!==prevH) redraw();
+    }
+
+    // Poll for DPR/zoom reliably
+    let _poll=null;
+    function startZoomPolling(){
+      if (_poll) return;
+      let lastD = window.devicePixelRatio || 1;
+      let lastW = window.innerWidth, lastH = window.innerHeight;
+      _poll = setInterval(()=>{
+        const d = window.devicePixelRatio || 1;
+        const w = window.innerWidth, h = window.innerHeight;
+        if (Math.abs(d-lastD)>1e-6 || w!==lastW || h!==lastH){
+          lastD=d; lastW=w; lastH=h;
+          handleZoomOrResize();
+        }
+      },150);
+    }
+
+    function pushSnap(){
+      try{
+        const d = canvas.toDataURL();
+        if (idx < hist.length-1) hist = hist.slice(0, idx+1);
+        hist.push(d);
+        if (hist.length>maxSteps) hist.shift();
+        idx = hist.length-1;
+      }catch(e){}
+    }
+
     function getPos(e){
       const r = canvas.getBoundingClientRect();
-      if (e.touches && e.touches[0]) return {x:e.touches[0].clientX-r.left,y:e.touches[0].clientY-r.top};
-      return {x:e.clientX-r.left,y:e.clientY-r.top};
+      const t = e.touches && e.touches[0];
+      const x = (t ? t.clientX : e.clientX) - r.left;
+      const y = (t ? t.clientY : e.clientY) - r.top;
+      return {x, y}; // CSS px; context scaled to DPR
     }
-    function save(){ try{ hist.push(canvas.toDataURL()); if(hist.length>50) hist.shift(); idx=hist.length-1; }catch{} }
-    function restore(){ const d=hist[idx]; if(!d) return; const img=new Image(); img.onload=()=>{ctx.clearRect(0,0,canvas.width,canvas.height); ctx.drawImage(img,0,0)}; img.src=d; }
 
-    function down(e){ save(); isDrawing=true; const p=getPos(e); lastX=p.x; lastY=p.y; ctx.beginPath(); ctx.moveTo(lastX,lastY); }
-    function move(e){ if(!isDrawing) return; const p=getPos(e); ctx.strokeStyle=color; ctx.lineWidth=2; ctx.lineCap='round'; ctx.lineJoin='round'; ctx.lineTo(p.x,p.y); ctx.stroke(); lastX=p.x; lastY=p.y; }
-    function up(){ isDrawing=false; }
+    function down(e){
+      isDrawing = true;
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+      const p = getPos(e);
+      lastX = p.x; lastY = p.y;
+      ctx.beginPath(); ctx.moveTo(lastX, lastY);
+    }
+    function move(e){
+      if (!isDrawing) return;
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+      ctx.strokeStyle = color; ctx.lineWidth = 2;
+      ctx.lineCap='round'; ctx.lineJoin='round';
+      const p = getPos(e);
+      ctx.lineTo(p.x, p.y); ctx.stroke();
+      lastX = p.x; lastY = p.y;
+    }
+    function up(){
+      if (!isDrawing) return;
+      isDrawing = false;
+      pushSnap();
+    }
 
-    function undo(){ if(idx<=0) return; idx--; restore(); }
-    function redo(){ if(idx>=hist.length-1) return; idx++; restore(); }
-    function clear(){ ctx.clearRect(0,0,canvas.width,canvas.height); save(); }
+    function undo(){ if (idx<=0) return; idx--; redraw(); }
+    function redo(){ if (idx>=hist.length-1) return; idx++; redraw(); }
+    function clear(){ ctx.setTransform(1,0,0,1,0,0); ctx.clearRect(0,0,canvas.width,canvas.height); ctx.setTransform(dpr,0,0,dpr,0,0); pushSnap(); }
 
-    resize(); save();
-    window.addEventListener('resize', ()=>{ save(); resize(); });
+    setBackingStore();
+    pushSnap(); // baseline
+    window.addEventListener('resize', handleZoomOrResize);
+    startZoomPolling();
 
     canvas.addEventListener('mousedown', down);
     canvas.addEventListener('mousemove', move);
@@ -74,17 +150,15 @@
     canvas.addEventListener('touchmove', move, {passive:true});
     canvas.addEventListener('touchend', up);
 
-    document.getElementById('undo').onclick=undo;
-    document.getElementById('redo').onclick=redo;
-    document.getElementById('clear').onclick=clear;
-
+    document.getElementById('undo').onclick = undo;
+    document.getElementById('redo').onclick = redo;
+    document.getElementById('clear').onclick = clear;
     document.querySelectorAll('.color-dot').forEach(dot=>{
       dot.addEventListener('click', ()=>{ color = dot.getAttribute('data-color') || '#ffffff'; });
     });
 
     document.addEventListener('keydown', (e)=>{
-      const meta = e.ctrlKey || e.metaKey;
-      if (!meta) return;
+      const meta = e.ctrlKey || e.metaKey; if (!meta) return;
       const k = e.key.toLowerCase();
       if (k==='z' && !e.shiftKey){ e.preventDefault(); undo(); }
       else if (k==='y' || (k==='z' && e.shiftKey)){ e.preventDefault(); redo(); }
