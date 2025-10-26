@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>MITA — Home</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* 🚫 No scrollbar on the homepage */
+    html, body {
+      height: 100%;
+      margin: 0;
+      overflow: hidden;          /* hide scrollbars */
+      overscroll-behavior: none; /* prevent bounce on mobile */
+      background: #0c0c0c;
+      color: #fff;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ensure content fills the viewport without causing overflow */
+    .home-wrap{
+      min-height: 100dvh; /* better on mobile address bar changes */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background:#0c0c0c;
+      color:#fff;
+      padding: 16px; /* small pad so shadows don’t clip */
+      box-sizing: border-box;
+    }
+    .home-card{
+      width: clamp(320px, 92vw, 860px);
+      background:#121212;
+      border:1px solid rgba(255,255,255,.06);
+      border-radius:16px;
+      box-shadow:0 20px 64px rgba(0,0,0,.55);
+      padding:28px;
+      box-sizing: border-box;
+      max-height: calc(100dvh - 32px); /* avoid overflow even on small screens */
+      overflow: hidden; /* prevent inner scroll */
+    }
+    .home-head{display:flex;justify-content:space-between;align-items:center;gap:16px}
+    .logo{display:grid;place-items:center;width:44px;height:44px;border-radius:12px;background:#fff;color:#000;font-weight:800}
+    .title h1{margin:0;font-size:1.35rem;letter-spacing:.2px}
+    .title p{margin:2px 0 0;color:#bbb;font-size:.9rem}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-top:18px}
+    .card-btn{display:flex;flex-direction:column;gap:6px;background:#1a1a1a;border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:16px;text-decoration:none;color:#fff}
+    .card-btn:hover{background:#202020}
+    .muted{color:#a7a7a7}
+  </style>
+</head>
+<body class="selector">
+  <div class="home-wrap">
+    <div class="home-card">
+      <div class="home-head">
+        <div style="display:flex;gap:10px;align-items:center">
+          <div class="logo">M</div>
+          <div class="title">
+            <h1>MITA — Mathematical International Talent Arena</h1>
+            <p class="muted">Single-player training • Randomize and filter from the selector.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid" style="margin-top:18px">
+        <a class="card-btn" href="question_selector.html">
+          <div style="font-weight:700">🎰 Question Selector</div>
+          <div class="muted">Filter by category & ELO, randomize a question, then start.</div>
+        </a>
+        <a class="card-btn" href="stats.html">
+          <div style="font-weight:700">📊 Stats & Web Diagram</div>
+          <div class="muted">See accuracy across the 9 categories.</div>
+        </a>
+        <a class="card-btn" href="blank_canvas.html">
+          <div style="font-weight:700">🧻 Blank Canvas</div>
+          <div class="muted">Just draw & jot notes. No questions here.</div>
+        </a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
