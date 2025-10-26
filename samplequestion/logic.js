@@ -374,7 +374,7 @@ function submitAnswer(){
   el.resultOverlay.style.display='flex';
   if (ok){ el.resultText.textContent='✅ Correct!'; launchConfetti(1200, 70); }
   else { el.resultText.textContent=`❌ Incorrect. Answer: ${q.answer}`; }
-  setTimeout(()=>{ location.href='./index.html'; }, 2200);
+  setTimeout(()=>{ location.href='../'; }, 2200);
 }
 
 document.addEventListener('DOMContentLoaded', initGame);

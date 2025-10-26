@@ -1,0 +1,279 @@
+/* ====================== */
+/*  BASE STYLES           */
+/* ====================== */
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #000;
+  font-family: 'Courier New', monospace;
+  color: white;
+  overflow-x: hidden;
+  touch-action: pan-y;
+  min-height: 300vh; /* Allows scrolling 2-3 pages down */
+}
+
+/* Custom scrollbar */
+body::-webkit-scrollbar {
+  width: 10px;
+  background-color: transparent;
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: #333;
+  border-radius: 5px;
+  transition: opacity 0.3s ease;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+  background-color: #444;
+}
+
+body.scrollbar-hidden::-webkit-scrollbar-thumb {
+  opacity: 0;
+}
+
+/* ====================== */
+/*  CANVAS STYLES         */
+/* ====================== */
+#drawing-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;   /* CSS size */
+  height: 300vh;  /* CSS size for tall page */
+  z-index: 1;
+  pointer-events: auto;
+  opacity: 0.9;
+  /* IMPORTANT: remove GPU pre-transform to keep pointer math exact */
+  /* was: will-change: transform; */
+}
+
+/* ====================== */
+/*  UI ELEMENT STYLES     */
+/* ====================== */
+#elo-display,
+#email-display {
+  position: fixed;
+  z-index: 100;
+  pointer-events: none;
+}
+
+#elo-display {
+  top: 10px;
+  left: 20px;
+  color: #aaa;
+  font-size: 1rem;
+}
+
+#email-display {
+  top: 10px;
+  right: 20px;
+  color: #aaa;
+  font-size: 1rem;
+}
+
+/* Toggle button - FIXED POSITION so it stays visible */
+#toggle-question-btn {
+  position: fixed;
+  top: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #222;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  z-index: 102;
+  pointer-events: auto;
+}
+
+#toggle-question-btn:hover {
+  background: #333;
+}
+
+/* Question container - FIXED with minimal top padding */
+#question-container {
+  position: fixed;
+  top: 70px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  padding: 0 20px;
+  z-index: 101;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  pointer-events: none; /* draw through the question box */
+}
+
+.question-box {
+  background-color: rgba(51, 51, 51, 0.9);
+  padding: 15px;
+  border-radius: 5px;
+  width: 90%;
+  max-width: 800px;
+  text-align: center;
+  word-wrap: break-word;
+  white-space: pre-line;
+  user-select: none;
+  font-size: 1.2rem;
+  line-height: 1.5;
+  pointer-events: none;
+}
+
+/* Answer container at bottom */
+.answer-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  z-index: 100;
+  pointer-events: auto;
+}
+
+#answer-box {
+  background: #111;
+  color: white;
+  border: 1px solid #444;
+  padding: 12px;
+  width: 150px;
+  border-radius: 5px;
+  font-size: 1rem;
+  pointer-events: auto;
+}
+
+#submit-btn,
+#change-elo-btn,
+#clear-drawing-btn {
+  background: #222;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  pointer-events: auto;
+}
+
+#submit-btn:hover,
+#change-elo-btn:hover,
+#clear-drawing-btn:hover {
+  background: #333;
+}
+
+#result {
+  position: fixed;
+  bottom: 70px;
+  right: 20px;
+  color: #4CAF50;
+  font-size: 1rem;
+  z-index: 100;
+  pointer-events: none;
+}
+
+/* ====================== */
+/*  MOBILE OPTIMIZATIONS  */
+/* ====================== */
+@media (max-width: 768px) {
+  #toggle-question-btn {
+    top: 35px;
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+
+  #question-container {
+    top: 60px;
+  }
+
+  .question-box {
+    padding: 10px;
+    font-size: 1rem;
+  }
+
+  .answer-container {
+    flex-direction: column;
+    align-items: flex-end;
+    bottom: 10px;
+    right: 10px;
+  }
+
+  #answer-box {
+    width: 120px;
+    padding: 10px;
+  }
+
+  #result {
+    bottom: 150px;
+    right: 10px;
+  }
+}
+
+/* ====================== */
+/* COLOR PICKER STYLES */
+/* ====================== */
+#color-picker-container {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 110;
+}
+
+#color-picker-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #222;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  transition: background 0.2s ease;
+}
+
+#color-picker-btn:hover {
+  background: #333;
+}
+
+#current-color-preview {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: inline-block;
+  border: 1px solid #555;
+  background: white;
+}
+
+#color-dropdown {
+  position: absolute;      /* absolute inside container */
+  bottom: 50px;            /* place ABOVE the button */
+  left: 0;
+  display: flex;
+  gap: 8px;
+  background: #111;
+  padding: 8px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  flex-wrap: wrap;         /* optional, wrap colors if many */
+}
+
+#color-dropdown.hidden {
+  display: none;
+}
+
+.color-option {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.color-option:hover {
+  transform: scale(1.2);
+}
