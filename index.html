@@ -44,6 +44,7 @@
     }
     button:hover { background-color: #e5e5e5; transform: translateY(-1px); }
     .success { color: #4ade80; font-weight: 500; font-size: 1rem; }
+    .error { color: #f87171; font-weight: 500; font-size: 0.95rem; }
   </style>
 </head>
 <body>
@@ -61,8 +62,20 @@
         action="https://script.google.com/macros/s/AKfycbzmmBCiQGQR6q2EfFewX3mggYlL-t-jnWjnPQEDlDsaJf4rJVjBwJBEPyi4pP4Rn0v2/exec"
         method="POST"
         target="hiddenFrame"
+        novalidate
       >
-        <input type="email" name="email" id="email" placeholder="Enter your email" required />
+        <input
+          type="email"
+          name="email"
+          id="email"
+          placeholder="Enter your email"
+          required
+          autocomplete="email"
+          inputmode="email"
+          pattern="^[^\s@]+@[^\s@]+\.[^\s@]{2,}$"
+          aria-invalid="false"
+          aria-describedby="errorMessage"
+        />
         <button type="submit">Notify Me</button>
       </form>
 
@@ -72,15 +85,54 @@
       <p id="successMessage" class="success" style="display:none;">
         ✅ Thanks! You’ve been added.
       </p>
+      <p id="errorMessage" class="error" style="display:none;">
+        Please enter a valid email address (e.g., name@example.com).
+      </p>
     </div>
   </div>
 
   <script>
     const form = document.getElementById("emailForm");
+    const emailInput = document.getElementById("email");
     const successMessage = document.getElementById("successMessage");
+    const errorMessage = document.getElementById("errorMessage");
 
-    form.addEventListener("submit", () => {
-      // instantly show success message
+    const isValidEmail = (value) => {
+      const trimmed = value.trim();
+      // Simple, robust email validation (user@domain.tld with 2+ char TLD)
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+      return re.test(trimmed);
+    };
+
+    // Live validation feedback
+    emailInput.addEventListener("input", () => {
+      const val = emailInput.value;
+      const ok = isValidEmail(val);
+
+      // Set custom validity for consistent behavior across browsers
+      emailInput.setCustomValidity(ok ? "" : "Invalid email address.");
+      emailInput.setAttribute("aria-invalid", ok ? "false" : "true");
+
+      // Toggle error message visibility
+      if (val.length === 0 || ok) {
+        errorMessage.style.display = "none";
+      } else {
+        errorMessage.style.display = "block";
+      }
+    });
+
+    form.addEventListener("submit", (e) => {
+      const val = emailInput.value.trim();
+
+      // Final guard before submit
+      if (!isValidEmail(val)) {
+        e.preventDefault();
+        errorMessage.style.display = "block";
+        emailInput.reportValidity(); // shows native tooltip if available
+        return;
+      }
+
+      // instantly show success message (unchanged behavior)
       form.style.display = "none";
       successMessage.style.display = "block";
     });
