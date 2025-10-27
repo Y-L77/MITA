@@ -232,7 +232,7 @@
     if(min!=null&&max!=null){
       localStorage.setItem('selectedElo',String(Math.round((min+max)/2)));
     }
-    location.href='MITA_P_PROTO1.html';
+    location.href='../samplequestion/index.html';
   });
 
   load().catch(err=>{
