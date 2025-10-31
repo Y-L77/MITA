@@ -195,7 +195,7 @@
       "latex": "\\text{Solve for the sum: } \\log_{4}\\frac{3}{1} + \\log_{4}\\frac{4}{2} + \\log_{4}\\frac{5}{3} + \\dots + \\log_{4}\\frac{100}{98}, \\text{ round to nearest integer}",
       "category": ["logarithms","series","summation","telescoping"],
       "author": "Yipeng Lu",
-      "web_difficulty": { "mechanics": 4, "geometry": 0, "number theory": 0, "problem solving": 2, "time pressure": 3 }
+      "web_difficulty": { "mechanics": 4, "geometry": 0, "number theory": 1, "problem solving": 2, "time pressure": 3 }
     },
     {
       "id": 20,
@@ -205,7 +205,47 @@
       "latex": "\\log_{4}(a) = \\log_{8}(b) = \\log_{20}(a + 2b). \\quad \\text{Solve for } \\frac{b}{a}.",
       "category": ["logarithms","algebra","problem-solving"],
       "author": "Yipeng Lu",
-      "web_difficulty": { "mechanics": 4, "geometry": 0, "number theory": 0, "problem solving": 3, "time pressure": 4 }
+      "web_difficulty": { "mechanics": 4, "geometry": 0, "number theory": 0, "problem solving": 2, "time pressure": 4 }
+    },
+    {
+      "id": 21,
+      "question": "A bag contains exactly 15 marbles of which 3 are red, 5 are blue, and 7 are green. The marbles are removed one at a time at random until all marbles are removed. One colour is the first to reach 0 remaining. What is the probability this colour is red?",
+      "answer": "21/40",
+      "elo": 1300,
+      "latex": "\\text{A bag contains 15 marbles: 3 red, 5 blue, 7 green. Marbles are removed randomly one at a time until all are gone.} \\\\ \\text{One colour is the first to reach 0 remaining. What is the probability that this colour is red?}",
+      "category": ["probability","combinatorics"],
+      "author": "CEMC Waterloo",
+      "web_difficulty": { "mechanics": 2, "geometry": 0, "number theory": 0, "problem solving": 4, "time pressure": 3 }
+    },
+    {
+      "id": 22,
+      "question": "Among all positive solutions to the equation $\\log_2(x^2) + 2\\log_x(8) = \\frac{392}{\\log_2(x^3)} + 20\\log_x(32)$, find the one with the greatest value.",
+      "answer": "32",
+      "elo": 1500,
+      "latex": "\\text{Among all positive solutions to } \\log_2(x^2) + 2\\log_x(8) = \\frac{392}{\\log_2(x^3)} + 20\\log_x(32), \\\\ \\text{find the solution with the greatest value.}",
+      "category": ["algebra","logarithms","problem-solving"],
+      "author": "CEMC Waterloo",
+      "web_difficulty": { "mechanics": 4, "geometry": 0, "number theory": 1, "problem solving": 3, "time pressure": 4 }
+    },
+    {
+      "id": 23,
+      "question": "Given a function $f$ satisfying the following properties: \\\\ $f(1-x) = 1 - f(x)$ \\\\ $f\\left(\\frac{1}{3}x\\right) = \\frac{1}{2} f(x)$ \\\\ $f(a) \\le f(b)$ for all $0 \\le a \\le b \\le 1$, \\\\ determine $f(6/7)$.",
+      "answer": "3/4",
+      "elo": 1600,
+      "latex": "\\text{Given a function } f \\text{ satisfying:} \\\\ f(1-x) = 1 - f(x), \\\\ f\\left(\\frac{1}{3}x\\right) = \\frac{1}{2} f(x), \\\\ f(a) \\le f(b) \\text{ for all } 0 \\le a \\le b \\le 1, \\\\ \\text{determine } f(6/7).",
+      "category": ["algebra","functional-equations","problem-solving"],
+      "author": "CEMC Waterloo",
+      "web_difficulty": { "mechanics": 3, "geometry": 0, "number theory": 2, "problem solving": 4, "time pressure": 4 }
+    },
+    {
+      "id": 24,
+      "question": "A right-angled triangle has integer side lengths. One side has length 605, which is neither the shortest nor the longest side. What is the maximum possible length of the shortest side?",
+      "answer": "528",
+      "elo": 1600,
+      "latex": "\\text{A right-angled triangle has integer side lengths. One side has length 605,} \\\\ \\text{which is neither the shortest nor the longest side. What is the maximum possible length of the shortest side?}",
+      "category": ["geometry","number-theory","problem-solving"],
+      "author": "CEMC Waterloo",
+      "web_difficulty": { "mechanics": 4, "geometry": 4, "number theory": 4, "problem solving": 4, "time pressure": 4 }
     }
   ]
 }
