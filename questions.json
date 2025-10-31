@@ -124,7 +124,7 @@
       "elo": 1700,
       "latex": "\\text{Given } \\\\ (4 + \\tan^2 A)(5 + \\tan^2 B) = \\sqrt{320} \\tan A \\tan B \\\\ \\text{Find } \\tan^2 B \\times \\tan A. \\\\ \\text{Constraints: } 0 < A, B < \\frac{\\pi}{2}",
       "category": ["trigonometry","algebra","problem-solving"],
-      "author": "Yipeng Lu and CSMC Q6 2018",
+      "author": "CEMC Waterloo",
       "web_difficulty": { "mechanics": 5, "geometry": 0, "number theory": 0, "problem solving": 5, "time pressure": 5 }
     },
     {
