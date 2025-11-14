@@ -67,6 +67,20 @@
       }
     }catch{}
   }
+
+  function setEloPreset(min, max){
+    el.eloMin.value = min;
+    el.eloMax.value = max;
+    saveBounds();
+    updatePoolInfo();
+    // Update active preset button
+    document.querySelectorAll('.elo-preset-btn').forEach(btn => {
+      btn.classList.remove('active');
+      if (btn.dataset.min == min && btn.dataset.max == max) {
+        btn.classList.add('active');
+      }
+    });
+  }
   function saveBounds(){
     const {min,max} = getBounds();
     const payload = JSON.parse(localStorage.getItem(SAVE_KEY)||'{}');
@@ -121,43 +135,73 @@
     if(el.poolInline) el.poolInline.textContent=txt;
   }
 
+  function updateFlowSteps(){
+    const pool=eligiblePool();
+    const hasFilters=selectedCats.size>0 || (el.eloMin?.value && el.eloMax?.value);
+    const hasQuestion=currentPick!==null;
+    
+    document.getElementById('step-1').classList.toggle('active',selectedCats.size>0);
+    document.getElementById('step-2').classList.toggle('active',el.eloMin?.value && el.eloMax?.value);
+    document.getElementById('step-3').classList.toggle('active',hasQuestion);
+    document.getElementById('step-4').classList.toggle('active',hasQuestion && !el.startBtn.disabled);
+  }
+
   function updatePoolInfo(){
     const pool=eligiblePool();
     setPoolInfoText(`Eligible: ${pool.length} question${pool.length===1?'':'s'}`);
     if(!pool.includes(currentPick)){
       currentPick=null;
-      el.preview.innerHTML=`<div class="ka muted">No question selected yet.</div>`;
+      el.preview.className='window';
+      el.preview.innerHTML=`<div class="ka muted" style="display: flex; flex-direction: column; align-items: center; gap: 12px;"><div style="font-size: 1.1rem; opacity: 0.8;">No question selected yet</div><div style="font-size: 0.95rem; opacity: 0.6; text-align: center; max-width: 300px; line-height: 1.5;">Click the <strong style="color: #fff; opacity: 0.9;">"Randomize"</strong> button to select a random question</div></div>`;
       el.currentId.textContent='—';
       el.currentElo.textContent='—';
       clearMiniRadar();
       el.startBtn.disabled=true;
     }
+    updateFlowSteps();
   }
 
   function spinOnce(){
     const pool=eligiblePool();
     if(!pool.length){
-      el.preview.innerHTML=`<div class="ka muted">No questions with those filters.</div>`;
+      el.preview.className='window';
+      el.preview.innerHTML=`<div class="ka muted" style="display: flex; flex-direction: column; align-items: center; gap: 12px;"><div style="font-size: 1.1rem; opacity: 0.8;">No questions match your filters</div><div style="font-size: 0.95rem; opacity: 0.6; text-align: center; max-width: 300px; line-height: 1.5;">Try adjusting categories or ELO range</div></div>`;
       el.currentId.textContent='—'; el.currentElo.textContent='—';
-      clearMiniRadar(); el.startBtn.disabled=true; return;
+      clearMiniRadar(); el.startBtn.disabled=true;
+      updateFlowSteps();
+      return;
     }
     const pick=sample(pool);
     currentPick=pick;
-    renderPreview(pick);
+    // Small delay to ensure smooth transition
+    setTimeout(() => {
+      renderPreview(pick);
+    }, 50);
+    updateFlowSteps();
   }
 
   function renderPreview(q){
+    el.preview.className='window has-question';
     el.preview.innerHTML='';
     const inner=document.createElement('div');
     inner.className='ka';
-    try{katex.render(q.latex||q.question,inner);}
-    catch{inner.textContent=q.question;}
+    inner.style.width='100%';
+    inner.style.maxWidth='100%';
+    try{
+      katex.render(q.latex||q.question,inner,{
+        throwOnError:false,
+        displayMode:true
+      });
+    }catch(e){
+      inner.textContent=q.question;
+    }
     el.preview.appendChild(inner);
 
     el.currentId.textContent=q.id;
     el.currentElo.textContent=(typeof q.elo==='number')?q.elo:'—';
     el.startBtn.disabled=false;
     renderMiniRadarForQuestion(q);
+    updateFlowSteps();
   }
 
   function clearMiniRadar(){
@@ -209,8 +253,8 @@
     const pts=vals.map((v,i)=>polar(i,v)).map(([x,y])=>`${x},${y}`).join(' ');
     const poly=document.createElementNS('http://www.w3.org/2000/svg','polygon');
     poly.setAttribute('points',pts);
-    poly.setAttribute('fill','rgba(255,213,79,0.22)');
-    poly.setAttribute('stroke','rgba(255,213,79,0.55)');
+    poly.setAttribute('fill','rgba(212,175,55,0.25)');
+    poly.setAttribute('stroke','rgba(212,175,55,0.7)');
     poly.setAttribute('stroke-width','2');
     svg.appendChild(poly);
   }
@@ -221,8 +265,19 @@
     saveBounds();
     updatePoolInfo();
     const old=el.saveElo.textContent;
-    el.saveElo.textContent='Saved ✓';
+    el.saveElo.textContent='Applied ✓';
     setTimeout(()=>el.saveElo.textContent=old,900);
+    // Clear preset selection when custom is used
+    document.querySelectorAll('.elo-preset-btn').forEach(btn => btn.classList.remove('active'));
+  });
+
+  // Preset button handlers
+  document.querySelectorAll('.elo-preset-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const min = parseInt(btn.dataset.min, 10);
+      const max = parseInt(btn.dataset.max, 10);
+      setEloPreset(min, max);
+    });
   });
   el.spinBtn?.addEventListener('click',spinOnce);
   el.startBtn?.addEventListener('click',()=>{

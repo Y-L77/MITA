@@ -34,6 +34,8 @@ const el = {
   resultOverlay: document.getElementById('result-overlay'),
   resultText: document.getElementById('result-text'),
   confetti: document.getElementById('confetti'),
+  nextQuestionContainer: document.getElementById('next-question-container'),
+  nextQuestionPersistentBtn: document.getElementById('next-question-persistent-btn'),
 };
 
 const state = {
@@ -285,6 +287,12 @@ async function initGame(){
     el.clearDrawingBtn.addEventListener('click', clearCanvas);
     el.toggleQuestionBtn.addEventListener('click', toggleQuestionBox);
     el.answerBox.addEventListener('keydown', (e)=>{ if(e.key==='Enter') submitAnswer(); });
+    if (el.nextQuestionPersistentBtn) {
+      el.nextQuestionPersistentBtn.addEventListener('click', () => {
+        clearRedirect();
+        window.location.href = '../question_selector.html';
+      });
+    }
     el.submitBtn.addEventListener('click', submitAnswer);
 
     el.colorPickerBtn?.addEventListener('click', ()=> el.colorDropdown?.classList.toggle('hidden'));
@@ -354,10 +362,117 @@ function isAnswerCorrect(user, key){
   if (u!==null && k!==null) return Math.abs(u-k) < 1e-9;
   return String(user).trim().toLowerCase() === String(key).trim().toLowerCase();
 }
+let redirectTimer = null;
+let redirectTimer2 = null;
+let stayHere = false;
+let reminderInterval = null;
+let countdownSeconds = 10;
+let countdownInterval = null;
+
+function clearRedirect(){
+  if (redirectTimer) {
+    clearTimeout(redirectTimer);
+    redirectTimer = null;
+  }
+  if (redirectTimer2) {
+    clearTimeout(redirectTimer2);
+    redirectTimer2 = null;
+  }
+  if (countdownInterval) {
+    clearInterval(countdownInterval);
+    countdownInterval = null;
+  }
+  if (reminderInterval) {
+    clearInterval(reminderInterval);
+    reminderInterval = null;
+  }
+  stayHere = false;
+  countdownSeconds = 10;
+}
+
+function updateCountdown(){
+  if (stayHere) return;
+  
+  const countdownEl = document.getElementById('countdown-timer');
+  if (countdownEl) {
+    countdownEl.textContent = countdownSeconds;
+  }
+  
+  if (countdownSeconds <= 0) {
+    if (countdownInterval) {
+      clearInterval(countdownInterval);
+      countdownInterval = null;
+    }
+    if (!stayHere) {
+      window.location.href = '../home.html';
+    }
+    return;
+  }
+  
+  countdownSeconds--;
+}
+
+function showRedirectMessage(){
+  if (stayHere) {
+    return;
+  }
+  
+  countdownSeconds = 10;
+  
+  el.resultText.innerHTML = '✅ <strong>Correct!</strong><br><br><div style="margin-top:24px;padding-top:24px;border-top:1px solid rgba(255,255,255,0.2);"><div style="margin-bottom:20px;"><button id="next-question-btn" style="padding:12px 24px;background:#fff;color:#000;border:none;border-radius:8px;cursor:pointer;font-size:1rem;font-weight:600;font-family:\'Palatino Linotype\',\'Book Antiqua\',Palatino,serif;width:100%;max-width:300px;margin:0 auto;display:block;">Next Question</button></div><div style="margin-bottom:16px;">Taking you to home page...<br><div style="margin:12px 0;font-size:1.2rem;font-weight:600;">Redirecting in <span id="countdown-timer" style="color:#fff;">10</span> seconds</div></div><button id="stay-btn" style="padding:10px 20px;background:transparent;color:#fff;border:1px solid #fff;border-radius:8px;cursor:pointer;font-size:0.9rem;font-weight:600;font-family:\'Palatino Linotype\',\'Book Antiqua\',Palatino,serif;">Stay Here</button></div>';
+  
+  // Start countdown
+  if (countdownInterval) clearInterval(countdownInterval);
+  countdownInterval = setInterval(updateCountdown, 1000);
+  
+  // Use event delegation or immediate binding
+  setTimeout(() => {
+    const stayBtn = document.getElementById('stay-btn');
+    if (stayBtn) {
+      stayBtn.onclick = () => {
+        stayHere = true;
+        clearRedirect();
+        // Hide overlay so they can see their solution
+        el.resultOverlay.style.display = 'none';
+        // Show persistent Next Question button
+        if (el.nextQuestionContainer) {
+          el.nextQuestionContainer.style.display = 'block';
+        }
+        startReminderInterval();
+      };
+    }
+    
+    const nextQuestionBtn = document.getElementById('next-question-btn');
+    if (nextQuestionBtn) {
+      nextQuestionBtn.onclick = () => {
+        clearRedirect();
+        window.location.href = '../question_selector.html';
+      };
+    }
+  }, 50);
+}
+
+function startReminderInterval(){
+  // Clear any existing interval
+  if (reminderInterval) clearInterval(reminderInterval);
+  
+  // Show reminder every 4 minutes
+  reminderInterval = setInterval(() => {
+    if (confirm('Do you want to go back to the home page?')) {
+      clearRedirect();
+      window.location.href = '../home.html';
+    }
+  }, 4 * 60 * 1000); // 4 minutes
+}
+
 function submitAnswer(){
   const now = Date.now(); if (now - state.lastAnswerTime < 600) return; state.lastAnswerTime = now;
   const q = state.currentQuestion; if (!q){ el.result.textContent='No question loaded.'; return; }
   const user = el.answerBox.value; if (!String(user).trim()){ el.result.textContent='Please enter an answer.'; return; }
+
+  // Clear any existing timers
+  clearRedirect();
+  stayHere = false;
 
   state.totalAttempts++;
   const ok = isAnswerCorrect(user, q.answer);
@@ -371,10 +486,53 @@ function submitAnswer(){
   addCategoryStats(q, ok);
   saveAll();
 
+  // Hide persistent Next Question button initially
+  if (el.nextQuestionContainer) {
+    el.nextQuestionContainer.style.display = 'none';
+  }
+  
   el.resultOverlay.style.display='flex';
-  if (ok){ el.resultText.textContent='✅ Correct!'; launchConfetti(1200, 70); }
-  else { el.resultText.textContent=`❌ Incorrect. Answer: ${q.answer}`; }
-  setTimeout(()=>{ window.location.reload(); }, 2200);
+  if (ok){ 
+    el.resultText.textContent='✅ Correct!'; 
+    launchConfetti(1200, 70);
+    // For correct answers, show redirect after 5 seconds
+    redirectTimer = setTimeout(() => {
+      showRedirectMessage();
+    }, 5000);
+  } else { 
+    el.resultText.innerHTML=`❌ <strong>Incorrect.</strong><br><br>Correct answer: <strong>${q.answer}</strong><br><br><div style="margin-top:24px;padding-top:24px;border-top:1px solid rgba(255,255,255,0.2);"><div style="margin-bottom:20px;"><button id="next-question-btn" style="padding:12px 24px;background:#fff;color:#000;border:none;border-radius:8px;cursor:pointer;font-size:1rem;font-weight:600;font-family:\'Palatino Linotype\',\'Book Antiqua\',Palatino,serif;width:100%;max-width:300px;margin:0 auto;display:block;">Next Question</button></div><div style="margin-bottom:16px;">Taking you to home page...<br><div style="margin:12px 0;font-size:1.2rem;font-weight:600;">Redirecting in <span id="countdown-timer" style="color:#fff;">10</span> seconds</div></div><button id="stay-btn" style="padding:10px 20px;background:transparent;color:#fff;border:1px solid #fff;border-radius:8px;cursor:pointer;font-size:0.9rem;font-weight:600;font-family:\'Palatino Linotype\',\'Book Antiqua\',Palatino,serif;">Stay Here</button></div>`;
+    
+    // Start countdown immediately for wrong answers
+    countdownSeconds = 10;
+    if (countdownInterval) clearInterval(countdownInterval);
+    countdownInterval = setInterval(updateCountdown, 1000);
+    
+    // Attach button handlers
+    setTimeout(() => {
+      const stayBtn = document.getElementById('stay-btn');
+      if (stayBtn) {
+        stayBtn.onclick = () => {
+          stayHere = true;
+          clearRedirect();
+          // Hide overlay so they can see their solution
+          el.resultOverlay.style.display = 'none';
+          // Show persistent Next Question button
+          if (el.nextQuestionContainer) {
+            el.nextQuestionContainer.style.display = 'block';
+          }
+          startReminderInterval();
+        };
+      }
+      
+      const nextQuestionBtn = document.getElementById('next-question-btn');
+      if (nextQuestionBtn) {
+        nextQuestionBtn.onclick = () => {
+          clearRedirect();
+          window.location.href = '../question_selector.html';
+        };
+      }
+    }, 50);
+  }
 }
 
 document.addEventListener('DOMContentLoaded', initGame);

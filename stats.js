@@ -93,6 +93,7 @@
       const lbl = document.createElementNS('http://www.w3.org/2000/svg','text');
       lbl.setAttribute('x', cx+4); lbl.setAttribute('y', cy-rr-2);
       lbl.setAttribute('fill','rgba(255,255,255,0.5)'); lbl.setAttribute('font-size','12');
+      lbl.setAttribute('font-family', "'Palatino Linotype', 'Book Antiqua', Palatino, serif");
       lbl.textContent = (i*20)+'%';
       svg.appendChild(lbl);
     }
@@ -109,7 +110,8 @@
       const text = document.createElementNS('http://www.w3.org/2000/svg','text');
       text.setAttribute('x', lx); text.setAttribute('y', ly);
       text.setAttribute('text-anchor','middle'); text.setAttribute('dominant-baseline','middle');
-      text.setAttribute('fill','#ddd'); text.setAttribute('font-size','12');
+      text.setAttribute('fill','#ddd'); text.setAttribute('font-size','13');
+      text.setAttribute('font-family', "'Palatino Linotype', 'Book Antiqua', Palatino, serif");
       text.textContent = v.cat;
       svg.appendChild(text);
     });

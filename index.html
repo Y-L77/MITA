@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MITA — Join Waitlist</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/png" href="assets/M.png">
+  <title>MITA - Join today</title>
+  <link rel="icon" type="image/png" href="download (1).png">
   <style>
     :root {
       --bg-dark: #0c0c0c;
@@ -19,99 +18,229 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Courier New', monospace;
+      font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
     }
 
     body {
       background: var(--bg-dark);
       color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100dvh;
+      min-height: 100vh;
       -webkit-font-smoothing: antialiased;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 0 24px;
     }
 
     .wrap {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 60px;
+      align-items: start;
+      min-height: 100vh;
+      padding: 40px 0;
+    }
+
+    .hero-section {
       display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      padding: 16px;
+      flex-direction: column;
+      gap: 24px;
+      padding-top: 20px;
     }
 
     .card {
-      width: clamp(320px, 90vw, 420px);
       background: var(--card-bg);
       border: 1px solid var(--border-color);
-      border-radius: 16px;
-      box-shadow: 0 20px 64px rgba(0, 0, 0, 0.55);
-      padding: 60px 28px;
+      border-radius: 12px;
+      padding: 40px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      position: sticky;
+      top: 40px;
+    }
+
+    .logo-container {
       display: flex;
-      flex-direction: column;
-      gap: 20px;
-      text-align: center;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
     }
 
     .logo {
-      width: 48px;
-      height: 48px;
-      border-radius: 12px;
-      background: #fff;
-      color: #000;
-      display: grid;
-      place-items: center;
-      font-weight: 800;
-      font-size: 1.2rem;
-      margin: 0 auto;
+      width: 180px;
+      height: 180px;
+      display: block;
+      object-fit: contain;
+      transition: transform 0.3s ease;
+    }
+
+    .logo:hover {
+      transform: scale(1.1);
+    }
+
+    .logo-text {
+      font-size: 2.5rem;
+      font-weight: 400;
+      color: #fff;
+      letter-spacing: -0.02em;
     }
 
     h1 {
-      font-size: 1.35rem;
+      font-size: 2.25rem;
       font-weight: 600;
       line-height: 1.3;
       color: #fff;
+      letter-spacing: -0.01em;
+      margin-bottom: 12px;
     }
 
     .muted {
       color: var(--muted);
-      font-size: 0.9rem;
+      font-size: 1rem;
+      line-height: 1.7;
     }
 
-    input[type="email"] {
+    .hero-section h1 {
+      font-size: 2.75rem;
+      line-height: 1.2;
+    }
+
+    .hero-section .muted {
+      font-size: 1.1rem;
+      line-height: 1.7;
+    }
+
+    input[type="email"],
+    input[type="text"],
+    input[type="password"] {
       width: 100%;
-      padding: 0.8rem 1rem;
-      border-radius: 10px;
-      border: 1px solid rgba(255,255,255,0.08);
+      padding: 0.875rem 1rem;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.1);
       background-color: var(--input-bg);
       color: white;
-      margin-top: 0.5rem;
-      font-size: 1rem;
-      transition: border-color 0.2s ease;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+      font-family: inherit;
     }
 
-    input[type="email"]:focus {
+    .password-wrapper {
+      position: relative;
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: rgba(255, 255, 255, 0.5);
+      cursor: pointer;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      transition: color 0.2s ease;
+    }
+
+    .password-toggle:hover {
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .password-toggle svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      stroke-width: 1.5;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .password-wrapper input {
+      padding-right: 45px;
+    }
+
+    input[type="email"]:focus,
+    input[type="text"]:focus {
       outline: none;
       border-color: rgba(255,255,255,0.2);
     }
 
-    /* unified button base */
+    input::placeholder {
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      text-align: left;
+    }
+
+    .form-header {
+      margin-bottom: 24px;
+    }
+
+    .form-header h2 {
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 6px;
+      letter-spacing: -0.01em;
+    }
+
+    .form-header p {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .form-row {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .form-row-two {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    label {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 6px;
+      display: block;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
     .btn {
       width: 100%;
-      padding: 0.9rem 1rem;
-      border-radius: 10px;
+      padding: 0.95rem 1.25rem;
+      border-radius: 8px;
       font-weight: 600;
       cursor: pointer;
-      transition: background-color 0.25s ease, transform 0.1s ease, box-shadow 0.15s ease;
+      transition: all 0.2s ease;
       font-family: inherit;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
       border: 1px solid transparent;
+      font-size: 0.95rem;
+      margin-top: 4px;
     }
 
-    /* primary notify button */
     .btn--primary {
       background-color: white;
       color: black;
@@ -122,25 +251,17 @@
       transform: translateY(-1px);
     }
 
-    /* ghost secondary button */
     .btn--ghost {
       background: transparent;
       color: #e6e6ea;
       border-color: rgba(255,255,255,0.08);
       box-shadow: inset 0 1px 0 rgba(255,255,255,0.02), 0 6px 24px rgba(0,0,0,0.45);
       margin-top: 8px;
-      display: none; /* hidden until form is complete */
+      display: none;
     }
     .btn--ghost:hover {
       background: rgba(255,255,255,0.02);
       transform: translateY(-1px);
-    }
-
-    .form-row {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-top: 8px;
     }
 
     .btn .icon {
@@ -152,79 +273,365 @@
     .success {
       color: #4ade80;
       font-weight: 500;
-      font-size: 1rem;
+      font-size: 1.1rem;
     }
 
     .error {
       color: #f87171;
       font-weight: 500;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
+      margin-top: 12px;
+      padding: 0;
+      line-height: 1.4;
+    }
+
+    @media (max-width: 968px) {
+      .wrap {
+        grid-template-columns: 1fr;
+        gap: 60px;
+        padding: 40px 0;
+      }
+
+      .hero-section h1 {
+        font-size: 2.5rem;
+      }
+
+      .form-row-two {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .card {
+        padding: 32px 24px;
+      }
+
+      .hero-section h1 {
+        font-size: 2rem;
+      }
+
+      h1 {
+        font-size: 1.75rem;
+      }
+    }
+
+    .checkbox-group {
+      display: none;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 20px;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      margin-top: 8px;
+    }
+
+    .checkbox-group.visible {
+      display: flex;
+    }
+
+    .checkbox-group input[type="checkbox"] {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .custom-checkbox {
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: border-color 0.2s ease, background-color 0.2s ease;
+      position: relative;
+    }
+
+    .checkbox-group input[type="checkbox"]:checked + .custom-checkbox {
+      border-color: rgba(255, 255, 255, 0.5);
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+
+    .checkbox-group input[type="checkbox"]:checked + .custom-checkbox svg {
+      display: block;
+    }
+
+    .custom-checkbox svg {
+      display: none;
+      width: 14px;
+      height: 14px;
+      stroke: rgba(255, 255, 255, 0.6);
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+
+    .checkbox-group label {
+      font-size: 1rem;
+      font-weight: 400;
+      color: var(--muted);
+      cursor: pointer;
+      margin: 0;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-transform: none;
+    }
+
+    .email-valid-indicator {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      margin-top: 12px;
+      font-size: 1rem;
+      color: #4ade80;
+    }
+
+    .email-valid-indicator.visible {
+      display: flex;
+    }
+
+    .checkmark-icon {
+      width: 20px;
+      height: 20px;
+      display: inline-block;
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .checkmark-icon svg {
+      width: 100%;
+      height: 100%;
+      stroke: #4ade80;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+
+    footer {
+      text-align: center;
+      padding: 32px 0;
+      margin-top: 60px;
+      border-top: 1px solid var(--border-color);
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    footer p {
+      margin: 0;
+      color: var(--muted);
+      opacity: 0.7;
+    }
+
+    .password-strength {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .password-strength.weak {
+      color: #f87171;
+    }
+
+    .password-strength.medium {
+      color: #fbbf24;
+    }
+
+    .password-strength.strong {
+      color: #4ade80;
     }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="card">
-      <div class="logo">M</div>
-      <div>
-        <h1>MITA — Mathematical International Talent Arena</h1>
-        <p class="muted">Sign up to get notified about MITA updates and early access.</p>
+  <div class="container">
+    <div class="wrap">
+      <div class="hero-section">
+        <div class="logo-container">
+          <img src="download (1).png" alt="MITA Logo" class="logo">
+        </div>
+        <div>
+          <h1>MITA — Mathematical International Talent Arena</h1>
+          <p class="muted"><strong>Sign up to compete against the world.</strong> Join the first internationally recognized ELO system for competitive math. Test your skills in real-time duels against mathematicians worldwide.</p>
+        </div>
       </div>
 
-      <form
-        id="emailForm"
+      <div class="card">
+        <div class="form-header">
+          <h2>Create Account</h2>
+          <p>Get started in seconds</p>
+        </div>
+
+        <form
+        id="signupForm"
         action="https://script.google.com/macros/s/AKfycbzmmBCiQGQR6q2EfFewX3mggYlL-t-jnWjnPQEDlDsaJf4rJVjBwJBEPyi4pP4Rn0v2/exec"
         method="POST"
         target="hiddenFrame"
         novalidate
       >
-        <div class="form-row">
-          <input
-            type="email"
-            name="email"
-            id="email"
-            placeholder="Enter your email"
-            required
-            autocomplete="email"
-            inputmode="email"
-            pattern="^[^\s@]+@[^\s@]+\.[^\s@]{2,}$"
-            aria-invalid="false"
-            aria-describedby="errorMessage"
-          />
+        <div class="form-group">
+          <div class="form-row-two">
+            <div>
+              <label for="firstName">First Name</label>
+              <input
+                type="text"
+                name="firstName"
+                id="firstName"
+                placeholder="John"
+                required
+                autocomplete="given-name"
+              />
+            </div>
+            <div>
+              <label for="lastName">Last Name</label>
+              <input
+                type="text"
+                name="lastName"
+                id="lastName"
+                placeholder="Doe"
+                required
+                autocomplete="family-name"
+              />
+            </div>
+          </div>
 
-          <button class="btn btn--primary" type="submit">Notify Me</button>
+          <div>
+            <label for="username">Username</label>
+              <input
+                type="text"
+                name="username"
+                id="username"
+                placeholder="johnlikescats123"
+                required
+                autocomplete="username"
+              />
+          </div>
+
+          <div>
+            <label for="email">Email</label>
+            <input
+              type="email"
+              name="email"
+              id="email"
+              placeholder="johndoe@example.com"
+              required
+              autocomplete="email"
+              inputmode="email"
+              pattern="^[^\s@]+@[^\s@]+\.[^\s@]{2,}$"
+              aria-invalid="false"
+              aria-describedby="errorMessage"
+            />
+            <p id="emailValidIndicator" class="email-valid-indicator">
+              <span class="checkmark-icon">
+                <svg viewBox="0 0 24 24">
+                  <path d="M5 13l4 4L19 7"/>
+                </svg>
+              </span>
+              <span>Valid email</span>
+            </p>
+          </div>
+
+
+          <div class="checkbox-group" id="notificationsCheckbox">
+            <label for="notifications">
+              <input type="checkbox" name="notifications" id="notifications" value="yes" checked>
+              <span class="custom-checkbox">
+                <svg viewBox="0 0 24 24">
+                  <path d="M5 13l4 4L19 7"/>
+                </svg>
+              </span>
+              <span>Receive notifications about updates and matches</span>
+            </label>
+          </div>
+
+          <button class="btn btn--primary" type="submit">Sign Up</button>
+          
+          <p id="errorMessage" class="error" style="display:none;"></p>
         </div>
       </form>
 
-      <button
-        id="peekButton"
-        class="btn btn--ghost"
-        type="button"
-        onclick="window.location.href='samplequestion'""
-        aria-label="Open MITA prototype page"
-      >
-        <span class="icon">👀</span>
-        <span>Take a Peek</span>
-      </button>
+      <div style="text-align: center; margin-top: 20px; color: var(--muted); font-size: 0.9rem;">
+        Already have an account? <a href="#" id="loginLink" style="color: #fff; text-decoration: underline; cursor: pointer;">Log in</a>
+      </div>
 
-      <!-- hidden iframe for form submission -->
-      <iframe name="hiddenFrame" style="display:none;"></iframe>
+      <!-- Login Modal -->
+      <div id="loginModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center;">
+        <div class="card" style="max-width: 400px; margin: 20px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+            <h2 style="margin: 0;">Log In</h2>
+            <button id="closeLoginModal" style="background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer; padding: 0; width: 30px; height: 30px;">&times;</button>
+          </div>
+          <form id="loginForm">
+            <div class="form-group">
+              <div>
+                <label for="loginUsername">Username</label>
+                <input type="text" id="loginUsername" name="loginUsername" placeholder="johnlikescats123" required autocomplete="username" />
+              </div>
+              <div>
+                <label for="loginEmail">Email</label>
+                <input type="email" id="loginEmail" name="loginEmail" placeholder="johndoe@example.com" required autocomplete="email" />
+              </div>
+              <p id="loginErrorMessage" class="error" style="display: none;"></p>
+              <button class="btn btn--primary" type="submit">Log In</button>
+            </div>
+          </form>
+        </div>
+      </div>
 
-      <p id="successMessage" class="success" style="display:none;">
-        Thanks! You’ve been added.
-      </p>
-      <p id="errorMessage" class="error" style="display:none;">
-        Please enter a valid email address (e.g., name@example.com).
-      </p>
+        <button
+          id="peekButton"
+          class="btn btn--ghost"
+          type="button"
+          onclick="window.location.href='samplequestion'"
+          aria-label="Open MITA prototype page"
+        >
+          <span class="icon">👀</span>
+          <span>Take a Peek</span>
+        </button>
+
+        <!-- hidden iframe for form submission -->
+        <iframe name="hiddenFrame" style="display:none;"></iframe>
+
+        <p id="successMessage" class="success" style="display:none; margin-top: 16px;">
+          Thanks! You've been added.
+        </p>
+      </div>
     </div>
   </div>
 
+  <footer>
+    <p>&copy; 2025 MITA — Mathematical International Talent Arena. All rights reserved.</p>
+  </footer>
+
   <script>
-    const form = document.getElementById("emailForm");
+    // Check if user is already logged in
+    if (localStorage.getItem('mita_user')) {
+      window.location.href = 'home.html';
+    }
+
+    const form = document.getElementById("signupForm");
     const emailInput = document.getElementById("email");
+    const firstNameInput = document.getElementById("firstName");
+    const lastNameInput = document.getElementById("lastName");
+    const usernameInput = document.getElementById("username");
     const successMessage = document.getElementById("successMessage");
     const errorMessage = document.getElementById("errorMessage");
     const peekButton = document.getElementById("peekButton");
+    const notificationsCheckbox = document.getElementById("notificationsCheckbox");
+    const emailValidIndicator = document.getElementById("emailValidIndicator");
+    const loginLink = document.getElementById("loginLink");
+    const loginModal = document.getElementById("loginModal");
+    const closeLoginModal = document.getElementById("closeLoginModal");
+    const loginForm = document.getElementById("loginForm");
+    const loginErrorMessage = document.getElementById("loginErrorMessage");
+
 
     const isValidEmail = (value) => {
       const trimmed = value.trim();
@@ -233,33 +640,232 @@
     };
 
     emailInput.addEventListener("input", () => {
-      const val = emailInput.value;
+      const val = emailInput.value.trim();
       const ok = isValidEmail(val);
 
       emailInput.setCustomValidity(ok ? "" : "Invalid email address.");
       emailInput.setAttribute("aria-invalid", ok ? "false" : "true");
 
-      if (val.length === 0 || ok) {
+      if (val.length === 0) {
         errorMessage.style.display = "none";
+        emailValidIndicator.classList.remove("visible");
+        notificationsCheckbox.classList.remove("visible");
+      } else if (ok) {
+        errorMessage.style.display = "none";
+        emailValidIndicator.classList.add("visible");
+        notificationsCheckbox.classList.add("visible");
       } else {
         errorMessage.style.display = "block";
+        emailValidIndicator.classList.remove("visible");
+        notificationsCheckbox.classList.remove("visible");
       }
     });
 
-    form.addEventListener("submit", (e) => {
-      const val = emailInput.value.trim();
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const emailVal = emailInput.value.trim();
+      const firstNameVal = firstNameInput.value.trim();
+      const lastNameVal = lastNameInput.value.trim();
+      const usernameVal = usernameInput.value.trim();
 
-      if (!isValidEmail(val)) {
-        e.preventDefault();
+      if (!firstNameVal || !lastNameVal || !usernameVal) {
+        errorMessage.textContent = "Please fill in all fields.";
+        errorMessage.style.display = "block";
+        return;
+      }
+
+      if (!isValidEmail(emailVal)) {
+        errorMessage.textContent = "Please enter a valid email address.";
         errorMessage.style.display = "block";
         emailInput.reportValidity();
         return;
       }
 
-      // Hide form, show success and reveal peek button
-      form.style.display = "none";
-      successMessage.style.display = "block";
-      peekButton.style.display = "inline-flex";
+      // Show loading state
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const originalText = submitBtn.textContent;
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Signing up...';
+
+      try {
+        // Get existing users from localStorage
+        const existingUsers = JSON.parse(localStorage.getItem('mita_users') || '[]');
+        
+        // Check if email or username already exists
+        const existingUser = existingUsers.find(u => 
+          u.email.toLowerCase() === emailVal.toLowerCase() || 
+          u.username === usernameVal
+        );
+        
+        if (existingUser) {
+          if (existingUser.email.toLowerCase() === emailVal.toLowerCase()) {
+            errorMessage.textContent = 'An account with this email already exists.';
+            errorMessage.style.display = "block";
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
+            return;
+          }
+          if (existingUser.username === usernameVal) {
+            errorMessage.textContent = 'This username is already taken.';
+            errorMessage.style.display = "block";
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
+            return;
+          }
+        }
+
+        // Create new user
+        const newUser = {
+          id: Date.now().toString(),
+          firstName: firstNameVal,
+          lastName: lastNameVal,
+          username: usernameVal,
+          email: emailVal,
+          notifications: document.getElementById("notifications").checked,
+          createdAt: new Date().toISOString()
+        };
+
+        // Save to localStorage (all users)
+        existingUsers.push(newUser);
+        localStorage.setItem('mita_users', JSON.stringify(existingUsers));
+
+        // Submit to Google Sheets (email goes here too) - MUST happen before redirect
+        const formData = {
+          firstName: firstNameVal,
+          lastName: lastNameVal,
+          username: usernameVal,
+          email: emailVal,
+          notifications: document.getElementById("notifications").checked ? 'yes' : 'no'
+        };
+
+        // Submit to Google Sheets using form submission (works with Google Apps Script)
+        const googleForm = document.createElement('form');
+        googleForm.method = 'POST';
+        googleForm.action = 'https://script.google.com/macros/s/AKfycbzmmBCiQGQR6q2EfFewX3mggYlL-t-jnWjnPQEDlDsaJf4rJVjBwJBEPyi4pP4Rn0v2/exec';
+        googleForm.target = 'hiddenFrame';
+        googleForm.style.display = 'none';
+        
+        // Add all form fields
+        Object.keys(formData).forEach(key => {
+          const input = document.createElement('input');
+          input.type = 'hidden';
+          input.name = key;
+          input.value = formData[key];
+          googleForm.appendChild(input);
+        });
+        
+        // Submit to Google Sheets
+        document.body.appendChild(googleForm);
+        googleForm.submit();
+        
+        // Keep form in DOM briefly to ensure submission completes
+        setTimeout(() => {
+          if (googleForm.parentNode) {
+            document.body.removeChild(googleForm);
+          }
+        }, 1000);
+
+        // Store current user in localStorage for session (no email)
+        const userData = {
+          id: newUser.id,
+          firstName: newUser.firstName,
+          lastName: newUser.lastName,
+          username: newUser.username,
+          notifications: newUser.notifications
+        };
+        
+        localStorage.setItem('mita_user', JSON.stringify(userData));
+        
+        // Redirect to home page
+        window.location.href = 'home.html';
+      } catch (error) {
+        console.error('Signup error:', error);
+        errorMessage.textContent = 'An error occurred. Please try again.';
+        errorMessage.style.display = "block";
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+      }
+    });
+
+    // Login modal functionality
+    loginLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      loginModal.style.display = 'flex';
+    });
+
+    closeLoginModal.addEventListener('click', () => {
+      loginModal.style.display = 'none';
+      loginErrorMessage.style.display = 'none';
+      loginForm.reset();
+    });
+
+    loginModal.addEventListener('click', (e) => {
+      if (e.target === loginModal) {
+        loginModal.style.display = 'none';
+        loginErrorMessage.style.display = 'none';
+        loginForm.reset();
+      }
+    });
+
+    // Login form handler
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value.trim();
+      const username = document.getElementById('loginUsername').value.trim();
+
+      if (!email || !username) {
+        loginErrorMessage.textContent = 'Please enter your email and username.';
+        loginErrorMessage.style.display = 'block';
+        return;
+      }
+
+      if (!isValidEmail(email)) {
+        loginErrorMessage.textContent = 'Please enter a valid email address.';
+        loginErrorMessage.style.display = 'block';
+        return;
+      }
+
+      const submitBtn = loginForm.querySelector('button[type="submit"]');
+      const originalText = submitBtn.textContent;
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Logging in...';
+
+      try {
+        // Get all users from localStorage
+        const allUsers = JSON.parse(localStorage.getItem('mita_users') || '[]');
+        
+        // Find user by both email AND username (both must match)
+        const user = allUsers.find(u => 
+          u.email.toLowerCase() === email.toLowerCase() && 
+          u.username === username
+        );
+
+        if (!user) {
+          loginErrorMessage.textContent = 'Invalid email or username.';
+          loginErrorMessage.style.display = 'block';
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalText;
+          return;
+        }
+
+        // Store user in localStorage for session (no email)
+        const userData = {
+          id: user.id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          username: user.username,
+          notifications: user.notifications
+        };
+        
+        localStorage.setItem('mita_user', JSON.stringify(userData));
+        window.location.href = 'home.html';
+      } catch (error) {
+        console.error('Login error:', error);
+        loginErrorMessage.textContent = 'An error occurred. Please try again.';
+        loginErrorMessage.style.display = 'block';
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+      }
     });
   </script>
 </body>
