@@ -1,4 +1,4 @@
-#MITA: Mathematical International Talent Arena
+#MITA: Mathematical International Talent Arena (In Progress)
 **© 2025 [MITA TEAM] • All Rights Reserved • [CFs, Yipeng Lu/Rhythm Panchal/Rohit Chavali]**
 
 ## 🌍 Vision
