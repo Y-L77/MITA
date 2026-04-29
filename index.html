@@ -189,11 +189,11 @@
       const el = document.createElement('span');
       el.className = 'math-sym';
       el.textContent = SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)];
-      const size = 18 + Math.random() * 36;
+      const size = 22 + Math.random() * 36;
       el.style.fontSize = size + 'px';
       el.style.left = (Math.random() * 100) + 'vw';
       el.style.bottom = '-60px';
-      const dur = 18 + Math.random() * 22;
+      const dur = 10 + Math.random() * 16;
       el.style.animationDuration = dur + 's';
       el.style.setProperty('--rot-start', (Math.random() * 40 - 20) + 'deg');
       el.style.setProperty('--rot-end',   (Math.random() * 40 - 20) + 'deg');
