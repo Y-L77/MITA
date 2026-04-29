@@ -2,671 +2,126 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>MITA — Question Selector</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
-  <link rel="icon" type="image/png" href="download (1).png">
-  <style>
-    * {
-      font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
-    }
-
-    :root { 
-      --gold: #b8941a;
-      --gold-light: #d4af37;
-      --gold-dark: #8b6f0e;
-      --muted: rgba(255, 255, 255, 0.6);
-      --ink: #ffffff;
-      --bg-dark: #0c0c0c;
-      --bg-card: #121212;
-      --bg-panel: #1a1a1a;
-      --border: rgba(255, 255, 255, 0.1);
-    }
-
-    html, body {
-      margin: 0;
-      padding: 0;
-      background: var(--bg-dark);
-      color: var(--ink);
-      min-height: 100vh;
-    }
-
-    a {
-      color: var(--ink);
-      text-decoration: none;
-    }
-
-    .nav {
-      position: fixed;
-      top: 24px;
-      left: 24px;
-      display: flex;
-      gap: 12px;
-      z-index: 99;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-      max-width: calc(100vw - 48px);
-      flex-wrap: wrap;
-    }
-
-    .nav.visible {
-      opacity: 1;
-      pointer-events: all;
-    }
-
-    .nav a {
-      background: var(--bg-card);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 14px 20px;
-      border-radius: 12px;
-      transition: all 0.2s ease;
-      font-size: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 500;
-      white-space: nowrap;
-      flex-shrink: 0;
-      max-width: 100%;
-      box-sizing: border-box;
-    }
-
-    .nav a:hover {
-      background: var(--bg-panel);
-      border-color: rgba(255, 255, 255, 0.2);
-      transform: translateY(-2px);
-    }
-
-    @media (max-width: 768px) {
-      .nav {
-        top: 16px;
-        left: 16px;
-        gap: 8px;
-        max-width: calc(100vw - 32px);
-      }
-
-      .nav a {
-        padding: 12px 16px;
-        font-size: 0.9rem;
-      }
-    }
-
-    .nav-icon {
-      width: 20px;
-      height: 20px;
-      display: inline-block;
-      flex-shrink: 0;
-    }
-
-    .nav-icon svg {
-      width: 100%;
-      height: 100%;
-      stroke: currentColor;
-      fill: none;
-      stroke-width: 2;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
-    .wrap {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 80px 40px 40px;
-      box-sizing: border-box;
-    }
-
-    .card {
-      width: clamp(320px, 95vw, 1200px);
-      background: var(--bg-card);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 20px;
-      padding: 48px;
-      box-shadow: 0 20px 64px rgba(0, 0, 0, 0.5);
-    }
-
-    .title {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 40px;
-      padding-bottom: 24px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .title h1 {
-      margin: 0;
-      font-size: 1.8rem;
-      font-weight: 600;
-      color: #fff;
-      letter-spacing: -0.5px;
-    }
-
-    .muted {
-      color: var(--muted);
-      font-size: 0.95rem;
-    }
-
-    .layout {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 40px;
-      margin-top: 32px;
-    }
-
-    @media (max-width: 980px) {
-      .layout {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .panel {
-      background: var(--bg-panel);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 16px;
-      padding: 32px;
-    }
-
-    .row {
-      display: grid;
-      gap: 32px;
-    }
-
-    .section-title {
-      font-weight: 600;
-      font-size: 1.1rem;
-      color: #fff;
-      margin-bottom: 16px;
-      letter-spacing: 0.3px;
-    }
-
-    .section-desc {
-      color: var(--muted);
-      font-size: 0.85rem;
-      margin-top: 10px;
-      line-height: 1.5;
-    }
-
-    .chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    .chip {
-      border: 2px solid rgba(255, 255, 255, 0.2);
-      background: transparent;
-      border-radius: 12px;
-      padding: 12px 20px;
-      font-size: 0.95rem;
-      cursor: pointer;
-      color: rgba(255, 255, 255, 0.8);
-      transition: all 0.2s ease;
-      font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
-    }
-
-    .chip:hover {
-      border-color: rgba(255, 255, 255, 0.3);
-      color: #fff;
-      background: rgba(255, 255, 255, 0.05);
-    }
-
-    .chip.active {
-      border-color: rgba(255, 255, 255, 0.4);
-      background: rgba(255, 255, 255, 0.1);
-      color: #fff;
-      font-weight: 600;
-    }
-
-    .elo-presets {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-
-    .elo-preset-btn {
-      background: transparent;
-      border: 2px solid rgba(255, 255, 255, 0.2);
-      border-radius: 10px;
-      padding: 10px 16px;
-      color: rgba(255, 255, 255, 0.8);
-      cursor: pointer;
-      font-size: 0.9rem;
-      transition: all 0.2s ease;
-      font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
-      font-weight: 500;
-    }
-
-    .elo-preset-btn:hover {
-      border-color: rgba(255, 255, 255, 0.3);
-      background: rgba(255, 255, 255, 0.05);
-      color: #fff;
-    }
-
-    .elo-preset-btn.active {
-      border-color: rgba(255, 255, 255, 0.4);
-      background: rgba(255, 255, 255, 0.1);
-      color: #fff;
-      font-weight: 600;
-    }
-
-    .elo-custom-section {
-      margin-top: 20px;
-      padding-top: 20px;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .elo-custom-label {
-      color: var(--muted);
-      font-size: 0.9rem;
-      margin-bottom: 12px;
-    }
-
-    .elo-controls {
-      display: flex;
-      gap: 16px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    .elo-input-group {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .elo-input-group input[type=number] {
-      width: 110px;
-      background: var(--bg-dark);
-      border: 2px solid rgba(255, 255, 255, 0.15);
-      border-radius: 10px;
-      color: #fff;
-      padding: 12px 14px;
-      font-size: 0.95rem;
-      font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
-      transition: border-color 0.2s ease;
-    }
-
-    .elo-input-group input[type=number]:focus {
-      outline: none;
-      border-color: rgba(255, 255, 255, 0.4);
-      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
-    }
-
-    .elo-separator {
-      color: var(--muted);
-      font-size: 0.9rem;
-    }
-
-    .btn {
-      background: transparent;
-      border: 2px solid rgba(255, 255, 255, 0.2);
-      color: #fff;
-      border-radius: 12px;
-      padding: 12px 24px;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 1rem;
-      transition: all 0.2s ease;
-      font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
-    }
-
-    .btn:hover {
-      background: rgba(255, 255, 255, 0.1);
-      border-color: rgba(255, 255, 255, 0.3);
-      transform: translateY(-2px);
-    }
-
-    .btn:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-      transform: none;
-    }
-
-    .btn:disabled:hover {
-      background: transparent;
-      border-color: rgba(255, 255, 255, 0.2);
-      box-shadow: none;
-    }
-
-    .btn-primary {
-      background: #fff;
-      color: #000;
-      border-color: #fff;
-      border-width: 2px;
-    }
-
-    .btn-primary:hover {
-      background: rgba(255, 255, 255, 0.9);
-      border-color: rgba(255, 255, 255, 0.9);
-      color: #000;
-    }
-
-    .btn-icon {
-      width: 18px;
-      height: 18px;
-      display: inline-block;
-      margin-right: 8px;
-      vertical-align: middle;
-    }
-
-    .btn-icon svg {
-      width: 100%;
-      height: 100%;
-      stroke: currentColor;
-      fill: none;
-      stroke-width: 2;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
-    .action-buttons {
-      display: flex;
-      gap: 16px;
-      margin-top: 12px;
-    }
-
-    .eligible-info {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 14px 18px;
-      background: var(--bg-dark);
-      border: 1px solid var(--border);
-      border-left: 3px solid rgba(255, 255, 255, 0.3);
-      border-radius: 10px;
-      color: #fff;
-      font-weight: 600;
-      font-size: 0.95rem;
-      margin-top: 16px;
-    }
-
-    .window {
-      min-height: 220px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--bg-dark);
-      border: 2px dashed rgba(255, 255, 255, 0.15);
-      border-radius: 16px;
-      padding: 40px;
-      box-sizing: border-box;
-    }
-
-    .window.has-question {
-      border-color: rgba(255, 255, 255, 0.3);
-      border-style: solid;
-      background: var(--bg-dark);
-      min-height: auto;
-      padding: 32px;
-    }
-
-    .ka {
-      font-size: 1.1rem;
-      text-align: center;
-      color: #fff;
-      line-height: 1.6;
-      width: 100%;
-      max-width: 100%;
-      overflow-wrap: break-word;
-      word-wrap: break-word;
-    }
-
-    .window .ka {
-      margin: 0;
-    }
-
-    .meta {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 20px;
-      padding: 16px 20px;
-      background: var(--bg-dark);
-      border-radius: 10px;
-      gap: 24px;
-    }
-
-    .meta-item {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .meta-label {
-      color: var(--muted);
-      font-size: 0.85rem;
-    }
-
-    .meta-value {
-      color: #fff;
-      font-weight: 600;
-      font-size: 1rem;
-    }
-
-    .pill {
-      display: inline-block;
-      padding: 6px 12px;
-      border-radius: 8px;
-      background: var(--bg-panel);
-      color: #fff;
-      font-weight: 600;
-      font-size: 0.9rem;
-    }
-
-    .mini {
-      margin-top: 24px;
-      background: var(--bg-dark);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      padding: 24px;
-    }
-
-    .mini h3 {
-      margin: 0 0 8px 0;
-      font-size: 1rem;
-      color: #fff;
-      font-weight: 600;
-    }
-
-    .mini sub {
-      color: var(--muted);
-      font-size: 0.85rem;
-    }
-
-    .flow-indicator {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 32px;
-      padding: 16px 20px;
-      background: var(--bg-panel);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      font-size: 0.9rem;
-      color: var(--muted);
-    }
-
-    .flow-step {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .flow-step.active {
-      color: #fff;
-      font-weight: 600;
-    }
-
-    .flow-arrow {
-      color: var(--muted);
-      margin: 0 4px;
-    }
-  </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css" />
+  <link rel="stylesheet" href="assets/css/theme.css" />
+  <link rel="stylesheet" href="assets/css/selector.css" />
+  <link rel="icon" type="image/png" href="assets/images/logo.png" />
 </head>
 <body>
-  <div class="nav" id="topNav">
-    <a href="home.html">
-      <span class="nav-icon">
-        <svg viewBox="0 0 24 24">
-          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-          <polyline points="9 22 9 12 15 12 15 22"/>
-        </svg>
-      </span>
-      Home
+  <header class="app-header">
+    <a class="brand" href="home.html">
+      <img src="assets/images/logo.png" alt="" width="40" height="40" />
+      <span>MITA</span>
     </a>
-    <a href="stats.html">
-      <span class="nav-icon">
-        <svg viewBox="0 0 24 24">
-          <line x1="18" y1="20" x2="18" y2="10"/>
-          <line x1="12" y1="20" x2="12" y2="4"/>
-          <line x1="6" y1="20" x2="6" y2="14"/>
-        </svg>
-      </span>
-      Stats
-    </a>
-  </div>
+    <nav class="app-nav" aria-label="Main">
+      <a href="home.html">
+        <span class="nav-ic" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </span>
+        Home
+      </a>
+      <a href="stats.html">
+        <span class="nav-ic" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        </span>
+        Stats
+      </a>
+    </nav>
+  </header>
 
-  <div class="wrap">
-    <div class="card">
-      <div class="title">
-        <h1>Question Selector</h1>
-        <div class="muted" id="pool-info">Eligible: 0 questions</div>
-      </div>
-
-      <div class="flow-indicator">
-        <div class="flow-step" id="step-1">1. Select Categories</div>
-        <span class="flow-arrow">→</span>
-        <div class="flow-step" id="step-2">2. Set ELO Range</div>
-        <span class="flow-arrow">→</span>
-        <div class="flow-step" id="step-3">3. Randomize</div>
-        <span class="flow-arrow">→</span>
-        <div class="flow-step" id="step-4">4. Start Solving</div>
-      </div>
-
-      <div class="layout">
-        <!-- LEFT: filters -->
-        <div class="panel">
-          <div class="row">
-            <div>
-              <div class="section-title">Select Categories</div>
-              <div id="cat-list" class="chips"></div>
-              <div class="section-desc">Click categories to filter. Select multiple to narrow down.</div>
-            </div>
-
-            <div>
-              <div class="section-title">Set ELO Range</div>
-              <div class="section-desc" style="margin-bottom: 16px;">ELO measures difficulty. Higher = harder. Choose a preset or set custom range.</div>
-              
-              <div class="elo-presets">
-                <button class="elo-preset-btn" data-min="0" data-max="500">Beginner (0-500)</button>
-                <button class="elo-preset-btn" data-min="500" data-max="1000">Intermediate (500-1000)</button>
-                <button class="elo-preset-btn" data-min="1000" data-max="1500">Advanced (1000-1500)</button>
-                <button class="elo-preset-btn" data-min="1500" data-max="2000">Expert (1500-2000)</button>
-                <button class="elo-preset-btn" data-min="2000" data-max="9999">Master (2000+)</button>
-              </div>
-
-              <div class="elo-custom-section">
-                <div class="elo-custom-label">Or set custom range:</div>
-                <div class="elo-controls">
-                  <div class="elo-input-group">
-                    <input id="elo-min" type="number" placeholder="Min" step="50" min="0">
-                    <span class="elo-separator">to</span>
-                    <input id="elo-max" type="number" placeholder="Max" step="50" min="0">
-                  </div>
-                  <button id="save-elo" class="btn">Apply</button>
-                </div>
-              </div>
-              
-              <div class="eligible-info" id="eligible-count" style="margin-top: 16px;">
-                Eligible: 0 questions
-              </div>
-            </div>
-
-            <div>
-              <div class="section-title">Randomize Question</div>
-              <div class="action-buttons">
-                <button id="spin-btn" class="btn btn-primary">
-                  <span class="btn-icon">
-                    <svg viewBox="0 0 24 24">
-                      <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
-                    </svg>
-                  </span>
-                  Randomize
-                </button>
-                <button id="start-btn" class="btn" disabled>
-                  Start Solving
-                  <span class="btn-icon" style="margin-left: 8px; margin-right: 0;">
-                    <svg viewBox="0 0 24 24">
-                      <path d="M5 12h14M12 5l7 7-7 7"/>
-                    </svg>
-                  </span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- RIGHT: preview + per-question web chart -->
-        <div class="panel">
-          <div class="section-title" style="margin-bottom: 20px;">Selected Question</div>
-          <div class="window" id="preview">
-            <div class="ka muted" style="display: flex; flex-direction: column; align-items: center; gap: 12px;">
-              <div style="font-size: 1.1rem; opacity: 0.8;">No question selected yet</div>
-              <div style="font-size: 0.95rem; opacity: 0.6; text-align: center; max-width: 300px; line-height: 1.5;">
-                Click the <strong style="color: #fff; opacity: 0.9;">"Randomize"</strong> button to select a random question
-              </div>
-            </div>
-          </div>
-
-          <div class="meta">
-            <div class="meta-item">
-              <div class="meta-label">Question ID</div>
-              <div class="meta-value" id="current-id">—</div>
-            </div>
-            <div class="meta-item">
-              <div class="meta-label">ELO Rating</div>
-              <div class="meta-value" id="current-elo">—</div>
-            </div>
-          </div>
-
-          <div class="mini">
-            <h3>Difficulty Breakdown</h3>
-            <sub>Mechanics • Geometry • Number Theory • Problem Solving • Time Pressure</sub>
-            <div style="margin-top: 16px; display: flex; justify-content: center;">
-              <svg id="mini-radar" width="360" height="260" style="max-width:100%;height:auto"></svg>
-            </div>
-          </div>
-        </div>
-      </div>
+  <main class="selector-shell">
+    <div class="page-intro">
+      <h1>Pick a question</h1>
+      <p class="lead">Choose topics and difficulty, hit <strong style="color: rgba(255,255,255,0.92)">Randomize</strong>, then open the canvas when you are ready.</p>
+      <div class="pool-badge" id="pool-info" role="status">Eligible: 0 questions</div>
     </div>
-  </div>
+
+    <div class="stack">
+      <section class="panel" aria-labelledby="cat-heading">
+        <h2 id="cat-heading">Categories</h2>
+        <p class="hint">Optional — leave empty to include every category. Tap to combine.</p>
+        <div id="cat-list" class="chips"></div>
+      </section>
+
+      <section class="panel" aria-labelledby="elo-heading">
+        <h2 id="elo-heading">Difficulty (ELO)</h2>
+        <p class="hint">Rough guide: higher ELO means harder problems.</p>
+        <div class="elo-presets">
+          <button type="button" class="elo-preset-btn" data-min="0" data-max="500">Beginner<br><span style="opacity:0.65;font-size:0.78rem">0–500</span></button>
+          <button type="button" class="elo-preset-btn" data-min="500" data-max="1000">Intermediate<br><span style="opacity:0.65;font-size:0.78rem">500–1000</span></button>
+          <button type="button" class="elo-preset-btn" data-min="1000" data-max="1500">Advanced<br><span style="opacity:0.65;font-size:0.78rem">1000–1500</span></button>
+          <button type="button" class="elo-preset-btn" data-min="1500" data-max="2000">Expert<br><span style="opacity:0.65;font-size:0.78rem">1500–2000</span></button>
+          <button type="button" class="elo-preset-btn" data-min="2000" data-max="9999">Master<br><span style="opacity:0.65;font-size:0.78rem">2000+</span></button>
+        </div>
+
+        <details class="elo-advanced">
+          <summary>Custom ELO range</summary>
+          <div class="inner">
+            <div class="elo-controls">
+              <div class="elo-input-group">
+                <input id="elo-min" type="number" placeholder="Min" step="50" min="0" inputmode="numeric" aria-label="Minimum ELO" />
+                <span class="elo-separator">to</span>
+                <input id="elo-max" type="number" placeholder="Max" step="50" min="0" inputmode="numeric" aria-label="Maximum ELO" />
+              </div>
+              <button type="button" id="save-elo" class="btn">Apply range</button>
+            </div>
+          </div>
+        </details>
+      </section>
+
+      <section class="panel" aria-label="Actions">
+        <h2 class="visually-hidden" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">Actions</h2>
+        <div class="actions-row">
+          <button type="button" id="spin-btn" class="btn btn-primary">
+            <span class="btn-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+            </span>
+            Randomize
+          </button>
+          <button type="button" id="start-btn" class="btn" disabled>
+            Start solving
+            <span class="btn-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </span>
+          </button>
+        </div>
+      </section>
+
+      <section class="panel preview-panel" aria-labelledby="preview-heading">
+        <h2 id="preview-heading">Preview</h2>
+        <p class="hint" style="margin-bottom:14px">Your random pick appears here before you start.</p>
+        <div class="window" id="preview">
+          <div class="ka muted placeholder-stack">
+            <div class="t1">No question yet</div>
+            <div class="t2">Tap <strong style="color:#fff;opacity:0.9">Randomize</strong> to draw from the pool above.</div>
+          </div>
+        </div>
+
+        <div class="meta">
+          <div class="meta-item">
+            <div class="meta-label">Question ID</div>
+            <div class="meta-value" id="current-id">—</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">ELO</div>
+            <div class="meta-value" id="current-elo">—</div>
+          </div>
+        </div>
+
+        <div class="mini">
+          <h3>Difficulty shape</h3>
+          <sub>Mechanics · Geometry · Number theory · Problem solving · Time pressure</sub>
+          <div class="radar-wrap">
+            <svg id="mini-radar" width="360" height="260"></svg>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
 
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
-  <script src="selector.js"></script>
-  <script>
-    // Show nav only when scrolled to top
-    const nav = document.getElementById('topNav');
-    
-    function handleScroll() {
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-      
-      // Show nav only when at the very top (within 50px)
-      if (scrollTop < 50) {
-        nav.classList.add('visible');
-      } else {
-        nav.classList.remove('visible');
-      }
-    }
-    
-    // Check on load
-    handleScroll();
-    
-    // Listen for scroll
-    window.addEventListener('scroll', handleScroll, { passive: true });
-  </script>
+  <script src="assets/js/selector.js"></script>
 </body>
 </html>

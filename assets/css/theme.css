@@ -1,0 +1,26 @@
+/* MITA shared design tokens */
+:root {
+  --bg-dark: #070708;
+  --bg-elevated: #0e0e10;
+  --card-bg: #141418;
+  --panel-bg: #1a1a20;
+  --border-color: rgba(255, 255, 255, 0.07);
+  --border-strong: rgba(255, 255, 255, 0.12);
+  --muted: #8b8b96;
+  --muted-bright: #b7b7c2;
+  --input-bg: #121215;
+  --text: #f4f4f8;
+  --accent: #7c90ff;
+  --accent-dim: rgba(124, 144, 255, 0.22);
+  --accent-glow: rgba(124, 144, 255, 0.35);
+  --success: #4ade80;
+  --danger: #f87171;
+  /* Legacy alias used in some pages */
+  --accent-gold: rgba(212, 175, 55, 0.35);
+  --font-ui: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-serif: "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --shadow-card: 0 0 0 1px rgba(255, 255, 255, 0.04), 0 24px 48px -12px rgba(0, 0, 0, 0.65);
+}

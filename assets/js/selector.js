@@ -17,7 +17,6 @@
     startBtn:   document.getElementById('start-btn'),
     preview:    document.getElementById('preview'),
     poolHeader: document.getElementById('pool-info'),
-    poolInline: document.getElementById('eligible-count'),
     currentId:  document.getElementById('current-id'),
     currentElo: document.getElementById('current-elo'),
     miniRadar:  document.getElementById('mini-radar'),
@@ -104,7 +103,7 @@
   }
 
   async function load(){
-    const res=await fetch('questions.json');
+    const res=await fetch('data/questions.json');
     const payload=await res.json();
     questions=payload.questions||payload;
     renderChips();
@@ -132,18 +131,6 @@
 
   function setPoolInfoText(txt){
     if(el.poolHeader) el.poolHeader.textContent=txt;
-    if(el.poolInline) el.poolInline.textContent=txt;
-  }
-
-  function updateFlowSteps(){
-    const pool=eligiblePool();
-    const hasFilters=selectedCats.size>0 || (el.eloMin?.value && el.eloMax?.value);
-    const hasQuestion=currentPick!==null;
-    
-    document.getElementById('step-1').classList.toggle('active',selectedCats.size>0);
-    document.getElementById('step-2').classList.toggle('active',el.eloMin?.value && el.eloMax?.value);
-    document.getElementById('step-3').classList.toggle('active',hasQuestion);
-    document.getElementById('step-4').classList.toggle('active',hasQuestion && !el.startBtn.disabled);
   }
 
   function updatePoolInfo(){
@@ -152,23 +139,21 @@
     if(!pool.includes(currentPick)){
       currentPick=null;
       el.preview.className='window';
-      el.preview.innerHTML=`<div class="ka muted" style="display: flex; flex-direction: column; align-items: center; gap: 12px;"><div style="font-size: 1.1rem; opacity: 0.8;">No question selected yet</div><div style="font-size: 0.95rem; opacity: 0.6; text-align: center; max-width: 300px; line-height: 1.5;">Click the <strong style="color: #fff; opacity: 0.9;">"Randomize"</strong> button to select a random question</div></div>`;
+      el.preview.innerHTML=`<div class="ka muted placeholder-stack"><div class="t1">No question yet</div><div class="t2">Tap <strong style="color:#fff;opacity:0.9">Randomize</strong> to draw from the pool above.</div></div>`;
       el.currentId.textContent='—';
       el.currentElo.textContent='—';
       clearMiniRadar();
       el.startBtn.disabled=true;
     }
-    updateFlowSteps();
   }
 
   function spinOnce(){
     const pool=eligiblePool();
     if(!pool.length){
       el.preview.className='window';
-      el.preview.innerHTML=`<div class="ka muted" style="display: flex; flex-direction: column; align-items: center; gap: 12px;"><div style="font-size: 1.1rem; opacity: 0.8;">No questions match your filters</div><div style="font-size: 0.95rem; opacity: 0.6; text-align: center; max-width: 300px; line-height: 1.5;">Try adjusting categories or ELO range</div></div>`;
+      el.preview.innerHTML=`<div class="ka muted placeholder-stack"><div class="t1">Nothing matches</div><div class="t2">Widen the ELO range or clear some categories.</div></div>`;
       el.currentId.textContent='—'; el.currentElo.textContent='—';
       clearMiniRadar(); el.startBtn.disabled=true;
-      updateFlowSteps();
       return;
     }
     const pick=sample(pool);
@@ -177,7 +162,6 @@
     setTimeout(() => {
       renderPreview(pick);
     }, 50);
-    updateFlowSteps();
   }
 
   function renderPreview(q){
@@ -201,7 +185,6 @@
     el.currentElo.textContent=(typeof q.elo==='number')?q.elo:'—';
     el.startBtn.disabled=false;
     renderMiniRadarForQuestion(q);
-    updateFlowSteps();
   }
 
   function clearMiniRadar(){
@@ -287,13 +270,12 @@
     if(min!=null&&max!=null){
       localStorage.setItem('selectedElo',String(Math.round((min+max)/2)));
     }
-    location.href='../samplequestion/index.html';
+    location.href='practice/index.html';
   });
 
   load().catch(err=>{
     console.error(err);
-    el.preview.innerHTML=`<div class="ka muted">Failed to load questions.json</div>`;
+    el.preview.innerHTML=`<div class="ka muted placeholder-stack"><div class="t1">Could not load questions</div><div class="t2">Check that <code style="opacity:0.85">data/questions.json</code> is available.</div></div>`;
     if(el.poolHeader) el.poolHeader.textContent='Eligible: 0';
-    if(el.poolInline) el.poolInline.textContent='Eligible: 0';
   });
 })();

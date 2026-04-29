@@ -38,6 +38,30 @@ const el = {
   nextQuestionPersistentBtn: document.getElementById('next-question-persistent-btn'),
 };
 
+function setResultOverlay(visible) {
+  if (el.resultOverlay) el.resultOverlay.classList.toggle('is-visible', !!visible);
+}
+
+function escapeHtml(s) {
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function redirectActionsHtml() {
+  return (
+    '<div class="result-dialog__divider"></div>' +
+    '<p class="result-dialog__redirect">Back to home in</p>' +
+    '<p class="result-dialog__count"><span id="countdown-timer">10</span>s</p>' +
+    '<div class="result-dialog__actions">' +
+    '<button type="button" class="result-btn result-btn--primary" id="next-question-btn">Next question</button>' +
+    '<button type="button" class="result-btn result-btn--ghost" id="stay-btn">Stay on canvas</button>' +
+    '</div>'
+  );
+}
+
 const state = {
   currentQuestion: null,
   questions: [],
@@ -419,7 +443,11 @@ function showRedirectMessage(){
   
   countdownSeconds = 10;
   
-  el.resultText.innerHTML = '✅ <strong>Correct!</strong><br><br><div style="margin-top:24px;padding-top:24px;border-top:1px solid rgba(255,255,255,0.2);"><div style="margin-bottom:20px;"><button id="next-question-btn" style="padding:12px 24px;background:#fff;color:#000;border:none;border-radius:8px;cursor:pointer;font-size:1rem;font-weight:600;font-family:\'Palatino Linotype\',\'Book Antiqua\',Palatino,serif;width:100%;max-width:300px;margin:0 auto;display:block;">Next Question</button></div><div style="margin-bottom:16px;">Taking you to home page...<br><div style="margin:12px 0;font-size:1.2rem;font-weight:600;">Redirecting in <span id="countdown-timer" style="color:#fff;">10</span> seconds</div></div><button id="stay-btn" style="padding:10px 20px;background:transparent;color:#fff;border:1px solid #fff;border-radius:8px;cursor:pointer;font-size:0.9rem;font-weight:600;font-family:\'Palatino Linotype\',\'Book Antiqua\',Palatino,serif;">Stay Here</button></div>';
+  el.resultText.innerHTML =
+    '<div class="result-badge result-badge--ok">Solved</div>' +
+    '<p class="result-dialog__title">Correct</p>' +
+    '<p class="result-dialog__text">Choose your next move—or let the timer take you home.</p>' +
+    redirectActionsHtml();
   
   // Start countdown
   if (countdownInterval) clearInterval(countdownInterval);
@@ -433,7 +461,7 @@ function showRedirectMessage(){
         stayHere = true;
         clearRedirect();
         // Hide overlay so they can see their solution
-        el.resultOverlay.style.display = 'none';
+        setResultOverlay(false);
         // Show persistent Next Question button
         if (el.nextQuestionContainer) {
           el.nextQuestionContainer.style.display = 'block';
@@ -491,16 +519,23 @@ function submitAnswer(){
     el.nextQuestionContainer.style.display = 'none';
   }
   
-  el.resultOverlay.style.display='flex';
+  setResultOverlay(true);
   if (ok){ 
-    el.resultText.textContent='✅ Correct!'; 
+    el.resultText.innerHTML =
+      '<div class="result-badge result-badge--ok">Correct</div>' +
+      '<p class="result-dialog__title">Nice solve.</p>' +
+      '<p class="result-dialog__text">Next step unlocks in a moment…</p>';
     launchConfetti(1200, 70);
-    // For correct answers, show redirect after 5 seconds
     redirectTimer = setTimeout(() => {
       showRedirectMessage();
     }, 5000);
   } else { 
-    el.resultText.innerHTML=`❌ <strong>Incorrect.</strong><br><br>Correct answer: <strong>${q.answer}</strong><br><br><div style="margin-top:24px;padding-top:24px;border-top:1px solid rgba(255,255,255,0.2);"><div style="margin-bottom:20px;"><button id="next-question-btn" style="padding:12px 24px;background:#fff;color:#000;border:none;border-radius:8px;cursor:pointer;font-size:1rem;font-weight:600;font-family:\'Palatino Linotype\',\'Book Antiqua\',Palatino,serif;width:100%;max-width:300px;margin:0 auto;display:block;">Next Question</button></div><div style="margin-bottom:16px;">Taking you to home page...<br><div style="margin:12px 0;font-size:1.2rem;font-weight:600;">Redirecting in <span id="countdown-timer" style="color:#fff;">10</span> seconds</div></div><button id="stay-btn" style="padding:10px 20px;background:transparent;color:#fff;border:1px solid #fff;border-radius:8px;cursor:pointer;font-size:0.9rem;font-weight:600;font-family:\'Palatino Linotype\',\'Book Antiqua\',Palatino,serif;">Stay Here</button></div>`;
+    el.resultText.innerHTML =
+      '<div class="result-badge result-badge--no">Review</div>' +
+      '<p class="result-dialog__title">Not quite</p>' +
+      '<p class="result-dialog__text">Expected answer</p>' +
+      '<p class="result-dialog__answer">' + escapeHtml(q.answer) + '</p>' +
+      redirectActionsHtml();
     
     // Start countdown immediately for wrong answers
     countdownSeconds = 10;
@@ -515,7 +550,7 @@ function submitAnswer(){
           stayHere = true;
           clearRedirect();
           // Hide overlay so they can see their solution
-          el.resultOverlay.style.display = 'none';
+          setResultOverlay(false);
           // Show persistent Next Question button
           if (el.nextQuestionContainer) {
             el.nextQuestionContainer.style.display = 'block';

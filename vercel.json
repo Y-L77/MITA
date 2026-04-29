@@ -1,0 +1,7 @@
+{
+  "rewrites": [
+    { "source": "/samplequestion", "destination": "/practice/" },
+    { "source": "/samplequestion/", "destination": "/practice/" },
+    { "source": "/samplequestion/:path*", "destination": "/practice/:path*" }
+  ]
+}

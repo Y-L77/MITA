@@ -2,871 +2,416 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MITA - Join today</title>
-  <link rel="icon" type="image/png" href="download (1).png">
-  <style>
-    :root {
-      --bg-dark: #0c0c0c;
-      --card-bg: #121212;
-      --border-color: rgba(255, 255, 255, 0.06);
-      --muted: #a7a7a7;
-      --input-bg: #1a1a1a;
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
-    }
-
-    body {
-      background: var(--bg-dark);
-      color: #fff;
-      min-height: 100vh;
-      -webkit-font-smoothing: antialiased;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      width: 100%;
-      padding: 0 24px;
-    }
-
-    .wrap {
-      display: grid;
-      grid-template-columns: 1.2fr 1fr;
-      gap: 60px;
-      align-items: start;
-      min-height: 100vh;
-      padding: 40px 0;
-    }
-
-    .hero-section {
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-      padding-top: 20px;
-    }
-
-    .card {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 40px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-      position: sticky;
-      top: 40px;
-    }
-
-    .logo-container {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 24px;
-    }
-
-    .logo {
-      width: 180px;
-      height: 180px;
-      display: block;
-      object-fit: contain;
-      transition: transform 0.3s ease;
-    }
-
-    .logo:hover {
-      transform: scale(1.1);
-    }
-
-    .logo-text {
-      font-size: 2.5rem;
-      font-weight: 400;
-      color: #fff;
-      letter-spacing: -0.02em;
-    }
-
-    h1 {
-      font-size: 2.25rem;
-      font-weight: 600;
-      line-height: 1.3;
-      color: #fff;
-      letter-spacing: -0.01em;
-      margin-bottom: 12px;
-    }
-
-    .muted {
-      color: var(--muted);
-      font-size: 1rem;
-      line-height: 1.7;
-    }
-
-    .hero-section h1 {
-      font-size: 2.75rem;
-      line-height: 1.2;
-    }
-
-    .hero-section .muted {
-      font-size: 1.1rem;
-      line-height: 1.7;
-    }
-
-    input[type="email"],
-    input[type="text"],
-    input[type="password"] {
-      width: 100%;
-      padding: 0.875rem 1rem;
-      border-radius: 8px;
-      border: 1px solid rgba(255,255,255,0.1);
-      background-color: var(--input-bg);
-      color: white;
-      font-size: 0.95rem;
-      transition: all 0.2s ease;
-      font-family: inherit;
-    }
-
-    .password-wrapper {
-      position: relative;
-    }
-
-    .password-toggle {
-      position: absolute;
-      right: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
-      color: rgba(255, 255, 255, 0.5);
-      cursor: pointer;
-      padding: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 24px;
-      height: 24px;
-      transition: color 0.2s ease;
-    }
-
-    .password-toggle:hover {
-      color: rgba(255, 255, 255, 0.8);
-    }
-
-    .password-toggle svg {
-      width: 18px;
-      height: 18px;
-      stroke: currentColor;
-      stroke-width: 1.5;
-      fill: none;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
-    .password-wrapper input {
-      padding-right: 45px;
-    }
-
-    input[type="email"]:focus,
-    input[type="text"]:focus {
-      outline: none;
-      border-color: rgba(255,255,255,0.2);
-    }
-
-    input::placeholder {
-      color: rgba(255, 255, 255, 0.4);
-    }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      text-align: left;
-    }
-
-    .form-header {
-      margin-bottom: 24px;
-    }
-
-    .form-header h2 {
-      font-size: 1.75rem;
-      font-weight: 600;
-      color: #fff;
-      margin-bottom: 6px;
-      letter-spacing: -0.01em;
-    }
-
-    .form-header p {
-      color: var(--muted);
-      font-size: 0.9rem;
-    }
-
-    .form-row {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .form-row-two {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-    }
-
-    label {
-      font-size: 0.85rem;
-      font-weight: 500;
-      color: rgba(255, 255, 255, 0.9);
-      margin-bottom: 6px;
-      display: block;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .btn {
-      width: 100%;
-      padding: 0.95rem 1.25rem;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      font-family: inherit;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      border: 1px solid transparent;
-      font-size: 0.95rem;
-      margin-top: 4px;
-    }
-
-    .btn--primary {
-      background-color: white;
-      color: black;
-      border-color: rgba(255,255,255,0.06);
-    }
-    .btn--primary:hover {
-      background-color: #e5e5e5;
-      transform: translateY(-1px);
-    }
-
-    .btn--ghost {
-      background: transparent;
-      color: #e6e6ea;
-      border-color: rgba(255,255,255,0.08);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.02), 0 6px 24px rgba(0,0,0,0.45);
-      margin-top: 8px;
-      display: none;
-    }
-    .btn--ghost:hover {
-      background: rgba(255,255,255,0.02);
-      transform: translateY(-1px);
-    }
-
-    .btn .icon {
-      font-size: 1.05rem;
-      line-height: 1;
-      display: inline-block;
-    }
-
-    .success {
-      color: #4ade80;
-      font-weight: 500;
-      font-size: 1.1rem;
-    }
-
-    .error {
-      color: #f87171;
-      font-weight: 500;
-      font-size: 0.9rem;
-      margin-top: 12px;
-      padding: 0;
-      line-height: 1.4;
-    }
-
-    @media (max-width: 968px) {
-      .wrap {
-        grid-template-columns: 1fr;
-        gap: 60px;
-        padding: 40px 0;
-      }
-
-      .hero-section h1 {
-        font-size: 2.5rem;
-      }
-
-      .form-row-two {
-        grid-template-columns: 1fr;
-        gap: 24px;
-      }
-    }
-
-    @media (max-width: 640px) {
-      .card {
-        padding: 32px 24px;
-      }
-
-      .hero-section h1 {
-        font-size: 2rem;
-      }
-
-      h1 {
-        font-size: 1.75rem;
-      }
-    }
-
-    .checkbox-group {
-      display: none;
-      align-items: center;
-      gap: 12px;
-      padding: 16px 20px;
-      background: rgba(255, 255, 255, 0.02);
-      border-radius: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      margin-top: 8px;
-    }
-
-    .checkbox-group.visible {
-      display: flex;
-    }
-
-    .checkbox-group input[type="checkbox"] {
-      position: absolute;
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-
-    .custom-checkbox {
-      width: 20px;
-      height: 20px;
-      border: 2px solid rgba(255, 255, 255, 0.3);
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      flex-shrink: 0;
-      transition: border-color 0.2s ease, background-color 0.2s ease;
-      position: relative;
-    }
-
-    .checkbox-group input[type="checkbox"]:checked + .custom-checkbox {
-      border-color: rgba(255, 255, 255, 0.5);
-      background-color: rgba(255, 255, 255, 0.05);
-    }
-
-    .checkbox-group input[type="checkbox"]:checked + .custom-checkbox svg {
-      display: block;
-    }
-
-    .custom-checkbox svg {
-      display: none;
-      width: 14px;
-      height: 14px;
-      stroke: rgba(255, 255, 255, 0.6);
-      stroke-width: 2;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      fill: none;
-    }
-
-    .checkbox-group label {
-      font-size: 1rem;
-      font-weight: 400;
-      color: var(--muted);
-      cursor: pointer;
-      margin: 0;
-      flex: 1;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      text-transform: none;
-    }
-
-    .email-valid-indicator {
-      display: none;
-      align-items: center;
-      gap: 10px;
-      margin-top: 12px;
-      font-size: 1rem;
-      color: #4ade80;
-    }
-
-    .email-valid-indicator.visible {
-      display: flex;
-    }
-
-    .checkmark-icon {
-      width: 20px;
-      height: 20px;
-      display: inline-block;
-      flex-shrink: 0;
-      position: relative;
-    }
-
-    .checkmark-icon svg {
-      width: 100%;
-      height: 100%;
-      stroke: #4ade80;
-      stroke-width: 2;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      fill: none;
-    }
-
-    footer {
-      text-align: center;
-      padding: 32px 0;
-      margin-top: 60px;
-      border-top: 1px solid var(--border-color);
-      color: var(--muted);
-      font-size: 0.85rem;
-    }
-
-    footer p {
-      margin: 0;
-      color: var(--muted);
-      opacity: 0.7;
-    }
-
-    .password-strength {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .password-strength.weak {
-      color: #f87171;
-    }
-
-    .password-strength.medium {
-      color: #fbbf24;
-    }
-
-    .password-strength.strong {
-      color: #4ade80;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>MITA — Contest math practice</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/theme.css" />
+  <link rel="stylesheet" href="assets/css/landing.css" />
+  <link rel="icon" type="image/png" href="assets/images/logo.png" />
 </head>
-<body>
-  <div class="container">
-    <div class="wrap">
-      <div class="hero-section">
-        <div class="logo-container">
-          <img src="download (1).png" alt="MITA Logo" class="logo">
-        </div>
-        <div>
-          <h1>MITA — Mathematical International Talent Arena</h1>
-          <p class="muted"><strong>Sign up to compete against the world.</strong> Join the first internationally recognized ELO system for competitive math. Test your skills in real-time duels against mathematicians worldwide.</p>
-        </div>
+<body class="landing">
+  <!-- Ambient floating math symbols -->
+  <div class="math-field" id="mathField" aria-hidden="true"></div>
+  <div class="landing__bg" aria-hidden="true"></div>
+
+  <div class="landing__shell">
+    <header class="landing__nav" id="landingNav">
+      <a class="landing__brand" href="#top">
+        <img src="assets/images/logo.png" alt="" width="34" height="34" />
+        <span>MITA</span>
+      </a>
+      <div class="landing__nav-actions">
+        <a class="landing__link landing__link--ghost" href="practice/">Try the workspace</a>
+        <a class="landing__link" href="#" id="loginLinkNav">Log in</a>
       </div>
+    </header>
 
-      <div class="card">
-        <div class="form-header">
-          <h2>Create Account</h2>
-          <p>Get started in seconds</p>
+    <main class="landing__main">
+      <section class="landing__hero" id="top">
+        <div class="landing__hero-inner">
+          <p class="landing__eyebrow">
+            <span class="landing__eyebrow-dot">·</span>
+            Olympiad prep &nbsp;·&nbsp; Structured &nbsp;·&nbsp; Gamified
+          </p>
+          <h1 class="landing__title">
+            <span class="landing__title-gradient">Mathematics International</span><br />
+            <span class="landing__title-gradient">Talent Arena</span><br />
+            <span class="landing__title-sub">For contest math.</span>
+          </h1>
+          <p class="landing__sub">
+            MITA is a <strong>training arena</strong> for olympiad and contest-style work. Difficulty-aware problems tuned to your level, a visual read on how your skills are evolving across topics, and a focused workspace and whiteboard tool to tackle problems.
+            
+          </p>
+          <div class="landing__cta">
+            <a class="landing__btn landing__btn--primary" href="#signup">Join the list</a>
+          </div>
         </div>
+      </section>
 
-        <form
-        id="signupForm"
-        action="https://script.google.com/macros/s/AKfycbzmmBCiQGQR6q2EfFewX3mggYlL-t-jnWjnPQEDlDsaJf4rJVjBwJBEPyi4pP4Rn0v2/exec"
-        method="POST"
-        target="hiddenFrame"
-        novalidate
-      >
-        <div class="form-group">
-          <div class="form-row-two">
-            <div>
-              <label for="firstName">First Name</label>
-              <input
-                type="text"
-                name="firstName"
-                id="firstName"
-                placeholder="John"
-                required
-                autocomplete="given-name"
-              />
-            </div>
-            <div>
-              <label for="lastName">Last Name</label>
-              <input
-                type="text"
-                name="lastName"
-                id="lastName"
-                placeholder="Doe"
-                required
-                autocomplete="family-name"
-              />
-            </div>
+      <section class="landing__features" aria-label="What you get">
+        <article class="landing__feature" data-reveal data-num="i.">
+          <h3>Problems at your level</h3>
+          <p>ELO-style difficulty rating so you always know whether tonight's set is a warm-up, a grind, or a stretch—no more guessing.</p>
+        </article>
+        <article class="landing__feature" data-reveal data-num="ii.">
+          <h3>Skill shape, not just scores</h3>
+          <p>A radar view of where you're solid and where contest pressure exposes gaps—geometry, number theory, combinatorics, time discipline, and more.</p>
+        </article>
+        <article class="landing__feature" data-reveal data-num="iii.">
+          <h3>Canvas-first workflow</h3>
+          <p>Sketch, annotate, and answer in one place. Built for the way contest math actually gets done, not a brittle text box that fights you.</p>
+        </article>
+        <article class="landing__feature" data-reveal data-num="iv.">
+          <h3>Momentum by design</h3>
+          <p>Short loops, visible streaks, and a rhythm that nudges you toward daily depth—the puzzle-streak mindset without the hollow gamification.</p>
+        </article>
+      </section>
+
+      <section class="landing__signup-wrap" id="signup">
+        <p class="landing__signup-label">Early access</p>
+
+        <!-- Floating math symbols around the form card -->
+        <div class="form-math-canvas" id="formMathCanvas" aria-hidden="true"></div>
+
+        <div class="card signup-card">
+          <div class="form-header">
+            <h2>Join the list</h2>
+            <p>Take a look at the early access version.</p>
           </div>
 
-          <div>
-            <label for="username">Username</label>
-              <input
-                type="text"
-                name="username"
-                id="username"
-                placeholder="johnlikescats123"
-                required
-                autocomplete="username"
-              />
+          <!-- Progress stepper -->
+          <div class="form-stepper" id="formStepper" aria-hidden="true">
+            <div class="step-dot active" id="dot0"></div>
+            <div class="step-line"></div>
+            <div class="step-dot" id="dot1"></div>
+            <div class="step-line"></div>
+            <div class="step-dot" id="dot2"></div>
           </div>
 
-          <div>
-            <label for="email">Email</label>
-            <input
-              type="email"
-              name="email"
-              id="email"
-              placeholder="johndoe@example.com"
-              required
-              autocomplete="email"
-              inputmode="email"
-              pattern="^[^\s@]+@[^\s@]+\.[^\s@]{2,}$"
-              aria-invalid="false"
-              aria-describedby="errorMessage"
-            />
-            <p id="emailValidIndicator" class="email-valid-indicator">
-              <span class="checkmark-icon">
-                <svg viewBox="0 0 24 24">
-                  <path d="M5 13l4 4L19 7"/>
-                </svg>
-              </span>
-              <span>Valid email</span>
-            </p>
-          </div>
-
-
-          <div class="checkbox-group" id="notificationsCheckbox">
-            <label for="notifications">
-              <input type="checkbox" name="notifications" id="notifications" value="yes" checked>
-              <span class="custom-checkbox">
-                <svg viewBox="0 0 24 24">
-                  <path d="M5 13l4 4L19 7"/>
-                </svg>
-              </span>
-              <span>Receive notifications about updates and matches</span>
-            </label>
-          </div>
-
-          <button class="btn btn--primary" type="submit">Sign Up</button>
-          
-          <p id="errorMessage" class="error" style="display:none;"></p>
-        </div>
-      </form>
-
-      <div style="text-align: center; margin-top: 20px; color: var(--muted); font-size: 0.9rem;">
-        Already have an account? <a href="#" id="loginLink" style="color: #fff; text-decoration: underline; cursor: pointer;">Log in</a>
-      </div>
-
-      <!-- Login Modal -->
-      <div id="loginModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center;">
-        <div class="card" style="max-width: 400px; margin: 20px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-            <h2 style="margin: 0;">Log In</h2>
-            <button id="closeLoginModal" style="background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer; padding: 0; width: 30px; height: 30px;">&times;</button>
-          </div>
-          <form id="loginForm">
+          <form id="signupForm" novalidate>
             <div class="form-group">
-              <div>
-                <label for="loginUsername">Username</label>
-                <input type="text" id="loginUsername" name="loginUsername" placeholder="johnlikescats123" required autocomplete="username" />
+              <div class="form-row-two">
+                <div class="field-wrap" id="wrap-firstName">
+                  <label for="firstName">First name</label>
+                  <input type="text" name="firstName" id="firstName" placeholder="Ada" required autocomplete="given-name" />
+                  <div class="field-tick"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></div>
+                </div>
+                <div class="field-wrap" id="wrap-lastName">
+                  <label for="lastName">Last name</label>
+                  <input type="text" name="lastName" id="lastName" placeholder="Lovelace" required autocomplete="family-name" />
+                  <div class="field-tick"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></div>
+                </div>
               </div>
-              <div>
-                <label for="loginEmail">Email</label>
-                <input type="email" id="loginEmail" name="loginEmail" placeholder="johndoe@example.com" required autocomplete="email" />
+              <div class="field-wrap" id="wrap-username">
+                <label for="username">Username</label>
+                <input type="text" name="username" id="username" placeholder="choose_a_handle" required autocomplete="username" />
+                <div class="field-tick"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></div>
               </div>
-              <p id="loginErrorMessage" class="error" style="display: none;"></p>
-              <button class="btn btn--primary" type="submit">Log In</button>
+              <div class="field-wrap" id="wrap-email">
+                <label for="email">Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  id="email"
+                  placeholder="you@school.edu"
+                  required
+                  autocomplete="email"
+                  inputmode="email"
+                  aria-invalid="false"
+                  aria-describedby="errorMessage"
+                />
+                <div class="field-tick"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></div>
+              </div>
+              <div class="checkbox-group" id="notificationsCheckbox">
+                <label for="notifications">
+                  <input type="checkbox" name="notifications" id="notifications" value="yes" checked />
+                  <span class="custom-checkbox">
+                    <svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+                  </span>
+                  <span>Send me practice prompts, tips, and product updates (optional).</span>
+                </label>
+              </div>
+              <button class="btn btn--primary" type="submit">Create account</button>
+              <p id="errorMessage" class="error" style="display:none;"></p>
             </div>
           </form>
+
+          <div class="auth-switch">
+            Already registered? <a href="#" id="loginLink">Log in</a>
+          </div>
+
+          <iframe name="hiddenFrame" style="display:none;"></iframe>
+          <p id="successMessage" class="success" style="display:none; margin-top:16px; text-align:center;">
+            You're on the list—we'll be in touch.
+          </p>
         </div>
+      </section>
+    </main>
+  </div>
+
+  <footer class="landing__footer">
+    <p>&copy; 2026 MITA — Mathematical International Talent Arena</p>
+  </footer>
+
+  <div id="loginModal" role="dialog" aria-modal="true" aria-labelledby="loginModalTitle">
+    <div class="card signup-card login-modal__card">
+      <div class="login-modal__head">
+        <h2 id="loginModalTitle">Log in</h2>
+        <button type="button" id="closeLoginModal" class="login-modal__close" aria-label="Close">&times;</button>
       </div>
-
-        <button
-          id="peekButton"
-          class="btn btn--ghost"
-          type="button"
-          onclick="window.location.href='samplequestion'"
-          aria-label="Open MITA prototype page"
-        >
-          <span class="icon">👀</span>
-          <span>Take a Peek</span>
-        </button>
-
-        <!-- hidden iframe for form submission -->
-        <iframe name="hiddenFrame" style="display:none;"></iframe>
-
-        <p id="successMessage" class="success" style="display:none; margin-top: 16px;">
-          Thanks! You've been added.
-        </p>
-      </div>
+      <form id="loginForm">
+        <div class="form-group">
+          <div>
+            <label for="loginUsername">Username</label>
+            <input type="text" id="loginUsername" name="loginUsername" required autocomplete="username" />
+          </div>
+          <div>
+            <label for="loginEmail">Email</label>
+            <input type="email" id="loginEmail" name="loginEmail" required autocomplete="email" />
+          </div>
+          <p id="loginErrorMessage" class="error" style="display:none;"></p>
+          <button class="btn btn--primary" type="submit">Log in</button>
+        </div>
+      </form>
     </div>
   </div>
 
-  <footer>
-    <p>&copy; 2025 MITA — Mathematical International Talent Arena. All rights reserved.</p>
-  </footer>
-
   <script>
-    // Check if user is already logged in
-    if (localStorage.getItem('mita_user')) {
-      window.location.href = 'home.html';
+    document.documentElement.classList.add('js');
+    if (localStorage.getItem('mita_user')) { window.location.href = 'home.html'; }
+
+    /* ── Floating background math symbols ── */
+    const SYMBOLS = ['∑','∫','π','∞','√','∂','∇','∈','∀','∃','⊕','≡','∆','λ','φ','θ','ℕ','ℝ','≤','≥','∏','∮','∝','≠'];
+    const mathField = document.getElementById('mathField');
+
+    function spawnSym() {
+      const el = document.createElement('span');
+      el.className = 'math-sym';
+      el.textContent = SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)];
+      const size = 18 + Math.random() * 36;
+      el.style.fontSize = size + 'px';
+      el.style.left = (Math.random() * 100) + 'vw';
+      el.style.bottom = '-60px';
+      const dur = 18 + Math.random() * 22;
+      el.style.animationDuration = dur + 's';
+      el.style.setProperty('--rot-start', (Math.random() * 40 - 20) + 'deg');
+      el.style.setProperty('--rot-end',   (Math.random() * 40 - 20) + 'deg');
+      mathField.appendChild(el);
+      setTimeout(() => el.remove(), (dur + 1) * 1000);
     }
 
-    const form = document.getElementById("signupForm");
-    const emailInput = document.getElementById("email");
-    const firstNameInput = document.getElementById("firstName");
-    const lastNameInput = document.getElementById("lastName");
-    const usernameInput = document.getElementById("username");
-    const successMessage = document.getElementById("successMessage");
-    const errorMessage = document.getElementById("errorMessage");
-    const peekButton = document.getElementById("peekButton");
-    const notificationsCheckbox = document.getElementById("notificationsCheckbox");
-    const emailValidIndicator = document.getElementById("emailValidIndicator");
-    const loginLink = document.getElementById("loginLink");
-    const loginModal = document.getElementById("loginModal");
-    const closeLoginModal = document.getElementById("closeLoginModal");
-    const loginForm = document.getElementById("loginForm");
-    const loginErrorMessage = document.getElementById("loginErrorMessage");
+    for (let i = 0; i < 12; i++) setTimeout(spawnSym, i * 400);
+    setInterval(spawnSym, 1800);
 
-
-    const isValidEmail = (value) => {
-      const trimmed = value.trim();
-      const re = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-      return re.test(trimmed);
-    };
-
-    emailInput.addEventListener("input", () => {
-      const val = emailInput.value.trim();
-      const ok = isValidEmail(val);
-
-      emailInput.setCustomValidity(ok ? "" : "Invalid email address.");
-      emailInput.setAttribute("aria-invalid", ok ? "false" : "true");
-
-      if (val.length === 0) {
-        errorMessage.style.display = "none";
-        emailValidIndicator.classList.remove("visible");
-        notificationsCheckbox.classList.remove("visible");
-      } else if (ok) {
-        errorMessage.style.display = "none";
-        emailValidIndicator.classList.add("visible");
-        notificationsCheckbox.classList.add("visible");
-      } else {
-        errorMessage.style.display = "block";
-        emailValidIndicator.classList.remove("visible");
-        notificationsCheckbox.classList.remove("visible");
-      }
+    /* ── Form floating math symbols ── */
+    const formCanvas = document.getElementById('formMathCanvas');
+    const FORM_SYMS = ['∑','∫','π','∞','√','∆','λ','≡','∂'];
+    const fpositions = [
+      {x:'6%',  y:'12%', s:22}, {x:'88%', y:'8%',  s:18},
+      {x:'3%',  y:'60%', s:16}, {x:'91%', y:'55%', s:20},
+      {x:'50%', y:'4%',  s:14}, {x:'75%', y:'80%', s:18},
+      {x:'15%', y:'85%', s:16}, {x:'62%', y:'70%', s:12},
+    ];
+    fpositions.forEach((p, i) => {
+      const el = document.createElement('span');
+      el.className = 'form-math-sym';
+      el.textContent = FORM_SYMS[i % FORM_SYMS.length];
+      el.style.left = p.x;
+      el.style.top  = p.y;
+      el.style.fontSize = p.s + 'px';
+      const dur = 3 + Math.random() * 3;
+      el.style.animationDuration  = dur + 's';
+      el.style.animationDelay     = (Math.random() * -4) + 's';
+      el.style.setProperty('--fr',  (Math.random() * 16 - 8) + 'deg');
+      el.style.setProperty('--fr2', (Math.random() * 16 - 8) + 'deg');
+      el.style.setProperty('--fy',  (-6 - Math.random() * 8) + 'px');
+      formCanvas.appendChild(el);
     });
 
-    form.addEventListener("submit", async (e) => {
+    /* ── Stepper ── */
+    const dots = ['dot0','dot1','dot2'].map(id => document.getElementById(id));
+    const isValidEmail = v => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim());
+
+    function updateStepper() {
+      const fv = document.getElementById('firstName').value.trim();
+      const lv = document.getElementById('lastName').value.trim();
+      const uv = document.getElementById('username').value.trim();
+      const ev = document.getElementById('email').value.trim();
+      const s0 = !!(fv && lv);
+      const s1 = !!(s0 && uv);
+      const s2 = !!(s1 && isValidEmail(ev));
+      dots[0].className = 'step-dot ' + (s0 ? 'done' : 'active');
+      dots[1].className = 'step-dot ' + (s1 ? 'done' : s0 ? 'active' : '');
+      dots[2].className = 'step-dot ' + (s2 ? 'done' : s1 ? 'active' : '');
+    }
+
+    /* ── Field validation ticks ── */
+    function setValid(wrapId, valid) {
+      const w = document.getElementById(wrapId);
+      if (w) w.classList.toggle('valid', valid);
+    }
+
+    const firstName  = document.getElementById('firstName');
+    const lastName   = document.getElementById('lastName');
+    const username   = document.getElementById('username');
+    const emailInput = document.getElementById('email');
+    const errorMessage = document.getElementById('errorMessage');
+    const notificationsCheckbox = document.getElementById('notificationsCheckbox');
+
+    firstName.addEventListener('input',  () => { setValid('wrap-firstName', firstName.value.trim().length > 0);  updateStepper(); });
+    lastName.addEventListener('input',   () => { setValid('wrap-lastName',  lastName.value.trim().length > 0);   updateStepper(); });
+    username.addEventListener('input',   () => { setValid('wrap-username',  username.value.trim().length > 0);   updateStepper(); });
+
+    emailInput.addEventListener('input', () => {
+      const ok = isValidEmail(emailInput.value);
+      setValid('wrap-email', ok);
+      emailInput.setAttribute('aria-invalid', ok ? 'false' : 'true');
+      if (!emailInput.value.trim()) {
+        errorMessage.style.display = 'none';
+        notificationsCheckbox.classList.remove('visible');
+      } else if (ok) {
+        errorMessage.style.display = 'none';
+        notificationsCheckbox.classList.add('visible');
+      } else {
+        errorMessage.textContent = 'Please enter a valid email.';
+        errorMessage.style.display = 'block';
+        notificationsCheckbox.classList.remove('visible');
+      }
+      updateStepper();
+    });
+
+    /* ── Signup submit ── */
+    document.getElementById('signupForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const emailVal = emailInput.value.trim();
-      const firstNameVal = firstNameInput.value.trim();
-      const lastNameVal = lastNameInput.value.trim();
-      const usernameVal = usernameInput.value.trim();
+      const fv = firstName.value.trim(), lv = lastName.value.trim(),
+            uv = username.value.trim(),  ev = emailInput.value.trim();
 
-      if (!firstNameVal || !lastNameVal || !usernameVal) {
-        errorMessage.textContent = "Please fill in all fields.";
-        errorMessage.style.display = "block";
-        return;
+      if (!fv || !lv || !uv) {
+        errorMessage.textContent = 'Please fill in all fields.';
+        errorMessage.style.display = 'block'; return;
+      }
+      if (!isValidEmail(ev)) {
+        errorMessage.textContent = 'Please enter a valid email address.';
+        errorMessage.style.display = 'block'; return;
       }
 
-      if (!isValidEmail(emailVal)) {
-        errorMessage.textContent = "Please enter a valid email address.";
-        errorMessage.style.display = "block";
-        emailInput.reportValidity();
-        return;
-      }
-
-      // Show loading state
-      const submitBtn = form.querySelector('button[type="submit"]');
-      const originalText = submitBtn.textContent;
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'Signing up...';
+      const btn = e.target.querySelector('button[type="submit"]');
+      const orig = btn.textContent;
+      btn.disabled = true; btn.textContent = 'Joining…';
 
       try {
-        // Get existing users from localStorage
-        const existingUsers = JSON.parse(localStorage.getItem('mita_users') || '[]');
-        
-        // Check if email or username already exists
-        const existingUser = existingUsers.find(u => 
-          u.email.toLowerCase() === emailVal.toLowerCase() || 
-          u.username === usernameVal
+        const users = JSON.parse(localStorage.getItem('mita_users') || '[]');
+        const clash = users.find(u =>
+          u.email.toLowerCase() === ev.toLowerCase() || u.username === uv
         );
-        
-        if (existingUser) {
-          if (existingUser.email.toLowerCase() === emailVal.toLowerCase()) {
-            errorMessage.textContent = 'An account with this email already exists.';
-            errorMessage.style.display = "block";
-            submitBtn.disabled = false;
-            submitBtn.textContent = originalText;
-            return;
-          }
-          if (existingUser.username === usernameVal) {
-            errorMessage.textContent = 'This username is already taken.';
-            errorMessage.style.display = "block";
-            submitBtn.disabled = false;
-            submitBtn.textContent = originalText;
-            return;
-          }
+        if (clash) {
+          errorMessage.textContent = clash.email.toLowerCase() === ev.toLowerCase()
+            ? 'An account with this email already exists.'
+            : 'That username is already taken.';
+          errorMessage.style.display = 'block';
+          btn.disabled = false; btn.textContent = orig; return;
         }
 
-        // Create new user
         const newUser = {
-          id: Date.now().toString(),
-          firstName: firstNameVal,
-          lastName: lastNameVal,
-          username: usernameVal,
-          email: emailVal,
-          notifications: document.getElementById("notifications").checked,
+          id: Date.now().toString(), firstName: fv, lastName: lv,
+          username: uv, email: ev,
+          notifications: document.getElementById('notifications').checked,
           createdAt: new Date().toISOString()
         };
+        users.push(newUser);
+        localStorage.setItem('mita_users', JSON.stringify(users));
 
-        // Save to localStorage (all users)
-        existingUsers.push(newUser);
-        localStorage.setItem('mita_users', JSON.stringify(existingUsers));
-
-        // Submit to Google Sheets (email goes here too) - MUST happen before redirect
-        const formData = {
-          firstName: firstNameVal,
-          lastName: lastNameVal,
-          username: usernameVal,
-          email: emailVal,
-          notifications: document.getElementById("notifications").checked ? 'yes' : 'no'
-        };
-
-        // Submit to Google Sheets using form submission (works with Google Apps Script)
-        const googleForm = document.createElement('form');
-        googleForm.method = 'POST';
-        googleForm.action = 'https://script.google.com/macros/s/AKfycbzmmBCiQGQR6q2EfFewX3mggYlL-t-jnWjnPQEDlDsaJf4rJVjBwJBEPyi4pP4Rn0v2/exec';
-        googleForm.target = 'hiddenFrame';
-        googleForm.style.display = 'none';
-        
-        // Add all form fields
-        Object.keys(formData).forEach(key => {
-          const input = document.createElement('input');
-          input.type = 'hidden';
-          input.name = key;
-          input.value = formData[key];
-          googleForm.appendChild(input);
+        // Fire to Google Sheet
+        const gf = document.createElement('form');
+        gf.method = 'POST';
+        gf.action = 'https://script.google.com/macros/s/AKfycbzmmBCiQGQR6q2EfFewX3mggYlL-t-jnWjnPQEDlDsaJf4rJVjBwJBEPyi4pP4Rn0v2/exec';
+        gf.target = 'hiddenFrame'; gf.style.display = 'none';
+        [{k:'firstName',v:fv},{k:'lastName',v:lv},{k:'username',v:uv},{k:'email',v:ev},
+         {k:'notifications',v:newUser.notifications?'yes':'no'}].forEach(({k,v})=>{
+          const inp = document.createElement('input');
+          inp.type='hidden'; inp.name=k; inp.value=v; gf.appendChild(inp);
         });
-        
-        // Submit to Google Sheets
-        document.body.appendChild(googleForm);
-        googleForm.submit();
-        
-        // Keep form in DOM briefly to ensure submission completes
-        setTimeout(() => {
-          if (googleForm.parentNode) {
-            document.body.removeChild(googleForm);
-          }
-        }, 1000);
+        document.body.appendChild(gf); gf.submit();
+        setTimeout(() => { if (gf.parentNode) gf.remove(); }, 1000);
 
-        // Store current user in localStorage for session (no email)
-        const userData = {
-          id: newUser.id,
-          firstName: newUser.firstName,
-          lastName: newUser.lastName,
-          username: newUser.username,
-          notifications: newUser.notifications
-        };
-        
-        localStorage.setItem('mita_user', JSON.stringify(userData));
-        
-        // Redirect to home page
+        localStorage.setItem('mita_user', JSON.stringify({
+          id: newUser.id, firstName: fv, lastName: lv,
+          username: uv, notifications: newUser.notifications
+        }));
         window.location.href = 'home.html';
-      } catch (error) {
-        console.error('Signup error:', error);
-        errorMessage.textContent = 'An error occurred. Please try again.';
-        errorMessage.style.display = "block";
-        submitBtn.disabled = false;
-        submitBtn.textContent = originalText;
+      } catch (err) {
+        console.error('Signup error:', err);
+        errorMessage.textContent = 'Something went wrong. Try again.';
+        errorMessage.style.display = 'block';
+        btn.disabled = false; btn.textContent = orig;
       }
     });
 
-    // Login modal functionality
-    loginLink.addEventListener('click', (e) => {
-      e.preventDefault();
-      loginModal.style.display = 'flex';
-    });
+    /* ── Login modal ── */
+    const loginModal = document.getElementById('loginModal');
+    const openLogin  = () => loginModal.classList.add('is-open');
+    const closeLogin = () => {
+      loginModal.classList.remove('is-open');
+      document.getElementById('loginErrorMessage').style.display = 'none';
+      document.getElementById('loginForm').reset();
+    };
 
-    closeLoginModal.addEventListener('click', () => {
-      loginModal.style.display = 'none';
-      loginErrorMessage.style.display = 'none';
-      loginForm.reset();
-    });
+    document.getElementById('loginLink').addEventListener('click',    e => { e.preventDefault(); openLogin(); });
+    document.getElementById('loginLinkNav').addEventListener('click', e => { e.preventDefault(); openLogin(); });
+    document.getElementById('closeLoginModal').addEventListener('click', closeLogin);
+    loginModal.addEventListener('click', e => { if (e.target === loginModal) closeLogin(); });
 
-    loginModal.addEventListener('click', (e) => {
-      if (e.target === loginModal) {
-        loginModal.style.display = 'none';
-        loginErrorMessage.style.display = 'none';
-        loginForm.reset();
-      }
-    });
-
-    // Login form handler
-    loginForm.addEventListener('submit', async (e) => {
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const email = document.getElementById('loginEmail').value.trim();
-      const username = document.getElementById('loginUsername').value.trim();
+      const uname = document.getElementById('loginUsername').value.trim();
+      const errEl = document.getElementById('loginErrorMessage');
+      if (!email || !uname) { errEl.textContent='Enter both email and username.'; errEl.style.display='block'; return; }
+      if (!isValidEmail(email)) { errEl.textContent='Please enter a valid email.'; errEl.style.display='block'; return; }
 
-      if (!email || !username) {
-        loginErrorMessage.textContent = 'Please enter your email and username.';
-        loginErrorMessage.style.display = 'block';
-        return;
-      }
-
-      if (!isValidEmail(email)) {
-        loginErrorMessage.textContent = 'Please enter a valid email address.';
-        loginErrorMessage.style.display = 'block';
-        return;
-      }
-
-      const submitBtn = loginForm.querySelector('button[type="submit"]');
-      const originalText = submitBtn.textContent;
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'Logging in...';
+      const btn = e.target.querySelector('button[type="submit"]');
+      const orig = btn.textContent;
+      btn.disabled = true; btn.textContent = 'Signing in…';
 
       try {
-        // Get all users from localStorage
-        const allUsers = JSON.parse(localStorage.getItem('mita_users') || '[]');
-        
-        // Find user by both email AND username (both must match)
-        const user = allUsers.find(u => 
-          u.email.toLowerCase() === email.toLowerCase() && 
-          u.username === username
-        );
-
+        const all  = JSON.parse(localStorage.getItem('mita_users') || '[]');
+        const user = all.find(u => u.email.toLowerCase() === email.toLowerCase() && u.username === uname);
         if (!user) {
-          loginErrorMessage.textContent = 'Invalid email or username.';
-          loginErrorMessage.style.display = 'block';
-          submitBtn.disabled = false;
-          submitBtn.textContent = originalText;
-          return;
+          errEl.textContent = 'No account matches those details.';
+          errEl.style.display = 'block'; btn.disabled=false; btn.textContent=orig; return;
         }
-
-        // Store user in localStorage for session (no email)
-        const userData = {
-          id: user.id,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          username: user.username,
-          notifications: user.notifications
-        };
-        
-        localStorage.setItem('mita_user', JSON.stringify(userData));
+        localStorage.setItem('mita_user', JSON.stringify({
+          id: user.id, firstName: user.firstName, lastName: user.lastName,
+          username: user.username, notifications: user.notifications
+        }));
         window.location.href = 'home.html';
-      } catch (error) {
-        console.error('Login error:', error);
-        loginErrorMessage.textContent = 'An error occurred. Please try again.';
-        loginErrorMessage.style.display = 'block';
-        submitBtn.disabled = false;
-        submitBtn.textContent = originalText;
+      } catch (err) {
+        errEl.textContent = 'Something went wrong. Try again.';
+        errEl.style.display = 'block'; btn.disabled=false; btn.textContent=orig;
       }
     });
+
+    /* ── Nav scroll glass ── */
+    const nav = document.getElementById('landingNav');
+    const onScroll = () => nav.classList.toggle('is-scrolled', window.scrollY > 12);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    /* ── Reveal feature cards ── */
+    const revealEls = document.querySelectorAll('[data-reveal]');
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(
+        entries => entries.forEach(en => {
+          if (en.isIntersecting) { en.target.classList.add('is-revealed'); io.unobserve(en.target); }
+        }),
+        { rootMargin: '0px 0px -8% 0px', threshold: 0.12 }
+      );
+      revealEls.forEach(el => io.observe(el));
+    } else {
+      revealEls.forEach(el => el.classList.add('is-revealed'));
+    }
   </script>
 </body>
 </html>
