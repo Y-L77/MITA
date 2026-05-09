@@ -9,12 +9,11 @@ body {
   color: white;
   overflow-x: hidden;
   touch-action: pan-y;
-  min-height: 300vh; /* Allows scrolling 2-3 pages down */
+  min-height: 300vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Custom scrollbar */
 body::-webkit-scrollbar {
   width: 10px;
   background-color: transparent;
@@ -41,13 +40,11 @@ body.scrollbar-hidden::-webkit-scrollbar-thumb {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100vw;   /* CSS size */
-  height: 300vh;  /* CSS size for tall page */
+  width: 100vw;
+  height: 300vh;
   z-index: 1;
   pointer-events: auto;
   opacity: 0.9;
-  /* IMPORTANT: remove GPU pre-transform to keep pointer math exact */
-  /* was: will-change: transform; */
 }
 
 /* ====================== */
@@ -74,7 +71,6 @@ body.scrollbar-hidden::-webkit-scrollbar-thumb {
   font-size: 1rem;
 }
 
-/* Toggle button - FIXED POSITION so it stays visible */
 #toggle-question-btn {
   position: fixed;
   top: 70px;
@@ -99,7 +95,6 @@ body.scrollbar-hidden::-webkit-scrollbar-thumb {
   border-color: rgba(255, 255, 255, 0.15);
 }
 
-/* Question container - FIXED with minimal top padding */
 #question-container {
   position: fixed;
   top: 110px;
@@ -110,7 +105,7 @@ body.scrollbar-hidden::-webkit-scrollbar-thumb {
   padding: 0 24px;
   z-index: 101;
   transition: transform 0.3s ease, opacity 0.3s ease;
-  pointer-events: none; /* draw through the question box */
+  pointer-events: none;
 }
 
 .question-box {
@@ -131,7 +126,6 @@ body.scrollbar-hidden::-webkit-scrollbar-thumb {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
 }
 
-/* Answer container at bottom */
 .answer-container {
   position: fixed;
   bottom: 24px;
@@ -162,7 +156,6 @@ body.scrollbar-hidden::-webkit-scrollbar-thumb {
 }
 
 #submit-btn,
-#change-elo-btn,
 #clear-drawing-btn {
   background: #121212;
   color: white;
@@ -178,7 +171,6 @@ body.scrollbar-hidden::-webkit-scrollbar-thumb {
 }
 
 #submit-btn:hover,
-#change-elo-btn:hover,
 #clear-drawing-btn:hover {
   background: #1a1a1a;
   border-color: rgba(255, 255, 255, 0.15);
@@ -245,7 +237,7 @@ body.scrollbar-hidden::-webkit-scrollbar-thumb {
 }
 
 /* ====================== */
-/* COLOR PICKER STYLES */
+/* COLOR PICKER STYLES    */
 /* ====================== */
 #color-picker-container {
   position: fixed;
@@ -287,8 +279,8 @@ body.scrollbar-hidden::-webkit-scrollbar-thumb {
 }
 
 #color-dropdown {
-  position: absolute;      /* absolute inside container */
-  bottom: 50px;            /* place ABOVE the button */
+  position: absolute;
+  bottom: 50px;
   left: 0;
   display: flex;
   gap: 8px;
@@ -296,7 +288,7 @@ body.scrollbar-hidden::-webkit-scrollbar-thumb {
   padding: 8px;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.4);
-  flex-wrap: wrap;         /* optional, wrap colors if many */
+  flex-wrap: wrap;
 }
 
 #color-dropdown.hidden {

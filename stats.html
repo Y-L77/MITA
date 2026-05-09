@@ -1,96 +1,783 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>MITA - Stats</title>
-  <link rel="stylesheet" href="assets/css/style.css">
-  <link rel="icon" type="image/png" href="assets/images/logo.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MITA — Stats</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
-    * {
-      font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #09090b;
+      --surface: #111115;
+      --surface2: #18181e;
+      --border: rgba(255,255,255,0.07);
+      --border-hover: rgba(255,255,255,0.14);
+      --text: #f0ede8;
+      --text-muted: #7a7880;
+      --text-dim: #4a4855;
+      --accent: #c8b89a;
+
+      --clr-combinatorics: #7eb8f7;
+      --clr-linear-algebra: #a78bfa;
+      --clr-calculus: #f97316;
+      --clr-probability: #4ade80;
+      --clr-enrichment: #f472b6;
     }
-    .stats-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:#0b0b0b;color:#fff;padding:32px 20px}
-    .stats-card{width:clamp(320px,96vw,1200px);background:#121212;border:1px solid rgba(255,255,255,.06);border-radius:16px;box-shadow:0 20px 64px rgba(0,0,0,.55);padding:32px}
-    .row{display:grid;grid-template-columns:1.2fr .8fr;gap:24px;margin-top:24px}
-    @media (max-width:900px){.row{grid-template-columns:1fr}}
-    .panel{background:#181818;border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:24px}
-    .muted{color:#a7a7a7;font-size:0.95rem}
-    .list{display:grid;gap:12px;margin-top:16px}
-    .list > div{padding:12px 0;border-bottom:1px solid rgba(255,255,255,.05)}
-    .list > div:last-child{border-bottom:none}
-    .pill{display:inline-block;padding:6px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.06);background:#0f0f0f;font-size:0.9rem}
-    .nav{display:flex;gap:12px;margin-bottom:24px;flex-wrap:wrap}
-    .nav a{color:#fff;text-decoration:none;background:#111;border:1px solid rgba(255,255,255,.08);padding:12px 18px;border-radius:10px;display:flex;align-items:center;gap:8px;font-size:0.95rem;transition:all 0.2s ease}
-    .nav a:hover{background:#191919;border-color:rgba(255,255,255,.12);transform:translateY(-1px)}
-    .nav-icon{display:flex;align-items:center;width:18px;height:18px}
-    .nav-icon svg{width:100%;height:100%;stroke:currentColor;fill:none;stroke-width:2}
-    h1{margin:0 0 8px 0;font-size:2rem;font-weight:600;letter-spacing:-0.02em}
-    #elo-now{font-size:1.3rem;font-weight:600;margin-bottom:8px}
-    #streak-line{font-size:1rem;margin-bottom:12px}
-    #breakdown strong{font-size:1.1rem;font-weight:600;display:block;margin-bottom:4px}
-    #breakdown .muted{font-size:0.9rem}
-    #breakdown > div > div:last-child{font-size:1.2rem;font-weight:600;min-width:50px;text-align:right}
+
+    html, body {
+      min-height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 32px 80px;
+    }
+
+    /* ── Nav ── */
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 28px 0 20px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 48px;
+    }
+
+    .nav-logo {
+      font-family: 'Fraunces', serif;
+      font-size: 1.5rem;
+      font-weight: 300;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 8px;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.75rem;
+      letter-spacing: 0.06em;
+      border: 1px solid var(--border);
+      padding: 8px 14px;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+    .nav-link:hover { color: var(--text); border-color: var(--border-hover); }
+    .nav-link svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* ── Page header ── */
+    .page-header {
+      margin-bottom: 40px;
+    }
+
+    .page-title {
+      font-family: 'Fraunces', serif;
+      font-size: 2rem;
+      font-weight: 300;
+      color: var(--text);
+      letter-spacing: -0.01em;
+      margin-bottom: 6px;
+    }
+
+    .page-sub {
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      letter-spacing: 0.08em;
+    }
+
+    /* ── Top KPI strip ── */
+    .kpi-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    .kpi {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 20px 18px;
+    }
+
+    .kpi-label {
+      font-size: 0.62rem;
+      letter-spacing: 0.14em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .kpi-value {
+      font-family: 'Fraunces', serif;
+      font-size: 1.9rem;
+      font-weight: 300;
+      color: var(--text);
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+
+    .kpi-sub {
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      margin-top: 4px;
+      letter-spacing: 0.04em;
+    }
+
+    /* ── Main grid ── */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 20px;
+    }
+
+    .left-col { display: flex; flex-direction: column; gap: 20px; }
+    .right-col { display: flex; flex-direction: column; gap: 20px; }
+
+    /* ── Panel ── */
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+    }
+
+    .panel-header {
+      margin-bottom: 20px;
+    }
+
+    .panel-title {
+      font-family: 'Fraunces', serif;
+      font-size: 1rem;
+      font-weight: 300;
+      color: var(--text);
+      letter-spacing: 0.02em;
+    }
+
+    .panel-sub {
+      font-size: 0.63rem;
+      color: var(--text-dim);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    /* ── Spider chart ── */
+    .spider-wrap {
+      display: flex;
+      justify-content: center;
+      padding: 8px 0 4px;
+    }
+
+    #spider-svg { overflow: visible; }
+
+    /* ── Category breakdown bars ── */
+    .cat-rows { display: flex; flex-direction: column; gap: 14px; }
+
+    .cat-row { display: flex; flex-direction: column; gap: 6px; }
+
+    .cat-row-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .cat-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .cat-row-name {
+      flex: 1;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+    }
+
+    .cat-row-elo {
+      font-size: 0.78rem;
+      color: var(--text);
+      letter-spacing: 0.02em;
+      font-family: 'DM Mono', monospace;
+    }
+
+    .cat-row-tier {
+      font-size: 0.62rem;
+      color: var(--text-dim);
+      width: 82px;
+      text-align: right;
+    }
+
+    .cat-bar-track {
+      height: 3px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .cat-bar-fill {
+      height: 100%;
+      border-radius: 2px;
+      transition: width 0.6s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    /* ── Accuracy rows ── */
+    .acc-rows { display: flex; flex-direction: column; gap: 10px; }
+
+    .acc-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .acc-label {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      flex: 1;
+      letter-spacing: 0.04em;
+    }
+
+    .acc-bar-track {
+      width: 100px;
+      height: 4px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 2px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .acc-bar-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 2px;
+      transition: width 0.6s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    .acc-pct {
+      font-size: 0.72rem;
+      color: var(--text);
+      width: 36px;
+      text-align: right;
+      font-family: 'DM Mono', monospace;
+    }
+
+    /* ── ELO history sparkline ── */
+    #sparkline { overflow: visible; display: block; }
+
+    .sparkline-empty {
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      text-align: center;
+      padding: 24px 0;
+      letter-spacing: 0.06em;
+    }
+
+    /* ── Overall badge ── */
+    .overall-badge {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      padding: 20px 0 0;
+      border-top: 1px solid var(--border);
+      margin-top: 20px;
+    }
+
+    .overall-num {
+      font-family: 'Fraunces', serif;
+      font-size: 2.6rem;
+      font-weight: 300;
+      color: var(--accent);
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+
+    .overall-label {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      letter-spacing: 0.06em;
+    }
+
+    /* ── Reset button ── */
+    .btn-danger {
+      background: none;
+      border: 1px solid rgba(239,68,68,0.25);
+      color: rgba(239,68,68,0.7);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.06em;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 16px;
+      width: 100%;
+    }
+    .btn-danger:hover {
+      border-color: rgba(239,68,68,0.5);
+      color: rgb(239,68,68);
+      background: rgba(239,68,68,0.05);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      .kpi-strip { grid-template-columns: repeat(2, 1fr); }
+      .main-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 560px) {
+      .page { padding: 0 16px 60px; }
+      .kpi-strip { grid-template-columns: repeat(2, 1fr); }
+    }
   </style>
 </head>
-<body class="selector">
-  <div class="stats-wrap">
-    <div class="stats-card">
-      <div class="nav">
-        <a href="home.html">
-          <span class="nav-icon">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-              <polyline points="9 22 9 12 15 12 15 22"/>
-            </svg>
-          </span>
-          Home
-        </a>
-        <a href="question_selector.html">
-          <span class="nav-icon">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <rect x="4" y="6" width="16" height="12" rx="2" ry="2"/>
-              <line x1="8" y1="10" x2="8" y2="14"/>
-              <line x1="12" y1="10" x2="12" y2="14"/>
-              <line x1="16" y1="10" x2="16" y2="14"/>
-              <circle cx="8" cy="12" r="1.5"/>
-              <circle cx="12" cy="12" r="1.5"/>
-              <circle cx="16" cy="12" r="1.5"/>
-            </svg>
-          </span>
-          Selector
-        </a>
-        <a href="blank_canvas.html">
-          <span class="nav-icon">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-              <path d="M3 9h18M3 15h18M9 3v18M15 3v18"/>
-            </svg>
-          </span>
-          Canvas
-        </a>
-      </div>
-      <h1>Stats & Web Diagram</h1>
-      <div class="muted">Performance by category (accuracy %) and overall progress.</div>
+<body>
 
-      <div class="row">
-        <div class="panel">
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <div>
-              <div id="elo-now" style="font-weight:700">ELO: —</div>
-              <div class="muted" id="streak-line">Streak: —</div>
-            </div>
-            <div><span id="total-line" class="pill">— attempts</span></div>
-          </div>
-          <svg id="radar" width="640" height="520" style="margin-top:10px;max-width:100%;height:auto"></svg>
-        </div>
-        <div class="panel">
-          <div style="font-weight:700">Breakdown</div>
-          <div class="list" id="breakdown"></div>
-        </div>
-      </div>
+<div class="page">
+  <nav class="nav">
+    <a class="nav-logo" href="home.html">MITA</a>
+    <div class="nav-links">
+      <a class="nav-link" href="home.html">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Home
+      </a>
+      <a class="nav-link" href="question_selector.html">
+        <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        Practice
+      </a>
+    </div>
+  </nav>
+
+  <div class="page-header">
+    <h1 class="page-title">Your Stats</h1>
+    <div class="page-sub">PERFORMANCE OVERVIEW</div>
+  </div>
+
+  <!-- KPI strip -->
+  <div class="kpi-strip">
+    <div class="kpi">
+      <div class="kpi-label">Overall ELO</div>
+      <div class="kpi-value" id="kpi-elo">—</div>
+      <div class="kpi-sub" id="kpi-tier">—</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Accuracy</div>
+      <div class="kpi-value" id="kpi-acc">—</div>
+      <div class="kpi-sub" id="kpi-acc-sub">of all attempts</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Best Streak</div>
+      <div class="kpi-value" id="kpi-streak">—</div>
+      <div class="kpi-sub" id="kpi-streak-cur">current: —</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Total Solved</div>
+      <div class="kpi-value" id="kpi-solved">—</div>
+      <div class="kpi-sub" id="kpi-attempts">— attempted</div>
     </div>
   </div>
-  <script src="assets/js/stats.js"></script>
+
+  <div class="main-grid">
+    <!-- Left -->
+    <div class="left-col">
+
+      <!-- Spider + ELO breakdown -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">Skill Ratings</div>
+          <div class="panel-sub">ELO per category</div>
+        </div>
+        <div class="spider-wrap">
+          <svg id="spider-svg" width="260" height="260" viewBox="-130 -130 260 260"></svg>
+        </div>
+        <div class="cat-rows" id="cat-rows"></div>
+        <div class="overall-badge">
+          <span class="overall-num" id="overall-elo">—</span>
+          <span class="overall-label">avg ELO across all topics</span>
+        </div>
+      </div>
+
+      <!-- ELO history sparkline -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">ELO History</div>
+          <div class="panel-sub">recent sessions</div>
+        </div>
+        <div id="sparkline-wrap"></div>
+      </div>
+
+    </div>
+
+    <!-- Right -->
+    <div class="right-col">
+
+      <!-- Accuracy by category -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">Accuracy</div>
+          <div class="panel-sub">by topic</div>
+        </div>
+        <div class="acc-rows" id="acc-rows"></div>
+      </div>
+
+      <!-- Session info -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">Session</div>
+          <div class="panel-sub">current run</div>
+        </div>
+        <div class="acc-rows" id="session-rows"></div>
+        <button class="btn-danger" id="reset-btn">Reset all progress</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+const SAVE_KEY = 'mita_save_v4';
+
+const CATEGORIES = [
+  { key: 'combinatorics',  label: 'Combinatorics',  color: '#7eb8f7' },
+  { key: 'linear-algebra', label: 'Linear Algebra',  color: '#a78bfa' },
+  { key: 'calculus',       label: 'Calculus',        color: '#f97316' },
+  { key: 'probability',    label: 'Probability',     color: '#4ade80' },
+  { key: 'enrichment',     label: 'Enrichment',      color: '#f472b6' },
+];
+
+const ELO_TIERS = [
+  { min: 0,    name: "Novice" },
+  { min: 400,  name: "Apprentice" },
+  { min: 700,  name: "Intermediate" },
+  { min: 1000, name: "Advanced" },
+  { min: 1300, name: "Expert" },
+  { min: 1600, name: "Master" },
+  { min: 1900, name: "Grandmaster" },
+];
+
+function getTier(elo) {
+  for (let i = ELO_TIERS.length - 1; i >= 0; i--) {
+    if (elo >= ELO_TIERS[i].min) return ELO_TIERS[i].name;
+  }
+  return ELO_TIERS[0].name;
+}
+
+function loadData() {
+  try {
+    const s = JSON.parse(localStorage.getItem(SAVE_KEY) || '{}');
+    const catElos = {};
+    CATEGORIES.forEach(c => { catElos[c.key] = 300; });
+    if (s.categoryElos) Object.assign(catElos, s.categoryElos);
+    return {
+      categoryElos: catElos,
+      streak: s.streak || 0,
+      bestStreak: s.bestStreak || 0,
+      totalAttempts: s.totalAttempts || 0,
+      totalCorrect: s.totalCorrect || 0,
+      eloHistory: Array.isArray(s.eloHistory) ? s.eloHistory : [],
+    };
+  } catch {
+    return {
+      categoryElos: Object.fromEntries(CATEGORIES.map(c => [c.key, 300])),
+      streak: 0, bestStreak: 0, totalAttempts: 0, totalCorrect: 0, eloHistory: [],
+    };
+  }
+}
+
+function getOverall(elos) {
+  const vals = Object.values(elos);
+  return Math.round(vals.reduce((a, b) => a + b, 0) / vals.length);
+}
+
+// ── KPI strip ──
+function renderKpis(data) {
+  const overall = getOverall(data.categoryElos);
+  const acc = data.totalAttempts > 0
+    ? Math.round((data.totalCorrect / data.totalAttempts) * 100)
+    : 0;
+
+  document.getElementById('kpi-elo').textContent = overall;
+  document.getElementById('kpi-tier').textContent = getTier(overall);
+  document.getElementById('kpi-acc').textContent = data.totalAttempts > 0 ? acc + '%' : '—';
+  document.getElementById('kpi-acc-sub').textContent = `of ${data.totalAttempts} attempts`;
+  document.getElementById('kpi-streak').textContent = data.bestStreak || '—';
+  document.getElementById('kpi-streak-cur').textContent = `current: ${data.streak}`;
+  document.getElementById('kpi-solved').textContent = data.totalCorrect || '—';
+  document.getElementById('kpi-attempts').textContent = `${data.totalAttempts} attempted`;
+}
+
+// ── Spider chart ──
+function drawSpider(elos) {
+  const svg = document.getElementById('spider-svg');
+  const R = 100;
+  const MAX_ELO = 2000;
+  const n = CATEGORIES.length;
+  const angles = CATEGORIES.map((_, i) => (Math.PI * 2 * i / n) - Math.PI / 2);
+
+  function polar(a, r) {
+    return { x: r * Math.cos(a), y: r * Math.sin(a) };
+  }
+
+  let html = '';
+
+  // Rings
+  [0.25, 0.5, 0.75, 1.0].forEach(frac => {
+    const pts = angles.map(a => polar(a, R * frac));
+    const d = pts.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x.toFixed(2)},${p.y.toFixed(2)}`).join(' ') + ' Z';
+    html += `<path d="${d}" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>`;
+  });
+
+  // Ring labels (ELO values)
+  [500, 1000, 1500, 2000].forEach((val, i) => {
+    const frac = val / MAX_ELO;
+    html += `<text x="4" y="${-(R * frac + 3).toFixed(1)}" font-family="DM Mono,monospace" font-size="7" fill="rgba(255,255,255,0.18)" letter-spacing="0.02em">${val}</text>`;
+  });
+
+  // Axes
+  angles.forEach(a => {
+    const tip = polar(a, R);
+    html += `<line x1="0" y1="0" x2="${tip.x.toFixed(2)}" y2="${tip.y.toFixed(2)}" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>`;
+  });
+
+  // Data polygon
+  const pts = CATEGORIES.map((cat, i) => {
+    const elo = Math.min(elos[cat.key] ?? 300, MAX_ELO);
+    return polar(angles[i], R * (elo / MAX_ELO));
+  });
+  const poly = pts.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x.toFixed(2)},${p.y.toFixed(2)}`).join(' ') + ' Z';
+  html += `<path d="${poly}" fill="rgba(200,184,154,0.1)" stroke="rgba(200,184,154,0.55)" stroke-width="1.5" stroke-linejoin="round"/>`;
+
+  // Dots + labels
+  CATEGORIES.forEach((cat, i) => {
+    const elo = Math.min(elos[cat.key] ?? 300, MAX_ELO);
+    const p = polar(angles[i], R * (elo / MAX_ELO));
+    const tip = polar(angles[i], R + 20);
+    const anchor = tip.x > 4 ? 'start' : tip.x < -4 ? 'end' : 'middle';
+    html += `<circle cx="${p.x.toFixed(2)}" cy="${p.y.toFixed(2)}" r="3.5" fill="${cat.color}"/>`;
+    html += `<text x="${tip.x.toFixed(2)}" y="${tip.y.toFixed(2)}" text-anchor="${anchor}" dominant-baseline="middle" font-family="DM Mono,monospace" font-size="9" fill="${cat.color}" letter-spacing="0.04em">${cat.label.split(' ')[0].toUpperCase()}</text>`;
+  });
+
+  svg.innerHTML = html;
+}
+
+// ── Category ELO rows ──
+function renderCatRows(elos) {
+  const MAX_ELO = 2000;
+  const container = document.getElementById('cat-rows');
+  container.innerHTML = '';
+
+  CATEGORIES.forEach(cat => {
+    const elo = elos[cat.key] ?? 300;
+    const pct = Math.min((elo / MAX_ELO) * 100, 100).toFixed(1);
+
+    const row = document.createElement('div');
+    row.className = 'cat-row';
+    row.innerHTML = `
+      <div class="cat-row-header">
+        <div class="cat-dot" style="background:${cat.color}"></div>
+        <div class="cat-row-name">${cat.label}</div>
+        <div class="cat-row-elo">${elo}</div>
+        <div class="cat-row-tier">${getTier(elo)}</div>
+      </div>
+      <div class="cat-bar-track">
+        <div class="cat-bar-fill" style="width:${pct}%;background:${cat.color};opacity:0.7"></div>
+      </div>
+    `;
+    container.appendChild(row);
+  });
+
+  document.getElementById('overall-elo').textContent = getOverall(elos);
+}
+
+// ── Accuracy by category (from eloHistory) ──
+// We track accuracy globally; for per-category we use ELO delta as a proxy
+// Since we don't store per-cat correct/total, we show overall accuracy with a note
+function renderAccRows(data) {
+  const container = document.getElementById('acc-rows');
+  container.innerHTML = '';
+
+  const overall = data.totalAttempts > 0
+    ? (data.totalCorrect / data.totalAttempts)
+    : 0;
+
+  // Show per-category ELO trend from history (last 20 entries per cat)
+  CATEGORIES.forEach(cat => {
+    const catHistory = data.eloHistory
+      .filter(h => h.cat === cat.key)
+      .slice(-20);
+
+    let accText = '—';
+    let fillPct = 0;
+
+    if (catHistory.length >= 2) {
+      // Infer wins: ELO went up = correct
+      let wins = 0;
+      for (let i = 1; i < catHistory.length; i++) {
+        if (catHistory[i].elo > catHistory[i - 1].elo) wins++;
+      }
+      const acc = wins / (catHistory.length - 1);
+      fillPct = Math.round(acc * 100);
+      accText = fillPct + '%';
+    } else if (catHistory.length === 1) {
+      accText = 'new';
+    }
+
+    const row = document.createElement('div');
+    row.className = 'acc-row';
+    row.innerHTML = `
+      <div class="acc-label">${cat.label}</div>
+      <div class="acc-bar-track">
+        <div class="acc-bar-fill" style="width:${fillPct}%;background:${cat.color}"></div>
+      </div>
+      <div class="acc-pct">${accText}</div>
+    `;
+    container.appendChild(row);
+  });
+
+  // Overall row
+  const overallRow = document.createElement('div');
+  overallRow.className = 'acc-row';
+  overallRow.style.marginTop = '8px';
+  overallRow.style.paddingTop = '10px';
+  overallRow.style.borderTop = '1px solid rgba(255,255,255,0.05)';
+  const overallPct = Math.round(overall * 100);
+  overallRow.innerHTML = `
+    <div class="acc-label" style="color:var(--text)">Overall</div>
+    <div class="acc-bar-track">
+      <div class="acc-bar-fill" style="width:${overallPct}%;background:var(--accent)"></div>
+    </div>
+    <div class="acc-pct" style="color:var(--accent)">${data.totalAttempts > 0 ? overallPct + '%' : '—'}</div>
+  `;
+  container.appendChild(overallRow);
+}
+
+// ── Session panel ──
+function renderSession(data) {
+  const container = document.getElementById('session-rows');
+  container.innerHTML = '';
+
+  const rows = [
+    { label: 'Current streak', value: data.streak },
+    { label: 'Best streak', value: data.bestStreak },
+    { label: 'Total correct', value: data.totalCorrect },
+    { label: 'Total attempted', value: data.totalAttempts },
+  ];
+
+  rows.forEach(r => {
+    const row = document.createElement('div');
+    row.className = 'acc-row';
+    row.innerHTML = `
+      <div class="acc-label">${r.label}</div>
+      <div class="acc-pct" style="width:auto;color:var(--text)">${r.value ?? 0}</div>
+    `;
+    container.appendChild(row);
+  });
+}
+
+// ── ELO Sparkline ──
+function renderSparkline(eloHistory) {
+  const wrap = document.getElementById('sparkline-wrap');
+
+  if (!eloHistory || eloHistory.length < 2) {
+    wrap.innerHTML = `<div class="sparkline-empty">No history yet — solve some questions to see your ELO over time.</div>`;
+    return;
+  }
+
+  // Take last 60 entries
+  const pts = eloHistory.slice(-60);
+  const elos = pts.map(p => p.elo);
+  const minElo = Math.min(...elos);
+  const maxElo = Math.max(...elos);
+  const range = Math.max(maxElo - minElo, 50);
+
+  const W = 600, H = 100;
+  const padX = 8, padY = 12;
+  const innerW = W - padX * 2;
+  const innerH = H - padY * 2;
+
+  function toSvg(i, elo) {
+    const x = padX + (i / (pts.length - 1)) * innerW;
+    const y = padY + innerH - ((elo - minElo) / range) * innerH;
+    return { x: x.toFixed(2), y: y.toFixed(2) };
+  }
+
+  const points = pts.map((p, i) => toSvg(i, p.elo));
+  const linePath = points.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x},${p.y}`).join(' ');
+
+  // Area fill path
+  const areaPath = linePath +
+    ` L${points[points.length - 1].x},${H} L${points[0].x},${H} Z`;
+
+  // Last point
+  const last = points[points.length - 1];
+  const lastElo = elos[elos.length - 1];
+
+  const svg = `
+    <svg id="sparkline" width="100%" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="overflow:visible">
+      <defs>
+        <linearGradient id="spark-grad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="rgba(200,184,154,0.2)"/>
+          <stop offset="100%" stop-color="rgba(200,184,154,0)"/>
+        </linearGradient>
+      </defs>
+      <path d="${areaPath}" fill="url(#spark-grad)"/>
+      <path d="${linePath}" fill="none" stroke="rgba(200,184,154,0.7)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>
+      <circle cx="${last.x}" cy="${last.y}" r="3" fill="#c8b89a"/>
+      <text x="${parseFloat(last.x) + 6}" y="${last.y}" dominant-baseline="middle" font-family="DM Mono,monospace" font-size="9" fill="#c8b89a" letter-spacing="0.04em">${lastElo}</text>
+    </svg>
+  `;
+  wrap.innerHTML = svg;
+}
+
+// ── Reset ──
+document.getElementById('reset-btn').addEventListener('click', () => {
+  if (confirm('Reset all progress? This cannot be undone.')) {
+    localStorage.removeItem(SAVE_KEY);
+    localStorage.removeItem('mita_active_categories');
+    window.location.reload();
+  }
+});
+
+// ── Init ──
+const data = loadData();
+renderKpis(data);
+drawSpider(data.categoryElos);
+renderCatRows(data.categoryElos);
+renderAccRows(data);
+renderSession(data);
+renderSparkline(data.eloHistory);
+</script>
 </body>
 </html>
